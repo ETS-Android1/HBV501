@@ -2,7 +2,7 @@
 
 ## Required setup:
 
-** The project uses postgreSQL architecture, this means a local database is required: `createdb feedme`
+The project uses postgreSQL architecture, this means a local database is required: `createdb feedme`
 
 ## Format:
 
