@@ -33,12 +33,12 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable(value = "id") Long recipeId)
-        throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         Recipe recipe = recipeRepository.findById(recipeId)
-          .orElseThrow(() -> new ResourceNotFoundException("Recipe not found for this id :: " + recipeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found for this id :: " + recipeId));
         return ResponseEntity.ok().body(recipe);
     }
-    
+
     @PostMapping("/recipes")
     public Recipe createRecipe(@Valid @RequestBody Recipe recipe) {
         return recipeRepository.save(recipe);
@@ -46,9 +46,9 @@ public class RecipeController {
 
     @PutMapping("/recipes/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable(value = "id") Long recipeId,
-         @Valid @RequestBody Recipe recipeDetails) throws ResourceNotFoundException {
+            @Valid @RequestBody Recipe recipeDetails) throws ResourceNotFoundException {
         Recipe recipe = recipeRepository.findById(recipeId)
-        .orElseThrow(() -> new ResourceNotFoundException("Recipe not found for this id :: " + recipeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found for this id :: " + recipeId));
 
         recipe.setName(recipeDetails.getName());
         recipe.setInstructions(recipeDetails.getInstructions());
@@ -59,9 +59,9 @@ public class RecipeController {
 
     @DeleteMapping("/recipes/{id}")
     public Map<String, Boolean> deleteRecipe(@PathVariable(value = "id") Long recipeId)
-         throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         Recipe recipe = recipeRepository.findById(recipeId)
-       .orElseThrow(() -> new ResourceNotFoundException("Recipe not found for this id :: " + recipeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found for this id :: " + recipeId));
 
         recipeRepository.delete(recipe);
         Map<String, Boolean> response = new HashMap<>();
