@@ -60,4 +60,5 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         nUser.setAdmin(false);
         return userRepository.save(nUser);
     }
+
 }

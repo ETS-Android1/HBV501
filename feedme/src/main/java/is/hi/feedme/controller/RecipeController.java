@@ -20,7 +20,7 @@ public class RecipeController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Recipe> getAllRecipes() {
-        return recipeService.findAll();
+        return recipeService.findAllRecipes();
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
