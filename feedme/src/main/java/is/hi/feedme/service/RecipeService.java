@@ -8,7 +8,11 @@ import is.hi.feedme.model.IngredientDto;
 import java.util.List;
 
 public interface RecipeService {
+    Recipe findOneRecipe(long id);
+
     Recipe save(RecipeDto recipe);
+
+    void delete(Recipe recipe);
 
     List<Recipe> findAllRecipes();
 

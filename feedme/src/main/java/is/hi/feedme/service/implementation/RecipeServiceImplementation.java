@@ -28,10 +28,21 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     @Override
+    public Recipe findOneRecipe(long id) {
+        return recipeRepository.findById(id);
+    }
+
+    @Override
     public Recipe save(RecipeDto recipe) {
 
         Recipe nRecipe = recipe.getRecipeFromDto();
         return recipeRepository.save(nRecipe);
+    }
+
+    @Override
+    public void delete(Recipe recipe) {
+
+        recipeRepository.delete(recipe);
     }
 
     public List<Ingredient> findAllIngredients() {

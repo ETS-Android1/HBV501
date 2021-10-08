@@ -41,15 +41,20 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         return authorities;
     }
 
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         List<User> list = new ArrayList<>();
         userRepository.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
 
     @Override
-    public User findOne(String username) {
+    public User findOneUser(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findOneUser(long id) {
+        return userRepository.findById(id);
     }
 
     @Override
@@ -60,5 +65,4 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         nUser.setAdmin(false);
         return userRepository.save(nUser);
     }
-
 }

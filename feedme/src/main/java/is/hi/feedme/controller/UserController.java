@@ -16,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/users")
@@ -46,15 +48,22 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/adminping", method = RequestMethod.GET)
-    public String adminPing() {
-        return "admin user";
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<User> getAllUsers() {
+        return userService.findAllUsers();
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @RequestMapping(value = "/userping", method = RequestMethod.GET)
-    public String userPing() {
-        return "normal user";
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public User getUser(@PathVariable long id) {
+        return userService.findOneUser(id);
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    public User userInfo() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userService.findOneUser(auth.getName());
     }
 
 }
