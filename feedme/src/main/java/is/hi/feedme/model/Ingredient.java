@@ -2,12 +2,13 @@ package is.hi.feedme.model;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "ingredients")
-public class Ingredient {
+public class Ingredient implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

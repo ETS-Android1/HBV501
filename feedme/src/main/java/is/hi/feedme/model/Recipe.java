@@ -2,12 +2,12 @@ package is.hi.feedme.model;
 
 import javax.persistence.*;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "recipes")
-public class Recipe {
+public class Recipe implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Recipe {
     @JoinTable(name = "recipes_ingredients", joinColumns = {
             @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
                     @JoinColumn(name = "ingredient_id", referencedColumnName = "id", nullable = false, updatable = false) })
-    private Set<Ingredient> ingredients = new HashSet<>();
+    private Set<Ingredient> ingredients;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Comment> comments;

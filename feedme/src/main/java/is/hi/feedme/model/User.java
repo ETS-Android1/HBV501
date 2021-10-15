@@ -1,11 +1,14 @@
 package is.hi.feedme.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -62,7 +62,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
 
         User nUser = user.getUserFromDto();
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        nUser.setAdmin(false);
+
         return userRepository.save(nUser);
     }
 }

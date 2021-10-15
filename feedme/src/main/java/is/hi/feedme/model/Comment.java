@@ -1,10 +1,12 @@
 package is.hi.feedme.model;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "comments")
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

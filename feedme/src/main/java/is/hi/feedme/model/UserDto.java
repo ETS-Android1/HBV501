@@ -44,7 +44,7 @@ public class UserDto {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
-        user.setAdmin(admin);
+        user.setAdmin(false);
 
         return user;
     }
