@@ -7,15 +7,15 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "comments")
-public class Comment implements Serializable {
+@Table(name = "reviews")
+public class Review implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
-    private String body;
+    private int rating;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -30,12 +30,12 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public String getBody() {
-        return body;
+    public int getRating() {
+        return rating;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public Recipe getRecipe() {
