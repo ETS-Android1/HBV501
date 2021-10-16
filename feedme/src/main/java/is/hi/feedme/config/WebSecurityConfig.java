@@ -44,7 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
+        // NOTE: 12 iterations are required for current dummy accounts to work
+        // This can be changed but then the data.sql accounts must be adjusted
+        return new BCryptPasswordEncoder(12);
     }
 
     @Override
