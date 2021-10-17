@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import is.hi.feedme.repository.RecipeRepository;
+import is.hi.feedme.repository.ReviewRepository;
 import is.hi.feedme.repository.IngredientRepository;
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
@@ -23,6 +24,9 @@ public class RecipeServiceImplementation implements RecipeService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
+    @Autowired
+    private ReviewRepository reviewRepository;
+
     public List<Recipe> findAllRecipes() {
         List<Recipe> list = new ArrayList<>();
         recipeRepository.findAll().iterator().forEachRemaining(list::add);
@@ -35,10 +39,12 @@ public class RecipeServiceImplementation implements RecipeService {
 
         while(recipeIterator.hasNext()) {
             Recipe curr = recipeIterator.next();
+            long currId = curr.getId();
 
             SimplifiedRecipe s = new SimplifiedRecipe();
-            s.setId(curr.getId());
+            s.setId(currId);
             s.setName(curr.getName());
+            s.setRating(reviewRepository.averageRatingByRecipeId(currId));
             s.setInstructions(curr.getInstructions());
             s.setCalories(curr.getCalories());
             s.setProteins(curr.getProteins());

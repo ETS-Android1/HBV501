@@ -4,6 +4,7 @@ public class SimplifiedRecipe {
 
     private long id;
     private String name;
+    private double rating;
     private String instructions;
     private double calories;
     private double carbs;
@@ -25,6 +26,14 @@ public class SimplifiedRecipe {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public String getInstructions() {
