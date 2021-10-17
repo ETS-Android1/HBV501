@@ -2,6 +2,8 @@ package is.hi.feedme.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -40,8 +42,15 @@ public class Recipe implements Serializable {
                     @JoinColumn(name = "ingredient_id", referencedColumnName = "id", nullable = false, updatable = false) })
     private Set<Ingredient> ingredients;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
+    private Set<User> users;
+
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Review> reviews;
 
     public long getId() {
         return id;
@@ -115,12 +124,28 @@ public class Recipe implements Serializable {
         this.ingredients = ingredients;
     }
 
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
     public Set<Comment> getComments() {
         return comments;
     }
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
     }
 
 }

@@ -2,11 +2,13 @@ package is.hi.feedme.service.implementation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import is.hi.feedme.repository.UserRepository;
 import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
+import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,6 +46,25 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     public List<User> findAllUsers() {
         List<User> list = new ArrayList<>();
         userRepository.findAll().iterator().forEachRemaining(list::add);
+        return list;
+    }
+
+    public List<SimplifiedUser> findAllSimpleUsers() {
+        List<SimplifiedUser> list = new ArrayList<>();
+        Iterator<User> userIterator = userRepository.findAll().iterator();
+
+        while(userIterator.hasNext()) {
+            User curr = userIterator.next();
+
+            SimplifiedUser s = new SimplifiedUser();
+            s.setId(curr.getId());
+            s.setUsername(curr.getUsername());
+            s.setEmail(curr.getEmail());
+            s.setAdmin(curr.getAdmin());
+
+            list.add(s);
+        }
+
         return list;
     }
 

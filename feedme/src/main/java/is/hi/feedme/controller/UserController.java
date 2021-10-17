@@ -3,6 +3,7 @@ package is.hi.feedme.controller;
 import is.hi.feedme.config.TokenProvider;
 import is.hi.feedme.model.AuthToken;
 import is.hi.feedme.model.LoginUser;
+import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
 import is.hi.feedme.service.UserService;
@@ -49,8 +50,8 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<User> getAllUsers() {
-        return userService.findAllUsers();
+    public List<SimplifiedUser> getAllUsers() {
+        return userService.findAllSimpleUsers();
     }
 
     @PreAuthorize("hasRole('ADMIN')")

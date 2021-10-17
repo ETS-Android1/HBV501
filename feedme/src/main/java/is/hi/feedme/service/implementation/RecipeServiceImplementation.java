@@ -1,11 +1,13 @@
 package is.hi.feedme.service.implementation;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import is.hi.feedme.repository.RecipeRepository;
 import is.hi.feedme.repository.IngredientRepository;
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
+import is.hi.feedme.model.SimplifiedRecipe;
 import is.hi.feedme.model.Ingredient;
 import is.hi.feedme.model.IngredientDto;
 import is.hi.feedme.service.RecipeService;
@@ -24,6 +26,29 @@ public class RecipeServiceImplementation implements RecipeService {
     public List<Recipe> findAllRecipes() {
         List<Recipe> list = new ArrayList<>();
         recipeRepository.findAll().iterator().forEachRemaining(list::add);
+        return list;
+    }
+
+    public List<SimplifiedRecipe> findAllSimpleRecipes() {
+        List<SimplifiedRecipe> list = new ArrayList<>();
+        Iterator<Recipe> recipeIterator = recipeRepository.findAll().iterator();
+
+        while(recipeIterator.hasNext()) {
+            Recipe curr = recipeIterator.next();
+
+            SimplifiedRecipe s = new SimplifiedRecipe();
+            s.setId(curr.getId());
+            s.setName(curr.getName());
+            s.setInstructions(curr.getInstructions());
+            s.setCalories(curr.getCalories());
+            s.setProteins(curr.getProteins());
+            s.setCarbs(curr.getCarbs());
+            s.setFats(curr.getFats());
+            s.setImage(curr.getImage());
+
+            list.add(s);
+        }
+
         return list;
     }
 

@@ -2,6 +2,7 @@ package is.hi.feedme.service;
 
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
+import is.hi.feedme.model.SimplifiedRecipe;
 import is.hi.feedme.model.Ingredient;
 import is.hi.feedme.model.IngredientDto;
 
@@ -15,6 +16,8 @@ public interface RecipeService {
     void delete(Recipe recipe);
 
     List<Recipe> findAllRecipes();
+
+    List<SimplifiedRecipe> findAllSimpleRecipes();
 
     Ingredient save(IngredientDto ingredient);
 

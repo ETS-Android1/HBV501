@@ -2,6 +2,7 @@ package is.hi.feedme.controller;
 
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
+import is.hi.feedme.model.SimplifiedRecipe;
 import is.hi.feedme.service.RecipeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Recipe> getAllRecipes() {
-        return recipeService.findAllRecipes();
+    public List<SimplifiedRecipe> getAllRecipes() {
+        return recipeService.findAllSimpleRecipes();
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
