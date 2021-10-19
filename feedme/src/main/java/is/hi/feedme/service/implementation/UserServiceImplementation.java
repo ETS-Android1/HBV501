@@ -8,6 +8,7 @@ import java.util.Set;
 import is.hi.feedme.repository.UserRepository;
 import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
+import is.hi.feedme.model.CompositeUser;
 import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,20 +50,22 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         return list;
     }
 
+    private SimplifiedUser createSimpleUser(User user) {
+        SimplifiedUser s = new SimplifiedUser();
+        s.setId(user.getId());
+        s.setUsername(user.getUsername());
+        s.setEmail(user.getEmail());
+        s.setAdmin(user.getAdmin());
+
+        return s;
+    }
+
     public List<SimplifiedUser> findAllSimpleUsers() {
         List<SimplifiedUser> list = new ArrayList<>();
         Iterator<User> userIterator = userRepository.findAll().iterator();
 
-        while(userIterator.hasNext()) {
-            User curr = userIterator.next();
-
-            SimplifiedUser s = new SimplifiedUser();
-            s.setId(curr.getId());
-            s.setUsername(curr.getUsername());
-            s.setEmail(curr.getEmail());
-            s.setAdmin(curr.getAdmin());
-
-            list.add(s);
+        while (userIterator.hasNext()) {
+            list.add(createSimpleUser(userIterator.next()));
         }
 
         return list;
@@ -76,6 +79,15 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     @Override
     public User findOneUser(long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public CompositeUser findCompositeUser(long id) {
+        User u = findOneUser(id);
+        CompositeUser cu = new CompositeUser();
+        cu.setSimplifiedUser(createSimpleUser(u));
+
+        return cu;
     }
 
     @Override

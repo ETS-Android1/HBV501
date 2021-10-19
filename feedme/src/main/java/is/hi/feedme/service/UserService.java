@@ -1,5 +1,6 @@
 package is.hi.feedme.service;
 
+import is.hi.feedme.model.CompositeUser;
 import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
@@ -16,4 +17,6 @@ public interface UserService {
     User findOneUser(String username);
 
     User findOneUser(long id);
+
+    CompositeUser findCompositeUser(long id);
 }
