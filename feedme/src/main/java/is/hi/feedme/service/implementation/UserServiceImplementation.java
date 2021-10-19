@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import is.hi.feedme.repository.RecipeRepository;
 import is.hi.feedme.repository.ReviewRepository;
 import is.hi.feedme.repository.UserRepository;
 import is.hi.feedme.model.User;
@@ -29,9 +28,6 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RecipeRepository recipeRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
