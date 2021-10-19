@@ -45,7 +45,7 @@ public class RecipeServiceImplementation implements RecipeService {
             s.setId(currId);
             s.setName(curr.getName());
             s.setRating(reviewRepository.averageRatingByRecipeId(currId));
-            s.setInstructions(curr.getInstructions());
+            s.setDescription(curr.getDescription());
             s.setCalories(curr.getCalories());
             s.setProteins(curr.getProteins());
             s.setCarbs(curr.getCarbs());

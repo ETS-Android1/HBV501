@@ -6,6 +6,7 @@ import java.util.Set;
 public class RecipeDto {
 
     private String name;
+    private String description;
     private String instructions;
     private double calories;
     private double carbs;
@@ -22,6 +23,15 @@ public class RecipeDto {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     public String getInstructions() {
         return instructions;

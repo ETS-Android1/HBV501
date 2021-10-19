@@ -46,6 +46,7 @@ VALUES
 INSERT INTO
   recipes (
     name,
+    description,
     instructions,
     image,
     calories,
@@ -56,6 +57,7 @@ INSERT INTO
 VALUES
   (
     'Chicken and Broccoly Stir-Fry',
+    'Bla',
     'Do things',
     'Get image',
     468.0,
