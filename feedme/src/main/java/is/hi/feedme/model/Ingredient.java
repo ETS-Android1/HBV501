@@ -20,8 +20,8 @@ public class Ingredient implements Serializable {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Set<Recipe> recipes = new HashSet<>();
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<IngredientQuantity> ingredientQuantities = new HashSet<>();
 
     public long getId() {
         return id;
@@ -39,12 +39,12 @@ public class Ingredient implements Serializable {
         this.name = name;
     }
 
-    public Set<Recipe> getRecipes() {
-        return recipes;
+    public Set<IngredientQuantity> getIngredientQuantities() {
+        return ingredientQuantities;
     }
 
-    public void setRecipes(Set<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setRecipes(Set<IngredientQuantity> ingredientQuantities) {
+        this.ingredientQuantities = ingredientQuantities;
     }
 
 }

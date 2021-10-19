@@ -106,6 +106,7 @@ public class RecipeDto {
         recipe.setCarbs(carbs);
         recipe.setFats(fats);
         recipe.setImage(image);
+        // Ingredients and comments are initialized as empty
 
         return recipe;
     }

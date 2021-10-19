@@ -2,13 +2,17 @@ package is.hi.feedme.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "recipes")
+@JsonAutoDetect(fieldVisibility=JsonAutoDetect.Visibility.ANY, getterVisibility=JsonAutoDetect.Visibility.NONE,
+        setterVisibility=JsonAutoDetect.Visibility.NONE, creatorVisibility=JsonAutoDetect.Visibility.NONE)
 public class Recipe implements Serializable {
 
     @Id
@@ -39,11 +43,9 @@ public class Recipe implements Serializable {
     @Column
     private String image;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "recipes_ingredients", joinColumns = {
-            @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false, updatable = false) }, inverseJoinColumns = {
-                    @JoinColumn(name = "ingredient_id", referencedColumnName = "id", nullable = false, updatable = false) })
-    private Set<Ingredient> ingredients;
+    @OneToMany(mappedBy = "recipe")
+    @JsonProperty("ingredients")
+    private Set<IngredientQuantity> ingredientQuantities;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
@@ -128,12 +130,12 @@ public class Recipe implements Serializable {
         this.image = image;
     }
 
-    public Set<Ingredient> getIngredients() {
-        return ingredients;
+    public Set<IngredientQuantity> getIngredientQuantities() {
+        return ingredientQuantities;
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setIngredientQuantities(Set<IngredientQuantity> ingredientQuantities) {
+        this.ingredientQuantities = ingredientQuantities;
     }
 
     public Set<User> getUsers() {

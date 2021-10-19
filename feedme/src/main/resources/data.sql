@@ -254,9 +254,9 @@ VALUES
 
 -- DUMMY RECIPE INGREDIENTS
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (1, 1);
+  (1, 1, 10, 'kg');
 
 -- ID: 2
 INSERT INTO
@@ -284,19 +284,19 @@ VALUES
 
 -- DUMMY RECIPE INGREDIENTS
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (2, 20);
+  (2, 20, 1, 'g');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (2, 28);
+  (2, 28, 1, 'ton');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (2, 29);
+  (2, 29, 1, 'something');
 
 -- ID: 3
 INSERT INTO
@@ -324,59 +324,59 @@ VALUES
 
 -- DUMMY RECIPE INGREDIENTS
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 30);
+  (3, 30, 2, 'blabla');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 1);
+  (3, 1, 2, 'kg');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 27);
+  (3, 27, 2, 'dl');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 3);
+  (3, 3, 2, 'cup');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 6);
+  (3, 6, 2, 'bucket');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 31);
+  (3, 31, 2, 'tanker ship');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 8);
+  (3, 8, 1, 'fuckton');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 32);
+  (3, 32, 1, 'teaspoon');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 33);
+  (3, 33, 1, 'kettle');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 29);
+  (3, 29, 1, 'yes');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (3, 34);
+  (3, 34, 1, 'something');
 
 -- ID: 4
 INSERT INTO
@@ -408,34 +408,34 @@ VALUES
   );
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (4, 29);
+  (4, 29, 1, 'boot');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (4, 7);
+  (4, 7, 1, 'kg');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (4, 5);
+  (4, 5, 1, 'teaspoon');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (4, 3);
+  (4, 3, 1, 'tanker ship');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (4, 6);
+  (4, 6, 1, 'kg');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (4, 4);
+  (4, 4, 1, 'cup');
 
 -- ID: 5
 INSERT INTO
@@ -463,34 +463,34 @@ In a medium-sized bowl, whisk the whites with a pinch of salt until soft peaks f
   );
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (5, 15);
+  (5, 15, 1, 'kg');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (5, 5);
+  (5, 5, 1, 'tanker ship');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (5, 4);
+  (5, 4, 2, 'cup');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (5, 7);
+  (5, 7, 3, 'g');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (5, 6);
+  (5, 6, 4, 'yes');
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (5, 3);
+  (5, 3, 5, 'some');
 
 -- ID: 6
 INSERT INTO
@@ -523,35 +523,40 @@ VALUES
   );
 
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 5);
+  (6, 5, 6, 'kg');
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 20);
+  (6, 20, 6, 'cup');
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 28);
+  (6, 28, 6, 'g');
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 2);
+  (6, 2, 2, 'g');
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 29);
+  (6, 29, 3, 'g');
 INSERT INTO
-  recipes_ingredients (recipe_id, ingredient_id)
+  ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 27);
+  (6, 27, 3, 'g');
 
 -- DUMMY STORED USER RECIPES
 INSERT INTO
   users_recipes (recipe_id, user_id)
 VALUES
   (1, 2);
+
+INSERT INTO
+  users_recipes (recipe_id, user_id)
+VALUES
+  (6, 2);
 
 -- DUMMY RECIPE COMMENTS
 INSERT INTO
