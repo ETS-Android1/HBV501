@@ -17,7 +17,9 @@ public interface RecipeService {
 
     List<Recipe> findAllRecipes();
 
-    List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers);
+    List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers, String sort);
+
+    List<SimplifiedRecipe> findAllSimpleRecipesPaginated(List<Long> identifiers, int limit, int offset, String sort);
 
     Ingredient save(IngredientDto ingredient);
 

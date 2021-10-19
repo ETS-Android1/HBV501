@@ -57,14 +57,31 @@ public class RecipeServiceImplementation implements RecipeService {
         return s;
     }
 
-    public List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers) {
+    public List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers, String sort) {
         List<SimplifiedRecipe> list = new ArrayList<>();
         Iterator<Recipe> recipeIterator;
 
         if (identifiers.size() > 0) {
-            recipeIterator = recipeRepository.findByIngredientIds(identifiers, identifiers.size()).iterator();
+            recipeIterator = recipeRepository.findByIngredientIds(sort, identifiers, identifiers.size()).iterator();
         } else {
-            recipeIterator = recipeRepository.findAll().iterator();
+            recipeIterator = recipeRepository.findAllSortedBy(sort).iterator();
+        }
+
+        while(recipeIterator.hasNext()) {
+            list.add(createSimpleRecipe(recipeIterator.next()));
+        }
+
+        return list;
+    }
+
+    public List<SimplifiedRecipe> findAllSimpleRecipesPaginated(List<Long> identifiers, int limit, int offset, String sort) {
+        List<SimplifiedRecipe> list = new ArrayList<>();
+        Iterator<Recipe> recipeIterator;
+
+        if (identifiers.size() > 0) {
+            recipeIterator = recipeRepository.findByIngredientIdsPaginated(sort, identifiers, identifiers.size(), limit, offset).iterator();
+        } else {
+            recipeIterator = recipeRepository.findAllSortedByPaginated(sort, limit, offset).iterator();
         }
 
         while(recipeIterator.hasNext()) {

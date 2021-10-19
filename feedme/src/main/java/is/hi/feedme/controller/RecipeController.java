@@ -39,7 +39,11 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SimplifiedRecipe> getAllRecipes(@RequestParam(required = false, name = "ingredients") String ingredients) {
+    public List<SimplifiedRecipe> getAllRecipes(
+            @RequestParam(required = false, name = "ingredients") String ingredients,
+            @RequestParam(required = false, name = "limit") Integer limit,
+            @RequestParam(required = false, name = "offset") Integer offset,
+            @RequestParam(required = false, name = "sort") String sort) {
         List<Long> l;
 
         if (ingredients != null) {
@@ -48,7 +52,11 @@ public class RecipeController {
             l = new ArrayList<Long>();
         }
 
-        return recipeService.findAllSimpleRecipes(l);
+        if (limit != null) {
+            return recipeService.findAllSimpleRecipesPaginated(l, limit, offset == null ? 0 : offset, sort != null ? sort : "id");
+        }
+
+        return recipeService.findAllSimpleRecipes(l, sort != null ? sort : "id");
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
