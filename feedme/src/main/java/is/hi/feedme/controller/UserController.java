@@ -2,6 +2,7 @@ package is.hi.feedme.controller;
 
 import is.hi.feedme.config.TokenProvider;
 import is.hi.feedme.model.AuthToken;
+import is.hi.feedme.model.CompositeUser;
 import is.hi.feedme.model.LoginUser;
 import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.model.User;
@@ -62,9 +63,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @RequestMapping(value = "/me", method = RequestMethod.GET)
-    public User userInfo() {
+    public CompositeUser userInfo() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userService.findOneUser(auth.getName());
+        return userService.findCompositeUser(auth.getName());
     }
 
 }

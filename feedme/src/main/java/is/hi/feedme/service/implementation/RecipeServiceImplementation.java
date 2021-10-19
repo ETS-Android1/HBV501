@@ -33,26 +33,36 @@ public class RecipeServiceImplementation implements RecipeService {
         return list;
     }
 
+    private SimplifiedRecipe createSimpleRecipe(Recipe curr) {
+        long currId = curr.getId();
+
+        SimplifiedRecipe s = new SimplifiedRecipe();
+        s.setId(currId);
+        s.setName(curr.getName());
+
+        try {
+            s.setRating(reviewRepository.averageRatingByRecipeId(currId));
+        } catch (Exception e) {
+            // No rating exists, apply 0.0
+            s.setRating(0.0);
+        }
+
+        s.setDescription(curr.getDescription());
+        s.setCalories(curr.getCalories());
+        s.setProteins(curr.getProteins());
+        s.setCarbs(curr.getCarbs());
+        s.setFats(curr.getFats());
+        s.setImage(curr.getImage());
+
+        return s;
+    }
+
     public List<SimplifiedRecipe> findAllSimpleRecipes() {
         List<SimplifiedRecipe> list = new ArrayList<>();
         Iterator<Recipe> recipeIterator = recipeRepository.findAll().iterator();
 
         while(recipeIterator.hasNext()) {
-            Recipe curr = recipeIterator.next();
-            long currId = curr.getId();
-
-            SimplifiedRecipe s = new SimplifiedRecipe();
-            s.setId(currId);
-            s.setName(curr.getName());
-            s.setRating(reviewRepository.averageRatingByRecipeId(currId));
-            s.setDescription(curr.getDescription());
-            s.setCalories(curr.getCalories());
-            s.setProteins(curr.getProteins());
-            s.setCarbs(curr.getCarbs());
-            s.setFats(curr.getFats());
-            s.setImage(curr.getImage());
-
-            list.add(s);
+            list.add(createSimpleRecipe(recipeIterator.next()));
         }
 
         return list;

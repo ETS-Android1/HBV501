@@ -18,10 +18,10 @@ public class Recipe implements Serializable {
     @Column(unique = true)
     private String name;
 
-    @Column
+    @Column(length = 1024)
     private String description;
 
-    @Column
+    @Column(length = 1024)
     private String instructions;
 
     @Column

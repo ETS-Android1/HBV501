@@ -5,10 +5,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import is.hi.feedme.repository.RecipeRepository;
+import is.hi.feedme.repository.ReviewRepository;
 import is.hi.feedme.repository.UserRepository;
 import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
 import is.hi.feedme.model.CompositeUser;
+import is.hi.feedme.model.Recipe;
+import is.hi.feedme.model.SimplifiedRecipe;
 import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +31,48 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     private UserRepository userRepository;
 
     @Autowired
+    private RecipeRepository recipeRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
+
+    private SimplifiedUser createSimpleUser(User user) {
+        SimplifiedUser s = new SimplifiedUser();
+        s.setId(user.getId());
+        s.setUsername(user.getUsername());
+        s.setEmail(user.getEmail());
+        s.setAdmin(user.getAdmin());
+
+        return s;
+    }
+
+    private SimplifiedRecipe createSimpleRecipe(Recipe curr) {
+        long currId = curr.getId();
+
+        SimplifiedRecipe s = new SimplifiedRecipe();
+        s.setId(currId);
+        s.setName(curr.getName());
+
+        try {
+            s.setRating(reviewRepository.averageRatingByRecipeId(currId));
+        } catch (Exception e) {
+            // No rating exists, apply 0.0
+            s.setRating(0.0);
+        }
+
+        s.setDescription(curr.getDescription());
+        s.setCalories(curr.getCalories());
+        s.setProteins(curr.getProteins());
+        s.setCarbs(curr.getCarbs());
+        s.setFats(curr.getFats());
+        s.setImage(curr.getImage());
+
+        return s;
+    }
+
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -48,16 +94,6 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         List<User> list = new ArrayList<>();
         userRepository.findAll().iterator().forEachRemaining(list::add);
         return list;
-    }
-
-    private SimplifiedUser createSimpleUser(User user) {
-        SimplifiedUser s = new SimplifiedUser();
-        s.setId(user.getId());
-        s.setUsername(user.getUsername());
-        s.setEmail(user.getEmail());
-        s.setAdmin(user.getAdmin());
-
-        return s;
     }
 
     public List<SimplifiedUser> findAllSimpleUsers() {
@@ -82,11 +118,19 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     }
 
     @Override
-    public CompositeUser findCompositeUser(long id) {
-        User u = findOneUser(id);
+    public CompositeUser findCompositeUser(String name) {
+        User u = findOneUser(name);
         CompositeUser cu = new CompositeUser();
         cu.setSimplifiedUser(createSimpleUser(u));
 
+        Set<Recipe> recipes = u.getRecipes();
+        List<SimplifiedRecipe> sr = new ArrayList<>();
+
+        for(Recipe r : recipes) {
+            sr.add(createSimpleRecipe(r));
+        }
+
+        cu.setSimplifiedRecipes(sr);
         return cu;
     }
 

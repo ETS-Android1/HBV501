@@ -18,5 +18,5 @@ public interface UserService {
 
     User findOneUser(long id);
 
-    CompositeUser findCompositeUser(long id);
+    CompositeUser findCompositeUser(String username);
 }
