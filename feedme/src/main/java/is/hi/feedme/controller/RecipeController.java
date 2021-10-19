@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,36 @@ import java.util.Map;
 @RequestMapping("/recipes")
 public class RecipeController {
 
+    private List<Long> generateIngredientIDList(String ingredientQuery) {
+        List<Long> l = new ArrayList<Long>();
+        String[] tokens = ingredientQuery.split(",");
+
+        for (String token : tokens) {
+            try {
+                Long id = Long.parseLong(token);
+                l.add(id);
+            } catch (Exception e) {
+                // Unused, skip adding
+            }
+        }
+
+        return l;
+    }
+
     @Autowired
     private RecipeService recipeService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SimplifiedRecipe> getAllRecipes() {
-        return recipeService.findAllSimpleRecipes();
+    public List<SimplifiedRecipe> getAllRecipes(@RequestParam(required = false, name = "ingredients") String ingredients) {
+        List<Long> l;
+
+        if (ingredients != null) {
+            l = generateIngredientIDList(ingredients);
+        } else {
+            l = new ArrayList<Long>();
+        }
+
+        return recipeService.findAllSimpleRecipes(l);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

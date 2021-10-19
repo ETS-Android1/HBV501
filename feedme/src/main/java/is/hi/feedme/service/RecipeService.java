@@ -17,7 +17,7 @@ public interface RecipeService {
 
     List<Recipe> findAllRecipes();
 
-    List<SimplifiedRecipe> findAllSimpleRecipes();
+    List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers);
 
     Ingredient save(IngredientDto ingredient);
 

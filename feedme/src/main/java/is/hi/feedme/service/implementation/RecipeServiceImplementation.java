@@ -57,9 +57,15 @@ public class RecipeServiceImplementation implements RecipeService {
         return s;
     }
 
-    public List<SimplifiedRecipe> findAllSimpleRecipes() {
+    public List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers) {
         List<SimplifiedRecipe> list = new ArrayList<>();
-        Iterator<Recipe> recipeIterator = recipeRepository.findAll().iterator();
+        Iterator<Recipe> recipeIterator;
+
+        if (identifiers.size() > 0) {
+            recipeIterator = recipeRepository.findByIngredientIds(identifiers, identifiers.size()).iterator();
+        } else {
+            recipeIterator = recipeRepository.findAll().iterator();
+        }
 
         while(recipeIterator.hasNext()) {
             list.add(createSimpleRecipe(recipeIterator.next()));

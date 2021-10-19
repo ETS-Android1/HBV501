@@ -12,7 +12,7 @@ public class Review implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     private int rating;
@@ -27,11 +27,11 @@ public class Review implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
