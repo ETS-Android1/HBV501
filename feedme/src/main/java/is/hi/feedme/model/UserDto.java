@@ -1,5 +1,8 @@
 package is.hi.feedme.model;
 
+/**
+ * Helper Object for working with request bodies for user insertion.
+ */
 public class UserDto {
 
     private String username;

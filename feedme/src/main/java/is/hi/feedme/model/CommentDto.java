@@ -1,5 +1,8 @@
 package is.hi.feedme.model;
 
+/**
+ * Helper Object for working with request bodies for comment insertion 
+ */
 public class CommentDto {
 
     private Long id;

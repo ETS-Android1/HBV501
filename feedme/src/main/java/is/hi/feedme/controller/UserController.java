@@ -20,6 +20,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * <pre>
+ * HTTP routes for requests to /users
+ * 
+ * NOTE: In all cases password information is omitted from response objects
+ * </pre>
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/users")
@@ -34,6 +41,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * POST on /users/login, no authentication required
+     *
+     * @param loginUser the request body required for login (username, password)
+     * @return the JWT bearer token to insert into future requests
+     * @throws AuthenticationException
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
@@ -44,28 +58,50 @@ public class UserController {
         return ResponseEntity.ok(new AuthToken(token));
     }
 
+    /**
+     * POST on /users/register, no authentication required
+     *
+     * @param user the request body of the user creation request
+     * @return the information of the created user ( password field omitted )
+     */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public User saveUser(@RequestBody UserDto user) {
         return userService.save(user);
     }
 
+    /**
+     * GET on /users/me, any authentication required
+     * 
+     * @return Composite user information for the current user
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    public CompositeUser userInfo() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userService.findCompositeUser(auth.getName());
+    }
+
+    /**
+     * GET on /users, admin authentication required
+     * 
+     * @return a list of all simple user information
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<SimplifiedUser> getAllUsers() {
         return userService.findAllSimpleUsers();
     }
 
+    /**
+     * GET on /users/{id}, admin authentication required
+     * 
+     * @param id the id of the user to look up
+     * @return the user info of the user
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public User getUser(@PathVariable long id) {
         return userService.findOneUser(id);
-    }
-
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @RequestMapping(value = "/me", method = RequestMethod.GET)
-    public CompositeUser userInfo() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userService.findCompositeUser(auth.getName());
     }
 
 }

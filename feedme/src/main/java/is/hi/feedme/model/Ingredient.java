@@ -8,6 +8,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <pre>
+ * Ingredient entity, tied to the ingredients table in the database
+ * Additional relations:
+ * * One to many relationship with the ingredient_quantities connecting table
+ * ( This additional relational table is used to store ingredient quantities and can be observed in the IngredientQuantity object )
+ * </pre>
+ */
 @Entity
 @Table(name = "ingredients")
 public class Ingredient implements Serializable {

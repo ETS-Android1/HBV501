@@ -1,5 +1,8 @@
 package is.hi.feedme.model;
 
+/**
+ * Helper Object for working with request bodies for user login 
+ */
 public class LoginUser {
 
     private String username;

@@ -9,6 +9,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * <pre>
+ * Recipe entity, tied to the recipes table in the database
+ * Additional relations:
+ * * Many to many relationship with the users table
+ * * One to many relationship with the ingredient_quantities connecting table
+ * * One to many relationship with the comments table
+ * * One to many relationship with the reviews table
+ * ( All of these values except for ingredients are omitted when creating responses )
+ * </pre>
+ */
 @Entity
 @Table(name = "recipes")
 @JsonAutoDetect(fieldVisibility=JsonAutoDetect.Visibility.ANY, getterVisibility=JsonAutoDetect.Visibility.NONE,

@@ -16,6 +16,10 @@ import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Main JWT token Component,
+ * provides key Getters and Setters for user validation
+ */
 @Component
 public class TokenProvider implements Serializable {
 

@@ -8,6 +8,15 @@ import javax.persistence.MapsId;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * <pre>
+ * IngredientQuantity entity, tied to the ingredient_quantity table in the database
+ * Additional relations:
+ * * Many to one relationship with the ingredients table
+ * * Many to one relationship with the recipes table
+ * ( This connecting entity is used to define the quantity and unit measurement of ingredients for a given recipe )
+ * </pre>
+ */
 @Entity
 public class IngredientQuantity {
 
@@ -19,14 +28,16 @@ public class IngredientQuantity {
     @JoinColumn(name = "ingredient_id")
     Ingredient ingredient;
 
+    // Recipe is omitted from any responses using this to avoid a looping response
     @ManyToOne
     @MapsId("recipeId")
     @JoinColumn(name = "recipe_id")
     @JsonIgnore
     Recipe recipe;
 
+    // The amount of the ingredient
     int quantity;
-
+    // The describing unit ( cup, kg, liter, eggs, ... )
     String unit;
 
     public Ingredient getIngredient() {

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+/**
+ * Embeddable composite primary key for the IngredientQuantity entity
+ */
 @Embeddable
 public class IngredientQuantityKey implements Serializable {
 

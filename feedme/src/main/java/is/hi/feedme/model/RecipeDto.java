@@ -3,6 +3,10 @@ package is.hi.feedme.model;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Helper Object for working with request bodies for recipe insertion.
+ * Ingredients and comments are currently initialized as empty and must be added separately.
+ */
 public class RecipeDto {
 
     private String name;

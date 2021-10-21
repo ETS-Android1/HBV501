@@ -3,6 +3,9 @@ package is.hi.feedme.model;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Helper Object for working with request bodies for ingredient insertion 
+ */
 public class IngredientDto {
 
     private Long id;

@@ -1,5 +1,12 @@
 package is.hi.feedme.model;
 
+/**
+ * <pre>
+ * Simplified object used for sending responses where full user information is not required
+ * Example routes used:
+ * * /users/me
+ * </pre>
+ */
 public class SimplifiedUser {
 
     private Long id;

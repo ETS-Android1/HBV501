@@ -1,5 +1,8 @@
 package is.hi.feedme.model;
 
+/**
+ * Helper Object for working with request bodies for review insertion.
+ */
 public class ReviewDto {
 
     private int rating;

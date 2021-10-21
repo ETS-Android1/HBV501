@@ -1,5 +1,13 @@
 package is.hi.feedme.model;
 
+/**
+ * <pre>
+ * Simplified object used for sending responses where full recipe information is not required
+ * Example routes used:
+ * * /recipes
+ * * /users/me
+ * </pre>
+ */
 public class SimplifiedRecipe {
 
     private Long id;

@@ -4,8 +4,18 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Specifies the CORS policy of the back-end framework.
+ */
 public class CORSFilter implements Filter {
 
+    /**
+     * Applies CORS filtering headers to response objects 
+     * 
+     * @param req The HTTP request object
+     * @param res The HTPP response object
+     * @param chain the next middleware to route to
+     */
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;

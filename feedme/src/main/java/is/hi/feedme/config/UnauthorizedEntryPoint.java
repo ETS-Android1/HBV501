@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * HTTP401 unauthorized error Component response
+ */
 @Component
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint, Serializable {
 

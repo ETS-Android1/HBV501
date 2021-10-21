@@ -6,6 +6,15 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * <pre>
+ * Comment entity, tied to the comments table in the database
+ * Additional relations:
+ * * Many to one relationship with recipe entities
+ * * Many to one relationship with user entities
+ * (Both of these relationships are omitted from responses)
+ * </pre>
+ */
 @Entity
 @Table(name = "comments")
 public class Comment implements Serializable {

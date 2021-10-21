@@ -7,6 +7,15 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+/**
+ * <pre>
+ * User entity, tied to the users table in the database
+ * Additional relations:
+ * * Many to many relationship with the recipes table
+ * * One to many relationship with the comments table
+ * * One to many relationship with the reviews table
+ * </pre>
+ */
 @Entity
 @Table(name = "users")
 public class User implements Serializable {

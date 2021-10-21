@@ -18,6 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Middleware to obtain JWT tokens from request headers
+ * and parse user info
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${jwt.header.string}")
@@ -32,6 +36,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
+    /**
+     * Applies JWT parsing and user validation to an incoming request 
+     * 
+     * @param req The HTTP request object
+     * @param res The HTPP response object
+     * @param chain the next middleware to route to
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {

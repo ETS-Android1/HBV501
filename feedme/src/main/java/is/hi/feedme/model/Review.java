@@ -6,6 +6,15 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * <pre>
+ * Review entity, tied to the reviews table in the database
+ * Additional relations:
+ * * Many to one relationship with the users table
+ * * Many to one relationship with the recipes table
+ * ( All additional relationships are currently omitted when creating responses )
+ * </pre>
+ */
 @Entity
 @Table(name = "reviews")
 public class Review implements Serializable {

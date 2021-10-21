@@ -1,5 +1,8 @@
 package is.hi.feedme.model;
 
+/**
+ * Helper Object for working with user authentication tokens
+ */
 public class AuthToken {
 
     private String token;

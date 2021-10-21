@@ -16,6 +16,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.annotation.Resource;
 
+/**
+ * <pre>
+ * Main web security configurations for the applications.
+ *  
+ * Configures and provides:
+ * * The routes that require authorization 
+ * * The amount of iterations for bcrypt encoding 
+ * * The Beans used for user authentication 
+ * </pre>
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
