@@ -175,6 +175,7 @@ public class RecipeServiceImplementation implements RecipeService {
             totalCount = recipeRepository.findCount();
         }
 
+        url += "&sort=";
         switch (sort) {
         case "calories":
             url += "calories";
