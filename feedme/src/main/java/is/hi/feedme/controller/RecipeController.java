@@ -1,5 +1,6 @@
 package is.hi.feedme.controller;
 
+import is.hi.feedme.model.CompositeRecipe;
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
 import is.hi.feedme.model.SimplifiedRecipe;
@@ -39,11 +40,19 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SimplifiedRecipe> getAllRecipes(
+    public CompositeRecipe getAllRecipes(
             @RequestParam(required = false, name = "ingredients") String ingredients,
             @RequestParam(required = false, name = "limit") Integer limit,
             @RequestParam(required = false, name = "offset") Integer offset,
-            @RequestParam(required = false, name = "sort") String sort) {
+            @RequestParam(required = false, name = "sort") String sort,
+            @RequestParam(required = false, name = "mincalories") Integer minCalories,
+            @RequestParam(required = false, name = "maxcalories") Integer maxCalories,
+            @RequestParam(required = false, name = "mincarbs") Integer minCarbs,
+            @RequestParam(required = false, name = "maxcarbs") Integer maxCarbs,
+            @RequestParam(required = false, name = "minproteins") Integer minProteins,
+            @RequestParam(required = false, name = "maxproteins") Integer maxProteins,
+            @RequestParam(required = false, name = "minfats") Integer minFats,
+            @RequestParam(required = false, name = "maxfats") Integer maxFats) {
         List<Long> l;
 
         if (ingredients != null) {
@@ -53,10 +62,19 @@ public class RecipeController {
         }
 
         if (limit != null) {
-            return recipeService.findAllSimpleRecipesPaginated(l, limit, offset == null ? 0 : offset, sort != null ? sort : "id");
+            return recipeService.findAllSimpleRecipesPaginated(l, limit, offset == null ? 0 : offset,
+                    sort != null ? sort : "id", minCalories == null ? 0 : minCalories,
+                    maxCalories == null ? Integer.MAX_VALUE : maxCalories, minCarbs == null ? 0 : minCarbs,
+                    maxCarbs == null ? Integer.MAX_VALUE : maxCarbs, minProteins == null ? 0 : minProteins,
+                    maxProteins == null ? Integer.MAX_VALUE : maxProteins, minFats == null ? 0 : minFats,
+                    maxFats == null ? Integer.MAX_VALUE : maxFats);
         }
 
-        return recipeService.findAllSimpleRecipes(l, sort != null ? sort : "id");
+        return recipeService.findAllSimpleRecipes(l, sort != null ? sort : "id", minCalories == null ? 0 : minCalories,
+                maxCalories == null ? Integer.MAX_VALUE : maxCalories, minCarbs == null ? 0 : minCarbs,
+                maxCarbs == null ? Integer.MAX_VALUE : maxCarbs, minProteins == null ? 0 : minProteins,
+                maxProteins == null ? Integer.MAX_VALUE : maxProteins, minFats == null ? 0 : minFats,
+                maxFats == null ? Integer.MAX_VALUE : maxFats);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

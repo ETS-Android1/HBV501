@@ -10,6 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Forgive me Father for I have sinned.
+ */
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Recipe findByName(String name);
@@ -21,17 +24,222 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query("SELECT r FROM Recipe r WHERE r.id IN :ids")
     List<Recipe> findByIds(@Param("ids") List<Long> recipeIdsList, Sort sort);
 
-    @Query(value = "SELECT * FROM recipes ORDER BY :sort", nativeQuery = true)
-    List<Recipe> findAllSortedBy(@Param("sort") String sort);
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY id", nativeQuery = true)
+    List<Recipe> findAllSortedById(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
 
-    @Query(value = "SELECT * FROM recipes ORDER BY :sort LIMIT :limit OFFSET :offset", nativeQuery = true)
-    List<Recipe> findAllSortedByPaginated(@Param("sort") String sort, @Param("limit") int limit, @Param("offset") int offset);
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY id LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findAllSortedByIdPaginated(@Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
 
-    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM (SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) ORDER BY :sort", nativeQuery = true)
-    List<Recipe> findByIngredientIds(@Param("sort") String sort, @Param("ids") List<Long> recipeIdsList, @Param("size") int size);
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY id", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedById(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
 
-    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM (SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) ORDER BY :sort LIMIT :limit OFFSET :offset", nativeQuery = true)
-    List<Recipe> findByIngredientIdsPaginated(@Param("sort") String sort, @Param("ids") List<Long> recipeIdsList, @Param("size") int size,
-            @Param("limit") int limit, @Param("offset") int offset);
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY id LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByIdPaginated(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+            @Param("limit") int limit, @Param("offset") int offset, @Param("minCalories") int minCalories,
+            @Param("maxCalories") int maxCalories, @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
+            @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins, @Param("minFats") int minFats,
+            @Param("maxFats") int maxFats);
 
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY calories", nativeQuery = true)
+    List<Recipe> findAllSortedByCalories(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY calories LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findAllSortedByCaloriesPaginated(@Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY calories", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByCalories(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY calories LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByCaloriesPaginated(@Param("ids") List<Long> recipeIdsList,
+            @Param("size") int size, @Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY carbs", nativeQuery = true)
+    List<Recipe> findAllSortedByCarbs(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY carbs LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findAllSortedByCarbsPaginated(@Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY carbs", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByCarbs(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY carbs LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByCarbsPaginated(@Param("ids") List<Long> recipeIdsList,
+            @Param("size") int size, @Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY proteins DESC", nativeQuery = true)
+    List<Recipe> findAllSortedByProteins(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY proteins DESC LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findAllSortedByProteinsPaginated(@Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY proteins DESC", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByProteins(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY proteins DESC LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByProteinsPaginated(@Param("ids") List<Long> recipeIdsList,
+            @Param("size") int size, @Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY fats", nativeQuery = true)
+    List<Recipe> findAllSortedByFats(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY fats LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findAllSortedByFatsPaginated(@Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY fats", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByFats(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+    @Query(value = "SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+            + "(calories > :minCalories AND calories < :maxCalories) AND "
+            + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+            + "(proteins > :minProteins AND proteins < :maxProteins) AND" + "(fats > :minFats AND fats < :maxFats)"
+            + "ORDER BY fats LIMIT :limit OFFSET :offset", nativeQuery = true)
+    List<Recipe> findByIngredientIdsSortedByFatsPaginated(@Param("ids") List<Long> recipeIdsList,
+            @Param("size") int size, @Param("limit") int limit, @Param("offset") int offset,
+            @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+            @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs, @Param("minProteins") int minProteins,
+            @Param("maxProteins") int maxProteins, @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+
+    @Query(value = "SELECT COUNT(*) FROM recipes", nativeQuery = true)
+    int findCount();
+
+    @Query(value = "SELECT COUNT(*) FROM (SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+            + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
+            + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) a)) b", nativeQuery = true)
+    int findCountFiltered(@Param("ids") List<Long> recipeIdsList, @Param("size") int size);
 }

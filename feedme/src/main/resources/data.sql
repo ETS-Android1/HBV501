@@ -569,3 +569,8 @@ INSERT INTO
   reviews (rating, recipe_id, user_id)
 VALUES
   (3, 1, 2);
+
+INSERT INTO
+  reviews (rating, recipe_id, user_id)
+VALUES
+  (5, 3, 2);

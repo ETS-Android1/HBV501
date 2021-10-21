@@ -2,7 +2,7 @@ package is.hi.feedme.service;
 
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
-import is.hi.feedme.model.SimplifiedRecipe;
+import is.hi.feedme.model.CompositeRecipe;
 import is.hi.feedme.model.Ingredient;
 import is.hi.feedme.model.IngredientDto;
 
@@ -17,9 +17,9 @@ public interface RecipeService {
 
     List<Recipe> findAllRecipes();
 
-    List<SimplifiedRecipe> findAllSimpleRecipes(List<Long> identifiers, String sort);
+    CompositeRecipe findAllSimpleRecipes(List<Long> identifiers, String sort, int minCalories, int maxCalories, int minCarbs, int maxCarbs, int minProteins, int maxProteins, int minFats, int maxFats);
 
-    List<SimplifiedRecipe> findAllSimpleRecipesPaginated(List<Long> identifiers, int limit, int offset, String sort);
+    CompositeRecipe findAllSimpleRecipesPaginated(List<Long> identifiers, int limit, int offset, String sort, int minCalories, int maxCalories, int minCarbs, int maxCarbs, int minProteins, int maxProteins, int minFats, int maxFats);
 
     Ingredient save(IngredientDto ingredient);
 
