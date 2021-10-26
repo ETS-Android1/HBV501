@@ -7,6 +7,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * <pre>
+ * The main repository for handling reviews
+ * 
+ * The non standard entity queries are used for building composite routes.
+ * An example of this would be displaying the average rating in the main
+ * /recipes route. The average rating is not really a property of the recipe itself
+ * it merely knows the list of reviews it has attached to it.
+ * </pre>
+ */
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 

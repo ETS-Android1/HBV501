@@ -7,6 +7,12 @@ import is.hi.feedme.model.UserDto;
 
 import java.util.List;
 
+/**
+ * Interface definitions for the UserService.
+ * 
+ * Details for the individual implementation can be seen in the /implementation
+ * directory.
+ */
 public interface UserService {
     User save(UserDto user);
 
