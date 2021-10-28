@@ -356,15 +356,26 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Standard function to obtain all the ingredients stored in the system. This is
-     * generally used by the /ingredients route to provide a list of viable
-     * ingredient filters.
+     * Standard function to obtain all the ingredients stored in the system.
      * 
      * @return a list of all ingredients in the system
      */
     public List<Ingredient> findAllIngredients() {
         List<Ingredient> list = new ArrayList<>();
         ingredientRepository.findAll().iterator().forEachRemaining(list::add);
+        return list;
+    }
+
+    /**
+     * Standard function to obtain all the ingredients stored in the system. This is
+     * generally used by the /ingredients route to provide a list of viable
+     * ingredient filters.
+     * 
+     * @return a list of all ingredients, which are in use by Recipes, in the system
+     */
+    public List<Ingredient> findAllUsedIngredients() {
+        List<Ingredient> list = new ArrayList<>();
+        ingredientRepository.findIngredientsUsedByRecipes().iterator().forEachRemaining(list::add);
         return list;
     }
 

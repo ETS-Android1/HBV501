@@ -22,11 +22,11 @@ public class IngredientController {
     /**
      * GET on /ingredients, no authentication required
      * 
-     * @return a list of all ingredient objects
+     * @return a list of all used ingredient objects
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Ingredient> getAllRecipes() {
-        return recipeService.findAllIngredients();
+        return recipeService.findAllUsedIngredients();
     }
 
 }
