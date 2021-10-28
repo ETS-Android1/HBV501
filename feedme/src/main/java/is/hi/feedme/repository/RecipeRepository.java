@@ -25,6 +25,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+
+        // TODO:
+        //
+        // Recipe save(Recipe recipe);
+
         Recipe findByName(String name);
 
         Recipe findById(long id);
@@ -285,4 +290,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                         + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids "
                         + "GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) a)) b", nativeQuery = true)
         int findCountFiltered(@Param("ids") List<Long> recipeIdsList, @Param("size") int size);
+
 }

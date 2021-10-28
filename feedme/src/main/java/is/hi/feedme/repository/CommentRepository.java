@@ -1,6 +1,7 @@
 package is.hi.feedme.repository;
 
 import is.hi.feedme.model.Comment;
+import is.hi.feedme.model.CommentDto;
 import is.hi.feedme.model.Recipe;
 
 import java.util.Set;
@@ -13,5 +14,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
     Set<Comment> findByRecipe(Recipe recipe);
+
+    Comment save(CommentDto comment);
+
+    void delete(Comment comment);
+
 }

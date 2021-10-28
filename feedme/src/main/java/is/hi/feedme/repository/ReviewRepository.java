@@ -1,6 +1,7 @@
 package is.hi.feedme.repository;
 
 import is.hi.feedme.model.Review;
+import is.hi.feedme.model.ReviewDto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+
+    Review save(ReviewDto review);
+
+    void delete(Review review);
 
     @Query("SELECT AVG(rating) FROM Review WHERE recipe_id=:recipe_id")
     double averageRatingByRecipeId(@Param("recipe_id") long recipe_id);

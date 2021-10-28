@@ -14,15 +14,17 @@ import java.util.List;
  * directory.
  */
 public interface UserService {
-    User save(UserDto user);
+    User createUser(UserDto user);
+
+    void deleteUser(User user);
 
     List<User> findAllUsers();
 
     List<SimplifiedUser> findAllSimpleUsers();
 
-    User findOneUser(String username);
+    User findUserByUsername(String username);
 
-    User findOneUser(long id);
+    User findUserById(long id);
 
     CompositeUser findCompositeUser(String username);
 }

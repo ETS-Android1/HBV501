@@ -135,7 +135,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
      * @return the user entity associated with that username
      */
     @Override
-    public User findOneUser(String username) {
+    public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -146,7 +146,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
      * @return the user entity associated with that ID
      */
     @Override
-    public User findOneUser(long id) {
+    public User findUserById(long id) {
         return userRepository.findById(id);
     }
 
@@ -158,7 +158,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
      */
     @Override
     public CompositeUser findCompositeUser(String name) {
-        User u = findOneUser(name);
+        User u = findUserByUsername(name);
         CompositeUser cu = new CompositeUser();
         cu.setSimplifiedUser(createSimpleUser(u));
 
@@ -183,11 +183,23 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
      * @return the User entity created from saving it
      */
     @Override
-    public User save(UserDto user) {
+    public User createUser(UserDto user) {
 
         User nUser = user.getUserFromDto();
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 
         return userRepository.save(nUser);
     }
+
+    /**
+     * Standard function to delete a user based on its entity.
+     * 
+     * @param user the User entity to delete
+     */
+    @Override
+    public void deleteUser(User user) {
+
+        userRepository.delete(user);
+    }
+
 }

@@ -326,7 +326,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return the recipe that corresponds to that ID if any
      */
     @Override
-    public Recipe findOneRecipe(long id) {
+    public Recipe findRecipeById(long id) {
         return recipeRepository.findById(id);
     }
 
@@ -338,7 +338,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return the Recipe entity created from saving it
      */
     @Override
-    public Recipe save(RecipeDto recipe) {
+    public Recipe createRecipe(RecipeDto recipe) {
 
         Recipe nRecipe = recipe.getRecipeFromDto();
         return recipeRepository.save(nRecipe);
@@ -350,7 +350,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param recipe the Recipe entity to delete
      */
     @Override
-    public void delete(Recipe recipe) {
+    public void deleteRecipe(Recipe recipe) {
 
         recipeRepository.delete(recipe);
     }
@@ -375,10 +375,21 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return the Ingredient entity created from saving it
      */
     @Override
-    public Ingredient save(IngredientDto ingredient) {
+    public Ingredient createIngredient(IngredientDto ingredient) {
 
         Ingredient nIngredient = ingredient.getIngredientFromDto();
         return ingredientRepository.save(nIngredient);
+    }
+
+    /**
+     * Standard function to delete an ingredient based on its entity.
+     * 
+     * @param ingredient the Ingredient entity to delete
+     */
+    @Override
+    public void deleteIngredient(Ingredient ingredient) {
+
+        ingredientRepository.delete(ingredient);
     }
 
 }

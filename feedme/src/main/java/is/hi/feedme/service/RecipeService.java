@@ -15,22 +15,28 @@ import java.util.List;
  * directory.
  */
 public interface RecipeService {
-    Recipe findOneRecipe(long id);
 
-    Recipe save(RecipeDto recipe);
+        // Recipe stuff
+        Recipe findRecipeById(long id);
 
-    void delete(Recipe recipe);
+        Recipe createRecipe(RecipeDto recipe);
 
-    List<Recipe> findAllRecipes();
+        void deleteRecipe(Recipe recipe);
 
-    CompositeRecipe findAllSimpleRecipes(List<Long> identifiers, String sort, int minCalories, int maxCalories,
-            int minCarbs, int maxCarbs, int minProteins, int maxProteins, int minFats, int maxFats);
+        List<Recipe> findAllRecipes();
 
-    CompositeRecipe findAllSimpleRecipesPaginated(List<Long> identifiers, int limit, int offset, String sort,
-            int minCalories, int maxCalories, int minCarbs, int maxCarbs, int minProteins, int maxProteins, int minFats,
-            int maxFats);
+        CompositeRecipe findAllSimpleRecipes(List<Long> identifiers, String sort, int minCalories, int maxCalories,
+                        int minCarbs, int maxCarbs, int minProteins, int maxProteins, int minFats, int maxFats);
 
-    Ingredient save(IngredientDto ingredient);
+        CompositeRecipe findAllSimpleRecipesPaginated(List<Long> identifiers, int limit, int offset, String sort,
+                        int minCalories, int maxCalories, int minCarbs, int maxCarbs, int minProteins, int maxProteins,
+                        int minFats, int maxFats);
 
-    List<Ingredient> findAllIngredients();
+        // Ingredient stuff
+        List<Ingredient> findAllIngredients();
+
+        Ingredient createIngredient(IngredientDto ingredient);
+
+        void deleteIngredient(Ingredient ingredient);
+
 }

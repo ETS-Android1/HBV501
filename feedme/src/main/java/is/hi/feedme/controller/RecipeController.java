@@ -22,6 +22,8 @@ import java.util.Map;
 @RequestMapping("/recipes")
 public class RecipeController {
 
+    // TODO: Routing for PATCH (updateRecipeById)
+
     /**
      * Helper function to parse a comma separated String of ingredient IDs
      * 
@@ -69,7 +71,7 @@ public class RecipeController {
      *         with pagination information
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public CompositeRecipe getAllRecipes(@RequestParam(required = false, name = "ingredients") String ingredients,
+    public CompositeRecipe findAllRecipes(@RequestParam(required = false, name = "ingredients") String ingredients,
             @RequestParam(required = false, name = "limit") Integer limit,
             @RequestParam(required = false, name = "offset") Integer offset,
             @RequestParam(required = false, name = "sort") String sort,
@@ -117,8 +119,8 @@ public class RecipeController {
      *         shown )
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Recipe getRecipe(@PathVariable long id) {
-        return recipeService.findOneRecipe(id);
+    public Recipe findRecipeInfoById(@PathVariable long id) {
+        return recipeService.findRecipeById(id);
     }
 
     /**
@@ -130,8 +132,8 @@ public class RecipeController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Recipe saveRecipe(@RequestBody RecipeDto recipe) {
-        return recipeService.save(recipe);
+    public Recipe createRecipe(@RequestBody RecipeDto recipe) {
+        return recipeService.createRecipe(recipe);
     }
 
     /**
@@ -143,9 +145,9 @@ public class RecipeController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public Map<String, Boolean> deleteRecipe(@PathVariable long id) {
-        Recipe recipe = recipeService.findOneRecipe(id);
-        recipeService.delete(recipe);
+    public Map<String, Boolean> deleteRecipeById(@PathVariable long id) {
+        Recipe recipe = recipeService.findRecipeById(id);
+        recipeService.deleteRecipe(recipe);
 
         Map<String, Boolean> res = new HashMap<>();
         res.put("deleted", Boolean.TRUE);

@@ -49,7 +49,7 @@ public class UserController {
      * @throws AuthenticationException
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
+    public ResponseEntity<?> validateUser(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
@@ -65,8 +65,8 @@ public class UserController {
      * @return the information of the created user ( password field omitted )
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public User saveUser(@RequestBody UserDto user) {
-        return userService.save(user);
+    public User createUser(@RequestBody UserDto user) {
+        return userService.createUser(user);
     }
 
     /**
@@ -76,7 +76,7 @@ public class UserController {
      */
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @RequestMapping(value = "/me", method = RequestMethod.GET)
-    public CompositeUser userInfo() {
+    public CompositeUser findCurrentUserInfo() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.findCompositeUser(auth.getName());
     }
@@ -88,7 +88,7 @@ public class UserController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SimplifiedUser> getAllUsers() {
+    public List<SimplifiedUser> findAllUsers() {
         return userService.findAllSimpleUsers();
     }
 
@@ -100,8 +100,8 @@ public class UserController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public User getUser(@PathVariable long id) {
-        return userService.findOneUser(id);
+    public User findUserById(@PathVariable long id) {
+        return userService.findUserById(id);
     }
 
 }

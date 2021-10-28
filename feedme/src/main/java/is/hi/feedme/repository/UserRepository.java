@@ -1,6 +1,7 @@
 package is.hi.feedme.repository;
 
 import is.hi.feedme.model.User;
+import is.hi.feedme.model.UserDto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
     User findByUsername(String username);
 
     User findById(long id);
+
+    User save(UserDto user);
+    
+    void delete(User user);
+
 }
