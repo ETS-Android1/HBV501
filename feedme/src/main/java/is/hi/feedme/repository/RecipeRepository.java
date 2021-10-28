@@ -42,8 +42,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
         @Query(value = "SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
                         + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
                         + "(proteins > :minProteins AND proteins < :maxProteins) AND"
-                        + "(fats > :minFats AND fats < :maxFats)" + "ORDER BY id ASC", nativeQuery = true)
-        List<Recipe> findAllSortedById(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+                        + "(fats > :minFats AND fats < :maxFats)" + "ORDER BY name ASC", nativeQuery = true)
+        List<Recipe> findAllSortedByName(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
                         @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
                         @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
                         @Param("minFats") int minFats, @Param("maxFats") int maxFats);
@@ -52,8 +52,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                         + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
                         + "(proteins > :minProteins AND proteins < :maxProteins) AND"
                         + "(fats > :minFats AND fats < :maxFats)"
-                        + "ORDER BY id ASC LIMIT :limit OFFSET :offset", nativeQuery = true)
-        List<Recipe> findAllSortedByIdPaginated(@Param("limit") int limit, @Param("offset") int offset,
+                        + "ORDER BY name ASC LIMIT :limit OFFSET :offset", nativeQuery = true)
+        List<Recipe> findAllSortedByNamePaginated(@Param("limit") int limit, @Param("offset") int offset,
                         @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
                         @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
                         @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
@@ -65,8 +65,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                         + "(calories > :minCalories AND calories < :maxCalories) AND "
                         + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
                         + "(proteins > :minProteins AND proteins < :maxProteins) AND"
-                        + "(fats > :minFats AND fats < :maxFats)" + "ORDER BY id ASC", nativeQuery = true)
-        List<Recipe> findByIngredientIdsSortedById(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+                        + "(fats > :minFats AND fats < :maxFats)" + "ORDER BY name ASC", nativeQuery = true)
+        List<Recipe> findByIngredientIdsSortedByName(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
                         @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
                         @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
                         @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
@@ -79,8 +79,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                         + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
                         + "(proteins > :minProteins AND proteins < :maxProteins) AND"
                         + "(fats > :minFats AND fats < :maxFats)"
-                        + "ORDER BY id ASC LIMIT :limit OFFSET :offset", nativeQuery = true)
-        List<Recipe> findByIngredientIdsSortedByIdPaginated(@Param("ids") List<Long> recipeIdsList,
+                        + "ORDER BY name ASC LIMIT :limit OFFSET :offset", nativeQuery = true)
+        List<Recipe> findByIngredientIdsSortedByNamePaginated(@Param("ids") List<Long> recipeIdsList,
                         @Param("size") int size, @Param("limit") int limit, @Param("offset") int offset,
                         @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
                         @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,

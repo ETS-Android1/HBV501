@@ -167,13 +167,13 @@ public class RecipeServiceImplementation implements RecipeService {
             }
             break;
         default:
-            url += "id";
+            url += "name";
             if (identifiers.size() > 0) {
-                recipeIterator = recipeRepository.findByIngredientIdsSortedById(identifiers, identifiers.size(),
+                recipeIterator = recipeRepository.findByIngredientIdsSortedByName(identifiers, identifiers.size(),
                         minCalories, maxCalories, minCarbs, maxCarbs, minProteins, maxProteins, minFats, maxFats)
                         .iterator();
             } else {
-                recipeIterator = recipeRepository.findAllSortedById(minCalories, maxCalories, minCarbs, maxCarbs,
+                recipeIterator = recipeRepository.findAllSortedByName(minCalories, maxCalories, minCarbs, maxCarbs,
                         minProteins, maxProteins, minFats, maxFats).iterator();
             }
             break;
@@ -291,13 +291,13 @@ public class RecipeServiceImplementation implements RecipeService {
 
             break;
         default:
-            url += "id";
+            url += "name";
             if (identifiers.size() > 0) {
-                recipeIterator = recipeRepository.findByIngredientIdsSortedByIdPaginated(identifiers,
+                recipeIterator = recipeRepository.findByIngredientIdsSortedByNamePaginated(identifiers,
                         identifiers.size(), limit, offset, minCalories, maxCalories, minCarbs, maxCarbs, minProteins,
                         maxProteins, minFats, maxFats).iterator();
             } else {
-                recipeIterator = recipeRepository.findAllSortedByIdPaginated(limit, offset, minCalories, maxCalories,
+                recipeIterator = recipeRepository.findAllSortedByNamePaginated(limit, offset, minCalories, maxCalories,
                         minCarbs, maxCarbs, minProteins, maxProteins, minFats, maxFats).iterator();
             }
             break;

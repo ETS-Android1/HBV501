@@ -97,14 +97,14 @@ public class RecipeController {
 
         if (limit != null) {
             return recipeService.findAllSimpleRecipesPaginated(l, limit, offset == null ? 0 : offset,
-                    sort != null ? sort : "id", minCalories == null ? 0 : minCalories,
+                    sort != null ? sort : "name", minCalories == null ? 0 : minCalories,
                     maxCalories == null ? Integer.MAX_VALUE : maxCalories, minCarbs == null ? 0 : minCarbs,
                     maxCarbs == null ? Integer.MAX_VALUE : maxCarbs, minProteins == null ? 0 : minProteins,
                     maxProteins == null ? Integer.MAX_VALUE : maxProteins, minFats == null ? 0 : minFats,
                     maxFats == null ? Integer.MAX_VALUE : maxFats);
         }
 
-        return recipeService.findAllSimpleRecipes(l, sort != null ? sort : "id", minCalories == null ? 0 : minCalories,
+        return recipeService.findAllSimpleRecipes(l, sort != null ? sort : "name", minCalories == null ? 0 : minCalories,
                 maxCalories == null ? Integer.MAX_VALUE : maxCalories, minCarbs == null ? 0 : minCarbs,
                 maxCarbs == null ? Integer.MAX_VALUE : maxCarbs, minProteins == null ? 0 : minProteins,
                 maxProteins == null ? Integer.MAX_VALUE : maxProteins, minFats == null ? 0 : minFats,
