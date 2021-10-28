@@ -60,7 +60,7 @@
     - `username`
     - `password`
     - `email`
-    - `admin` ( OPTIONAL ) - this will generally be ignored and default to false
+    - `admin` - Currently this will generally be ignored and default to false
 * `/users/login` can be posted to with the following information to obtain a JWT login token:
     - `username`
     - `password`
