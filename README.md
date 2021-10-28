@@ -70,6 +70,8 @@
 
 **TODO stuff:**
 
+*Note some of this is done to some degree e.g. deletes and posts but it's not complete and not tested!*
+
 * PATCH routes for the purpose of editing recipes/comments/reviews/users
 * POST routes for adding comments and reviews ( and potentially new recipes )
 * DELETE routes for removing entities ( most of the repository and service functions exist but have not been connected )
