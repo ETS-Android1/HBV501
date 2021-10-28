@@ -32,7 +32,8 @@
 **Most get routes work to a moderate degree**
 
 * `/ingredients` can be queried for a list of ingredients that currently exists in the database
-* `/recipes` can be queried with multiple parameter options (adding a `?` and separating options with `&`):
+* `/recipes` can be queried with multiple parameter options (adding a `?` and separating options with `&`, e.g. `/recipes?ingredients=1&limit=1&offset=1`):
+    - `ingredients`: Comma separated integer values representing ingredient ID numbers to filter for
     - `limit`: Integer value representing how many records should be shown
     - `offset`: Integer value representing how many records should the result be offset by
     - `sort`: String value representing a column to order the records by, currently this can be:
