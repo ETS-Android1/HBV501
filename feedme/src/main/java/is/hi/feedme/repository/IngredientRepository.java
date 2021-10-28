@@ -12,9 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
-    // TODO:
-    //
-    // <List>Ingredient findByRecipe(Recipe recipe);
+    // TODO: <List>Ingredient findByRecipe(Recipe recipe);
 
     Ingredient findByName(String name);
 

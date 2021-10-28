@@ -26,9 +26,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-        // TODO:
-        //
-        // Recipe save(Recipe recipe);
+        // TODO: Recipe save(Recipe recipe);
 
         Recipe findByName(String name);
 
