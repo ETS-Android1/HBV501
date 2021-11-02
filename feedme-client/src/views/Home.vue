@@ -18,17 +18,17 @@
     </v-expansion-panel>
     </v-expansion-panels>
     <v-row no-gutters>
-      <template v-for="n in 6">
-        <v-col :key="n">
+      <template v-for="(recipe,index) in recipedata.recipes">
+        <v-col :key="recipe.id">
           <v-container
             class="pa-2"
-
           >
           <v-card
         class="mx-auto"
-        max-width="20rem"
+        width="22rem"
+        height="27rem"
         style="margin-top:3rem"
-    >
+        >
         <v-card-title>{{recipe.name}}</v-card-title>
         <v-card-subtitle>{{recipe.description}}</v-card-subtitle>
         <v-card-text>
@@ -59,9 +59,27 @@
                     {{ recipe.proteins }}
                   </v-list-item-content>
                 </v-list-item>
-            </v-list>
+                </v-list>
+                <div class="text-center mt-12">
+                <v-rating
+                  v-model="recipe.rating"
+                  color="yellow darken-3"
+                  background-color="grey darken-1"
+                  empty-icon="$ratingFull"
+                  half-increments
+                  readonly
+                ></v-rating>
+                    </div>
         </v-card-text>
+        <v-divider></v-divider>
          <v-card-actions>
+           <v-btn
+                color="orange"
+                text
+                to="viewrecipe/3"
+            >
+                View
+            </v-btn>
             <v-btn
                 color="orange"
                 text
@@ -73,60 +91,33 @@
           </v-container>
         </v-col>
         <v-responsive
-          v-if="n === 3"
-          :key="`width-${n}`"
+          v-if="index === 3"
+          :key="`width-${index}`"
           width="100%"
         ></v-responsive>
       </template>
     </v-row>
+    <v-pagination
+        v-model="page" 
+        class="my-4"
+        circle
+        :length="15"
+        :total-visible="7"
+    ></v-pagination>
   </v-container>
   </div>
 </template>
 
 <script>
-import { getIngredients } from "../service/api";
+import { getIngredients, getRecipes } from "../service/api";
   export default {
     name: 'Home',
     data() {
       return {
-        recipes: [],
+        page: 1,
+        recipedata: {},
         ex4: ['t1', 't2'],
-        types: [],
-        recipe: {
-                id: 1,
-                name: "Chicken and Broccoly Stir-Fry",
-                description: "Bla",
-                instructions: "Do things",
-                calories: 468.0,
-                carbs: 17.2,
-                proteins: 38.9,
-                fats: 27.2,
-                image: "Get image",             
-                ingredients: [
-                    {
-                        id: 1,
-                        name: "chicken"
-                    },
-                    {
-                        id: 2,
-                        name: "beans"
-                    },
-                    {
-                        id: 3,
-                        name: "catnip"
-                    },
-                    {
-                        id: 4, 
-                        name: "milk"
-                    }
-                ],
-                comments: [
-                    {
-                        id: 1,
-                        body: "Dry"
-                    }
-                ]
-            }
+        types: []
       }
     },
     methods: {
@@ -138,7 +129,10 @@ import { getIngredients } from "../service/api";
       const ingredients = (await getIngredients()).data;
       ingredients.forEach(ing => {
         this.types.push({ text: ing.name, value: ing.id , selected : false  })
-      });
+      });     
+
+      this.recipedata = (await getRecipes()).data;
+      console.log(this.recipedata);
     }
   }
 </script>

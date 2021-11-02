@@ -11,9 +11,6 @@
         <v-btn text to="/">
           <span class="mr-2">Home</span>
         </v-btn>
-        <v-btn text to="/viewrecipe">
-          <span class="mr-2">ViewRecipe</span>
-        </v-btn>
         <v-btn text to="/account">
           <span class="mr-2">Account</span>
         </v-btn>
