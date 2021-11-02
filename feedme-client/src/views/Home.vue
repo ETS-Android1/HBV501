@@ -76,7 +76,7 @@
            <v-btn
                 color="orange"
                 text
-                to="viewrecipe/3"
+                :to="{path:'/viewrecipe',query:{id: recipe.id}}"
             >
                 View
             </v-btn>

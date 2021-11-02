@@ -14,7 +14,8 @@ const routes = [
     {
         path: '/viewrecipe/:id?',
         name: 'ViewRecipe',
-        component: ViewRecipe
+        component: ViewRecipe,
+        props: route => ({ query: route.query.id })
     },
     {
         path: '/account',
