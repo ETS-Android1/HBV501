@@ -115,7 +115,7 @@ import { getIngredients, getRecipes } from "../service/api";
     data() {
       return {
         page: 1,
-        pageSize: 4,
+        pageSize: 6,
         list: [],
         listCount: 0,
         historyList: [],
@@ -130,7 +130,6 @@ import { getIngredients, getRecipes } from "../service/api";
       });     
 
       this.list = (await getRecipes()).data.recipes;
-      console.log(this.list);
 		let _this = this;
 		_this.initPage();
 		_this.updatePage(_this.page);
