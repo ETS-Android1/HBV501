@@ -18,7 +18,7 @@
     </v-expansion-panel>
     </v-expansion-panels>
     <v-row no-gutters>
-      <template v-for="(recipe,index) in recipedata.recipes">
+      <template v-for="(recipe,index) in historyList">
         <v-col :key="recipe.id">
           <v-container
             class="pa-2"
@@ -101,8 +101,8 @@
         v-model="page" 
         class="my-4"
         circle
-        :length="15"
-        :total-visible="7"
+        :length="pages"
+        @input="updatePage"
     ></v-pagination>
   </v-container>
   </div>
@@ -115,24 +115,53 @@ import { getIngredients, getRecipes } from "../service/api";
     data() {
       return {
         page: 1,
-        recipedata: {},
+        pageSize: 4,
+        list: [],
+        listCount: 0,
+        historyList: [],
         ex4: ['t1', 't2'],
         types: []
       }
     },
-    methods: {
-      getIngr() {
-        getIngredients();
-      }
-    },
-    async mounted() {
+    async created() {
       const ingredients = (await getIngredients()).data;
       ingredients.forEach(ing => {
         this.types.push({ text: ing.name, value: ing.id , selected : false  })
       });     
 
-      this.recipedata = (await getRecipes()).data;
-      console.log(this.recipedata);
+      this.list = (await getRecipes()).data.recipes;
+      console.log(this.list);
+		let _this = this;
+		_this.initPage();
+		_this.updatePage(_this.page);
+	},
+    methods: {
+      initPage: function() {
+			let _this = this;
+			_this.listCount = _this.list.length;
+			if (_this.listCount < _this.pageSize) {
+				_this.historyList = _this.list;
+			} else {
+				_this.historyList = _this.list.slice(0, _this.pageSize);
+			}
+		},
+		updatePage: function(pageIndex) {
+			let _this = this;
+			let _start = (pageIndex - 1) * _this.pageSize;
+			let _end = pageIndex * _this.pageSize;
+			_this.historyList = _this.list.slice(_start, _end);
+			_this.page = pageIndex;
+		}
+    },
+    async mounted() {
+
+    },
+    computed: {
+      pages() {
+			let _this = this;
+			if (_this.pageSize == null || _this.listCount == null) return 0;
+			return Math.ceil(_this.listCount / _this.pageSize);
+		}
     }
   }
 </script>
