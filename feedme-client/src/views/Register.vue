@@ -1,9 +1,18 @@
 <template>
+<div>
     <v-card
         class="mx-auto"
         width="400"
         style="margin-top: 1rem;"
     >
+    <v-alert
+      v-if="error.visible"
+      dense
+      dismissible
+      type="error"
+    >
+      {{error.message}}
+    </v-alert>
     <v-card-title>FeedMe Register</v-card-title>
     <v-card-text>
         <v-form>
@@ -56,9 +65,11 @@
         </v-form>
     </v-card-text>
     </v-card>
+</div>
 </template>
 
 <script>
+import { postRegister } from '../service/api'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, email, minLength, sameAs } from 'vuelidate/lib/validators'
 export default ({
@@ -75,7 +86,11 @@ export default ({
             username: "",
             password: "",
             email: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            error: {
+                visible: false,
+                message: 'Default'
+            }
         }
     },
     computed: {
@@ -109,11 +124,19 @@ export default ({
       }
     },
     methods: {
-        submit () {
+        async submit () {
             this.$v.$touch()    
             if(!this.$v.$anyError) {
                 //can submit
-                console.log('Lets pretend Im submitting')
+            
+                postRegister({username: this.username, password: this.password, email: this.email, admin: false})
+                    .then((res) => {
+                        console.log('success',res);
+                    })
+                    .catch(() => {
+                        this.error.visible = true;
+                        this.error.message = 'Could not register, username or email might already be in use.';
+                    })
             }
         },
         clear () {
