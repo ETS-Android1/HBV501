@@ -91,7 +91,7 @@
           </v-container>
         </v-col>
         <v-responsive
-          v-if="index === 3"
+          v-if="index === 2"
           :key="`width-${index}`"
           width="100%"
         ></v-responsive>
