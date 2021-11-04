@@ -6,23 +6,23 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- * Embeddable composite primary key for the IngredientQuantity entity
+ * Embeddable composite primary key for the Review entity
  */
 @Embeddable
-public class IngredientQuantityKey implements Serializable {
+public class ReviewKey implements Serializable {
 
-    @Column(name = "ingredient_id")
-    long ingredientId;
+    @Column(name = "user_id")
+    long userId;
 
     @Column(name = "recipe_id")
     long recipeId;
 
-    public long getIngredientId() {
-        return ingredientId;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setIngredientId(long id) {
-        this.ingredientId = id;
+    public void setUserId(long id) {
+        this.userId = id;
     }
 
     public long getRecipeId() {

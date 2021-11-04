@@ -40,7 +40,7 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
-    private SimplifiedUser createSimpleUser(User user) {
+    public SimplifiedUser createSimpleUser(User user) {
         SimplifiedUser s = new SimplifiedUser();
         s.setId(user.getId());
         s.setUsername(user.getUsername());
@@ -137,6 +137,17 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    /**
+     * Basic find one service, returns the user with the given email 
+     * 
+     * @param email the email to look for
+     * @return the user entity associated with that email 
+     */
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     /**

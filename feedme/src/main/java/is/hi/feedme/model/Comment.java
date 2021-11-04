@@ -19,9 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "comments")
 public class Comment implements Serializable {
 
-    @Id
+    @Id // No composite key, we allow multiple comments per user
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String username;
 
     @Column
     private String body;
@@ -42,6 +45,14 @@ public class Comment implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return this.user.getUsername();
+    }
+
+    public void setUsername() {
+        // Do not actually allow explicit setting
     }
 
     public String getBody() {

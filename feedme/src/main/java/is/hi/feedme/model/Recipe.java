@@ -65,7 +65,6 @@ public class Recipe implements Serializable {
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Review> reviews;
 

@@ -1,6 +1,7 @@
 package is.hi.feedme.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -19,37 +20,43 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "reviews")
 public class Review implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    ReviewKey id;
+
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    User user;
+
+    // Recipe is omitted from any responses using this to avoid a looping response
+    @ManyToOne
+    @MapsId("recipeId")
+    @JoinColumn(name = "recipe_id")
+    @JsonIgnore
+    Recipe recipe;
+
+    @Column
+    private String username;
+
+    @Column
+    private String title;
+
+    @Column
+    private String subtitle;
+
+    @Column
+    private Date date;
 
     @Column
     private int rating;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "recipe_id", nullable = false)
-    private Recipe recipe;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    public Long getId() {
-        return id;
+    public User getUser() {
+        return user;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Recipe getRecipe() {
@@ -60,12 +67,44 @@ public class Review implements Serializable {
         this.recipe = recipe;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return this.user.getUsername();
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername() {
+        // Do not actually allow explicit setting
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubtitle() {
+        return subtitle; 
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
 }

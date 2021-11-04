@@ -3,15 +3,20 @@ package is.hi.feedme.service.implementation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import is.hi.feedme.repository.RecipeRepository;
 import is.hi.feedme.repository.ReviewRepository;
 import is.hi.feedme.repository.IngredientRepository;
 import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
+import is.hi.feedme.model.Review;
+import is.hi.feedme.model.ReviewDto;
 import is.hi.feedme.model.SimplifiedRecipe;
 import is.hi.feedme.model.CompositeRecipe;
 import is.hi.feedme.model.Ingredient;
 import is.hi.feedme.model.IngredientDto;
+import is.hi.feedme.model.IngredientQuantityDto;
 import is.hi.feedme.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -320,6 +325,17 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
+     * Standard function to find one complete Recipe by its name
+     * 
+     * @param name the name of the recipe to find
+     * @return the recipe that corresponds to that name if any
+     */
+    @Override
+    public Recipe findRecipeByName(String name) {
+        return recipeRepository.findByName(name);
+    }
+
+    /**
      * Standard function to find one complete Recipe by its ID number
      * 
      * @param id the ID number of the recipe to find
@@ -339,9 +355,47 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public Recipe createRecipe(RecipeDto recipe) {
-
         Recipe nRecipe = recipe.getRecipeFromDto();
         return recipeRepository.save(nRecipe);
+    }
+
+    /**
+     * Standard function to update a recipe in the database
+     * 
+     * @param recipe  the current recipe information to update
+     * @param changes the list of changes to apply
+     * @return the Recipe entity created from saving it
+     */
+    @Override
+    public Recipe updateRecipe(Recipe recipe, Map<String, Object> changes) {
+
+        changes.forEach((change, value) -> {
+            switch (change) {
+            case "description":
+                recipe.setDescription((String) value);
+                break;
+            case "instructions":
+                recipe.setInstructions((String) value);
+                break;
+            case "calories":
+                recipe.setCalories((double) value);
+                break;
+            case "carbs":
+                recipe.setCarbs((double) value);
+                break;
+            case "proteins":
+                recipe.setProteins((double) value);
+                break;
+            case "fats":
+                recipe.setFats((double) value);
+                break;
+            case "image":
+                recipe.setImage((String) value);
+                break;
+            }
+        });
+
+        return recipeRepository.save(recipe);
     }
 
     /**
@@ -351,8 +405,49 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public void deleteRecipe(Recipe recipe) {
-
         recipeRepository.delete(recipe);
+    }
+
+    /**
+     * Adds a new ingredient to a recipe.
+     * 
+     * @param recipeId the id of the recipe to add to
+     * @param iDto     the ingredient to add
+     */
+    @Override
+    public void addNewIngredient(long recipeId, IngredientQuantityDto iDto) {
+        recipeRepository.saveRecipeIngredient(recipeId, iDto.getIngredient(), iDto.getQuantity(), iDto.getUnit());
+    }
+
+    /**
+     * Removes an ingredient from a recipe.
+     * 
+     * @param recipeId     the id of the recipe to remove from
+     * @param ingredientId the id of the ingredient to remove
+     */
+    @Override
+    public void deleteRecipeIngredient(long recipeId, long ingredientId) {
+        recipeRepository.deleteRecipeIngredient(recipeId, ingredientId);
+    }
+
+    /**
+     * Standard function to find a recipe based on its name
+     *
+     * @param name
+     * @return The ingredient that has this name, if any
+     */
+    public Ingredient findIngredientByName(String name) {
+        return ingredientRepository.findByName(name);
+    }
+
+    /**
+     * Standard function to find a recipe based on its id
+     *
+     * @param name
+     * @return The ingredient that has this name, if any
+     */
+    public Ingredient findIngredientById(long id) {
+        return ingredientRepository.findById(id);
     }
 
     /**
@@ -387,7 +482,6 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public Ingredient createIngredient(IngredientDto ingredient) {
-
         Ingredient nIngredient = ingredient.getIngredientFromDto();
         return ingredientRepository.save(nIngredient);
     }
@@ -399,8 +493,38 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public void deleteIngredient(Ingredient ingredient) {
-
         ingredientRepository.delete(ingredient);
+    }
+
+    /**
+     * Standard function to find a review with the primary key pair of recipeId and userId
+     * 
+     * @param recipeId the recipe to find the review for
+     * @param userId the user to find the review for
+     * @return the Review entity if one is found
+     */
+    public Review findReview(long recipeId, long userId) {
+        return reviewRepository.findByRecipeIdAndUserId(recipeId, userId);
+    }
+
+    /**
+     * Standard function to save a review gotten from a request body.
+     * 
+     * @param review the ReviewDto made from the request body information
+     */
+    @Override
+    public int createReview(long recipeId, long userId, ReviewDto review) {
+        return reviewRepository.saveRecipeReview(recipeId, userId, review.getTitle(), review.getSubtitle(), review.getRating());
+    }
+
+    /**
+     * Standard function to delete a review based on its entity
+     * 
+     * @param review the Review entity to delete
+     */
+    @Override
+    public void deleteReview(Review review) {
+        reviewRepository.delete(review);
     }
 
 }

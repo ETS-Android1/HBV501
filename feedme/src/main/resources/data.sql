@@ -566,11 +566,11 @@ VALUES
 
 -- DUMMY RECIPE REVIEWS
 INSERT INTO
-  reviews (rating, recipe_id, user_id)
+  reviews (recipe_id, user_id, title, subtitle, "date", rating)
 VALUES
-  (3, 1, 2);
+  (1, 2, 'Bleh', 'Meh', CURRENT_TIMESTAMP, 3);
 
 INSERT INTO
-  reviews (rating, recipe_id, user_id)
+  reviews (recipe_id, user_id, title, subtitle, "date", rating)
 VALUES
-  (5, 3, 2);
+  (3, 2, 'Nice', 'Nice', CURRENT_TIMESTAMP, 5);

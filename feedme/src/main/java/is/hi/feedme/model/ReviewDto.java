@@ -5,8 +5,25 @@ package is.hi.feedme.model;
  */
 public class ReviewDto {
 
+    private String title;
+    private String subtitle;
     private int rating;
-    private Recipe recipe;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
 
     public int getRating() {
         return rating;
@@ -16,18 +33,4 @@ public class ReviewDto {
         this.rating = rating;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public Review getReviewFromDto() {
-        Review review = new Review();
-        review.setRating(rating);
-
-        return review;
-    }
 }

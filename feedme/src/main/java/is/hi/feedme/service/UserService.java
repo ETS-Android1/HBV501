@@ -26,6 +26,8 @@ public interface UserService {
      */
     User createUser(UserDto user);
 
+    SimplifiedUser createSimpleUser(User user);
+
     /**
      * Standard function to delete a user based on its entity.
      * 
@@ -51,6 +53,14 @@ public interface UserService {
      * @return the user entity associated with that username
      */
     User findUserByUsername(String username);
+
+    /**
+     * Basic find one service, returns the user with the given email 
+     * 
+     * @param email the email to look for
+     * @return the user entity associated with that email 
+     */
+    public User findUserByEmail(String email);
 
     /**
      * Basic find one service, returns the user with the given ID

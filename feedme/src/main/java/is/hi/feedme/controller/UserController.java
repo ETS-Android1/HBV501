@@ -1,7 +1,7 @@
 package is.hi.feedme.controller;
 
 import is.hi.feedme.config.TokenProvider;
-import is.hi.feedme.model.AuthToken;
+import is.hi.feedme.model.LoginResponse;
 import is.hi.feedme.model.CompositeUser;
 import is.hi.feedme.model.LoginUser;
 import is.hi.feedme.model.SimplifiedUser;
@@ -9,6 +9,7 @@ import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
 import is.hi.feedme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,7 +56,11 @@ public class UserController {
                 new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+
+        SimplifiedUser user = userService.createSimpleUser(userService.findUserByUsername(loginUser.getUsername()));
+
+        // CORS policy is set to 3600 so max token age uses that
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponse(user, token, 3600));
     }
 
     /**
@@ -65,8 +70,32 @@ public class UserController {
      * @return the information of the created user ( password field omitted )
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public User createUser(@RequestBody UserDto user) {
-        return userService.createUser(user);
+    public ResponseEntity<?> createUser(@RequestBody UserDto user) {
+        User nameCheck = null;
+        User emailCheck = null;
+
+        try {
+            nameCheck = userService.findUserByUsername(user.getUsername());
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (nameCheck != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("user with that username already exists");
+        }
+
+        try {
+            emailCheck = userService.findUserByEmail(user.getEmail());
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (emailCheck != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("user with that email already exists");
+        }
+
+        SimplifiedUser nUser = userService.createSimpleUser(userService.createUser(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(nUser);
     }
 
     /**
@@ -77,6 +106,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @RequestMapping(value = "/me", method = RequestMethod.GET)
     public CompositeUser findCurrentUserInfo() {
+        // This route doesn't need explicit error handling, 401 is handled automatically
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.findCompositeUser(auth.getName());
     }
@@ -88,8 +118,20 @@ public class UserController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SimplifiedUser> findAllUsers() {
-        return userService.findAllSimpleUsers();
+    public ResponseEntity<List<SimplifiedUser>> findAllUsers() {
+        List<SimplifiedUser> su = null;
+
+        try {
+            su = userService.findAllSimpleUsers();
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (su == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(su);
     }
 
     /**
@@ -100,8 +142,19 @@ public class UserController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public User findUserById(@PathVariable long id) {
-        return userService.findUserById(id);
-    }
+    public ResponseEntity<?> findUserById(@PathVariable long id) {
+        User u = null;
+        
+        try {
+            u = userService.findUserById(id);
+        } catch (Exception e) {
+            // Unused
+        }
 
+        if (u == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no user with that id exists");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(u);
+    }
 }
