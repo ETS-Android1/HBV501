@@ -47,7 +47,7 @@
           <v-card
         class="mx-auto"
         width="22rem"
-        height="28rem"
+        height="30rem"
         style="margin-top:3rem"
         >
         <v-card-title>{{recipe.name}}</v-card-title>
@@ -90,7 +90,9 @@
                   half-increments
                   readonly
                 ></v-rating>
-                    </div>
+                <p v-if="recipe.rating < 0">not rated yet</p>
+                <p v-else><br /></p>
+                </div>
         </v-card-text>
         <v-divider></v-divider>
          <v-card-actions>

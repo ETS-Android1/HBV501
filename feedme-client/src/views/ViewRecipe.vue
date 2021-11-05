@@ -5,13 +5,32 @@
 		</v-btn>
 		<v-card style="margin-top: 1rem">
 			<v-toolbar class="mb-2" color="orange darken-3" dark flat>
-				<v-toolbar-title>{{ recipe.name }}</v-toolbar-title>
+				<v-toolbar-title>
+					{{ recipe.name }}
+				</v-toolbar-title>
 			</v-toolbar>
 			<v-container fluid>
+								<v-rating
+                  v-model="recipe.rating"
+                  color="yellow darken-3"
+                  background-color="grey darken-1"
+                  empty-icon="$ratingFull"
+                  half-increments
+                  readonly
+                ></v-rating>
 				<v-row>
 					<v-col cols="6">
 						<v-card flat>
-							<v-card-title>Ingredients</v-card-title>
+							<v-card-title>
+								Ingredients
+								<v-chip
+								class="ma-2"
+								color="green"
+								text-color="white"
+								>
+								{{recipe.ingredients.length}}
+								</v-chip>
+							</v-card-title>
 							<v-card-subtitle>List of the ingredients in the recipe</v-card-subtitle>
 							<v-card-text>
 								<v-simple-table fixed-header height="300px">
@@ -139,18 +158,19 @@ export default {
 	name: "ViewRecipe",
 	data() {
 		return {
-			recipe: {},
+			recipe: { ingredients: [] },
 			reviewList: []
 		};
 	},
 	async created() {
 		const recipeid = parseInt(this.$route.query.id);
 		this.recipe = (await getRecipeById(recipeid)).data;
-		await this.setReviews(this.recipe.reviews);
-		console.log(this.recipe.reviews);
+		this.recipe.ingredients.sort((a,b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
+		this.setReviews(this.recipe.reviews);
+		console.log(this.recipe);
 	},
 	methods: {
-		async setReviews(reviews) {
+		setReviews(reviews) {
 			let list = [];
 			for (let review in reviews) {
 				list.push(review);
