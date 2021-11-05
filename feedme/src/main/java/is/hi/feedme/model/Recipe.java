@@ -42,6 +42,10 @@ public class Recipe implements Serializable {
 
     @Transient
     @JsonInclude
+    double rating = 0.0;
+
+    @Transient
+    @JsonInclude
     @JsonProperty("user_stored")
     boolean userStored = false;
 
@@ -104,6 +108,14 @@ public class Recipe implements Serializable {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public boolean getUserStored() {

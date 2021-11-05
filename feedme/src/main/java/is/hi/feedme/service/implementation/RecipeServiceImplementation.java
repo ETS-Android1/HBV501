@@ -351,7 +351,17 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public Recipe findRecipeById(long id) {
-        return recipeRepository.findById(id);
+        Recipe r = recipeRepository.findById(id);
+        double rating = 0.0;
+
+        try {
+            rating = reviewRepository.averageRatingByRecipeId(id);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        r.setRating(rating);
+        return r;
     }
 
     /**
