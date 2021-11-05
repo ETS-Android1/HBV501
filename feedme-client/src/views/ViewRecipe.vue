@@ -75,53 +75,59 @@
 						</v-card>
 					</v-col>
 				</v-row>
-			<v-card flat width="80%">
-				<v-card-title>Instructions</v-card-title>
-				<v-card-subtitle
-					>A guide from the author to ensure your success</v-card-subtitle
-				>
-				<v-card-text>
-					<p class="text--primary">{{recipe.description}}</p>
-				</v-card-text>
-			</v-card>
-			<v-card class="mx-auto" flat>
-				<v-card-title>Reviews</v-card-title>
-        <v-card-subtitle>Feedback from our users</v-card-subtitle>
-        <v-card-text>
-				<v-list v-if="reviewList.length > 0" three-line>
-					<template v-for="(item, index) in reviewList">
-						<v-divider v-if="item.divider" :key="index"></v-divider>
+				<v-card flat width="80%">
+					<v-card-title>Instructions</v-card-title>
+					<v-card-subtitle
+						>A guide from the author to ensure your success</v-card-subtitle
+					>
+					<v-card-text>
+						<p class="text--primary">{{ recipe.description }}</p>
+					</v-card-text>
+				</v-card>
+				<v-card class="mx-auto" flat>
+					<v-card-title>Reviews</v-card-title>
+					<v-card-subtitle>Feedback from our users</v-card-subtitle>
+					<v-card-text>
+						<v-list v-if="reviewList.length > 0" three-line>
+							<template v-for="(item, index) in reviewList">
+								<v-divider v-if="item.divider" :key="index"></v-divider>
 
-						<v-list-item v-else :key="item.title">
-							<v-list-item-avatar>
-								<v-img :src="'https://icons.iconarchive.com/icons/papirus-team/papirus-status/128/avatar-default-icon.png'"></v-img>
-							</v-list-item-avatar>
+								<v-list-item v-else :key="item.title">
+									<v-list-item-avatar>
+										<v-img
+											:src="
+												'https://icons.iconarchive.com/icons/papirus-team/papirus-status/128/avatar-default-icon.png'
+											"
+										></v-img>
+									</v-list-item-avatar>
 
-							<v-list-item-content>
-								<v-list-item-title>{{ item.title }}</v-list-item-title>
-								<v-list-item-subtitle
-									><span class="text--primary">{{ item.username }}</span
-									><br />{{ item.subtitle }}</v-list-item-subtitle>
-								<v-list-item-action>
-									<v-rating
-										v-model="item.rating"
-										color="yellow darken-3"
-										background-color="grey darken-1"
-										empty-icon="$ratingFull"
-										readonly
-										small
-										dense
-									></v-rating>
-								</v-list-item-action>
-								<v-list-item-action-text>{{ item.date }}</v-list-item-action-text>
-							</v-list-item-content>
-						</v-list-item>
-					</template>
-				</v-list>
-        <p v-else class="text--primary">This recipe has no reviews so far.</p>
-        </v-card-text>
-			</v-card>
-      </v-container>
+									<v-list-item-content>
+										<v-list-item-title>{{ item.title }}</v-list-item-title>
+										<v-list-item-subtitle
+											><span class="text--primary">{{ item.username }}</span
+											><br />{{ item.subtitle }}</v-list-item-subtitle
+										>
+										<v-list-item-action>
+											<v-rating
+												v-model="item.rating"
+												color="yellow darken-3"
+												background-color="grey darken-1"
+												empty-icon="$ratingFull"
+												readonly
+												small
+												dense
+											></v-rating>
+										</v-list-item-action>
+										<v-list-item-action-text>{{ new Date(item.date).toDateString() }}<v-spacer></v-spacer>
+                    </v-list-item-action-text>
+									</v-list-item-content>
+								</v-list-item>
+							</template>
+						</v-list>
+						<p v-else class="text--primary">This recipe has no reviews so far.</p>
+					</v-card-text>
+				</v-card>
+			</v-container>
 		</v-card>
 	</v-container>
 </template>
@@ -134,28 +140,25 @@ export default {
 	data() {
 		return {
 			recipe: {},
-			reviewList: [
-			]
+			reviewList: []
 		};
 	},
 	async created() {
 		const recipeid = parseInt(this.$route.query.id);
 		this.recipe = (await getRecipeById(recipeid)).data;
-    await this.setReviews(this.recipe.reviews);
+		await this.setReviews(this.recipe.reviews);
 		console.log(this.recipe.reviews);
 	},
-  methods: {
-    async setReviews(reviews) {
-      let list = [];
-      for(let review in reviews) {
-        list.push(review);
-        list.push({divider: true, inset: true})
-      }
-      if(reviews.length <= 1)
-        this.reviewList = reviews;
-      else
-        this.reviewList = list;
-    }
-  }
+	methods: {
+		async setReviews(reviews) {
+			let list = [];
+			for (let review in reviews) {
+				list.push(review);
+				list.push({ divider: true, inset: true });
+			}
+			if (reviews.length <= 1) this.reviewList = reviews;
+			else this.reviewList = list;
+		}
+	}
 };
 </script>
