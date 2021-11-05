@@ -5,15 +5,36 @@
     <v-expansion-panel
     >
       <v-expansion-panel-header>
-        Filtering
+        Filter / sort
       </v-expansion-panel-header>
       <v-expansion-panel-content>
+      <v-card flat>
+        <v-card-title>Ingredients</v-card-title>
+        <v-card-subtitle>Search based on your favorite ingredients!</v-card-subtitle>
+        <v-card-text>
         <v-layout wrap>
                 <v-flex v-for="(category,index) in types" :key="types[index].text" xs6 sm2>
                   <v-checkbox light :label="category.text" v-model="category.selected">
                   </v-checkbox>
                 </v-flex>
         </v-layout>
+        </v-card-text>
+      </v-card>
+      <v-card flat>
+          <v-card-title>Nutritional values</v-card-title>
+          <v-card-subtitle>If you need to be careful with your calories intake!</v-card-subtitle>
+          <v-card-text>
+            <form
+            width="300"
+            >
+              <v-range-slider
+                hint="Calories"
+                max="0"
+                min="100"
+              ></v-range-slider>
+            </form>
+          </v-card-text>
+      </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
     </v-expansion-panels>
@@ -26,11 +47,11 @@
           <v-card
         class="mx-auto"
         width="22rem"
-        height="27rem"
+        height="28rem"
         style="margin-top:3rem"
         >
         <v-card-title>{{recipe.name}}</v-card-title>
-        <v-card-subtitle>{{recipe.description}}</v-card-subtitle>
+        <v-card-subtitle>{{setSubtitle(recipe.description)}}</v-card-subtitle>
         <v-card-text>
             <v-list dense>
                 <v-list-item>
@@ -109,7 +130,7 @@
 </template>
 
 <script>
-import { getIngredients, getRecipes } from "../service/api";
+import { getIngredients, getRecipes } from "../service/recipeapi";
   export default {
     name: 'Home',
     data() {
@@ -119,7 +140,6 @@ import { getIngredients, getRecipes } from "../service/api";
         list: [],
         listCount: 0,
         historyList: [],
-        ex4: ['t1', 't2'],
         types: []
       }
     },
@@ -150,7 +170,19 @@ import { getIngredients, getRecipes } from "../service/api";
 			let _end = pageIndex * _this.pageSize;
 			_this.historyList = _this.list.slice(_start, _end);
 			_this.page = pageIndex;
-		}
+		},
+      setSubtitle: function(description) {
+        if(description.length <= 49) {
+          let spaceToAdd = (49 - description.length)*3;
+          let buffer = "​ ".repeat(spaceToAdd);
+          description = description + buffer;
+        }
+        else if(description.length >= 98) {
+          description = description.substring(0, 98);
+          description += '...'
+        }
+        return description;
+      }
     },
     async mounted() {
 

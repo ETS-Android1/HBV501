@@ -14,13 +14,8 @@ async function getIngredients() {
     return axios.get(`${apiRoot}/ingredients`);
 }
 
-async function postRegister(info) {
-    return axios.post(`${apiRoot}/users/register`, info);
-}
-
 module.exports = {
     getRecipes,
     getIngredients,
-    getRecipeById,
-    postRegister
+    getRecipeById
 }

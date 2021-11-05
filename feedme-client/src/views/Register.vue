@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { postRegister } from '../service/api'
+import { postRegister } from '../service/userapi'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, email, minLength, sameAs } from 'vuelidate/lib/validators'
 export default ({
@@ -141,7 +141,7 @@ export default ({
         },
         clear () {
             this.$v.$reset()
-            this.name = ''
+            this.username = ''
             this.email = ''
             this.password = ''
             this.confirmPassword = ''

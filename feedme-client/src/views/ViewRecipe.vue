@@ -1,11 +1,15 @@
 <template>
   <v-container fluid>
-    <v-icon large color="black"> mdi-arrow-left </v-icon>
-    Back
+    <v-btn fab light small @click="$router.go(-1)">
+      <v-icon>mdi-arrow-left</v-icon>
+    </v-btn>
     <v-card style="margin-top: 1rem">
       <v-toolbar class="mb-2" color="orange darken-3" dark flat>
         <v-toolbar-title>{{recipe.name}}</v-toolbar-title>
       </v-toolbar>
+      <v-card class="mx-auto" flat>
+        <v-card-title>Dada</v-card-title>
+      </v-card>
       <v-card class="mx-auto" flat>
         <v-card-title>Nutritional value</v-card-title>
         <v-list>
@@ -77,7 +81,7 @@
 </template>
 
 <script>
-import { getRecipeById } from "../service/api";
+import { getRecipeById } from "../service/recipeapi";
 
 export default ({
     name: 'ViewRecipe',
@@ -122,9 +126,6 @@ export default ({
             }
           ]
         }
-    },
-    methods: {
-
     },
     async mounted() {
         const recipeid = parseInt(this.$route.query.id);
