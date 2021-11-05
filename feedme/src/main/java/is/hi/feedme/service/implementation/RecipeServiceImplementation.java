@@ -76,8 +76,7 @@ public class RecipeServiceImplementation implements RecipeService {
         try {
             s.setRating(reviewRepository.averageRatingByRecipeId(currId));
         } catch (Exception e) {
-            // No rating exists, apply 0.0
-            s.setRating(0.0);
+            s.setRating(-1.0);
         }
 
         s.setDescription(curr.getDescription());
@@ -352,7 +351,7 @@ public class RecipeServiceImplementation implements RecipeService {
     @Override
     public Recipe findRecipeById(long id) {
         Recipe r = recipeRepository.findById(id);
-        double rating = 0.0;
+        double rating = -1.0;
 
         try {
             rating = reviewRepository.averageRatingByRecipeId(id);
