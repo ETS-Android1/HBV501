@@ -88,7 +88,7 @@ public class UserController {
         }
 
         if (nameCheck != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("user with that username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("username");
         }
 
         try {
@@ -98,7 +98,7 @@ public class UserController {
         }
 
         if (emailCheck != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("user with that email already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("email");
         }
 
         SimplifiedUser nUser = userService.createSimpleUser(userService.createUser(user));
