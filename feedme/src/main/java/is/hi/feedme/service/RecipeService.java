@@ -4,6 +4,9 @@ import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.RecipeDto;
 import is.hi.feedme.model.Review;
 import is.hi.feedme.model.ReviewDto;
+import is.hi.feedme.model.User;
+import is.hi.feedme.model.Comment;
+import is.hi.feedme.model.CommentDto;
 import is.hi.feedme.model.CompositeRecipe;
 import is.hi.feedme.model.Ingredient;
 import is.hi.feedme.model.IngredientDto;
@@ -11,6 +14,7 @@ import is.hi.feedme.model.IngredientQuantityDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Interface definitions for the RecipeService.
@@ -205,10 +209,53 @@ public interface RecipeService {
     public int createReview(long recipeId, long userId, ReviewDto review);
 
     /**
+     * Standard function to update a review in the database
+     * 
+     * @param review the current review information to update
+     * @param changes the list of changes to apply
+     * @return the Review entity created from saving it
+     */
+    public Review updateReview(Review review, Map<String, Object> changes);
+
+    /**
      * Standard function to delete a review based on its entity
      * 
      * @param review the Review entity to delete
      */
     public void deleteReview(Review review);
+
+    /**
+     * Standard function to find a comment by its id
+     * 
+     * @param id the id of the comment to find
+     * @return the Comment entity if one is found
+     */
+    public Optional<Comment> findComment(long id);
+
+    /**
+     * Standard function to save a comment received from a request body
+     * 
+     * @param recipe the recipe to use for the comment
+     * @param user the user who made the comment
+     * @param comment the request body information
+     * @return the created Comment entity
+     */
+    public Comment createComment(Recipe recipe, User user, CommentDto comment);
+
+    /**
+     * Standard function to update a comment in the database
+     * 
+     * @param comment the current comment information to update
+     * @param changes the list of changes to apply
+     * @return the Comment entity created from saving it
+     */
+    public Comment updateComment(Comment comment, Map<String, Object> changes);
+
+    /**
+     * Standard function to delete a comment based on its entity
+     * 
+     * @param comment the Comment entity to delete
+     */
+    public void deleteComment(Comment comment);
 
 }

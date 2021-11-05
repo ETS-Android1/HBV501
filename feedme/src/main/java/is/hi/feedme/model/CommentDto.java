@@ -5,17 +5,8 @@ package is.hi.feedme.model;
  */
 public class CommentDto {
 
-    private Long id;
     private String body;
-    private Recipe recipe;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getBody() {
         return body;
@@ -25,18 +16,4 @@ public class CommentDto {
         this.body = body;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public Comment getCommentFromDto() {
-        Comment comment = new Comment();
-        comment.setBody(body);
-
-        return comment;
-    }
 }

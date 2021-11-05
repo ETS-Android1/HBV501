@@ -1,5 +1,7 @@
 package is.hi.feedme.controller;
 
+import is.hi.feedme.model.Comment;
+import is.hi.feedme.model.CommentDto;
 import is.hi.feedme.model.CompositeRecipe;
 import is.hi.feedme.model.Ingredient;
 import is.hi.feedme.model.IngredientQuantityDto;
@@ -321,7 +323,7 @@ public class RecipeController {
     }
 
     /**
-     * POST on /recipes/{id}/reviews, user authentication is required
+     * POST on /recipes/{id}/reviews, authentication is required
      * 
      * @param id the id of the recipe to add a review to
      * @param rDto the request body of the review to add
@@ -360,7 +362,52 @@ public class RecipeController {
     }
 
     /**
-     * DELETE on /recipes/{id}/reviews/{userId}, user authentication is required
+     * PATCH on /recipes/{id}/reviews/{userId}, authentication required. Used to change a
+     * review.
+     * 
+     * @param id the id of the recipe
+     * @param userId the id of the user
+     * @return a response indicating whether update was successful
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "{id}/reviews/{userId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateUserReview(@PathVariable long id, @PathVariable long userId, @RequestBody Map<String, Object> changes) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+
+        if (!(user.getAdmin() || user.getId() == userId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        Recipe recipe = null;
+
+        try {
+            recipe = recipeService.findRecipeById(id);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (recipe == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no recipe with that id exists");
+        }
+
+        Review r = null;
+
+        try {
+            r = recipeService.findReview(id, userId);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (r == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no review with those key values exists");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(recipeService.updateReview(r, changes));
+    }
+
+    /**
+     * DELETE on /recipes/{id}/reviews/{userId}, authentication is required
      * 
      * @param id the id of the recipe to add a review to
      * @param userId the id of the user
@@ -389,6 +436,109 @@ public class RecipeController {
         }
 
         recipeService.deleteReview(r);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    /**
+     * POST on /recipes/{id}/comments, authentication is required
+     * 
+     * @param id the id of the recipe to add a review to
+     * @param cDto the request body of the comment to add
+     * @return the status of the creation request
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "{id}/comments", method = RequestMethod.POST)
+    public ResponseEntity<?> addUserComment(@PathVariable long id, @RequestBody CommentDto cDto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Recipe r = null;
+
+        try {
+            r = recipeService.findRecipeById(id);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (r == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no recipe with that id exists");
+        }
+
+        Comment c = null;
+
+        try {
+            c = recipeService.createComment(r, user, cDto);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (c == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        }
+    }
+
+    /**
+     * PATCH on /recipes/{id}/comments/{commentId}, authentication required. Used to change a
+     * review.
+     * 
+     * @param id the id of the recipe
+     * @param userId the id of the user
+     * @return a response indicating whether update was successful
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "{id}/comments/{commentId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateUserComment(@PathVariable long id, @PathVariable long commentId, @RequestBody Map<String, Object> changes) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Comment c = null;
+
+        try {
+            c = recipeService.findComment(commentId).get();
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (c == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no comment with that id exists");
+        }
+
+        if (!(user.getAdmin() || user.getId() == c.getUser().getId())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(recipeService.updateComment(c, changes));
+    }
+
+    /**
+     * DELETE on /recipes/{id}/comments/{commentId}, authentication is required
+     * 
+     * @param id the id of the recipe
+     * @param commentId the id of the comment
+     * @return the status of the deletion request
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "{id}/comments/{commentId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUserComment(@PathVariable long id, @PathVariable long commentId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Comment c = null;
+
+        try {
+            c = recipeService.findComment(commentId).get();
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (c == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no comment with that id exists");
+        }
+
+        if (!(user.getAdmin() || user.getId() == c.getUser().getId())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        recipeService.deleteComment(c);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
