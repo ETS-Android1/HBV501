@@ -15,7 +15,7 @@ export default ({
 
     },
     async mounted() {
-        const m = await getUserInfo(this.$store.state.token);
+        const m = await getUserInfo();
         this.user = m.data.user;
     }
 })

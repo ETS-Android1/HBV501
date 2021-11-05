@@ -1,3 +1,5 @@
+import { store } from '../main.js'
+
 const axios = require('axios').default;
 
 const apiRoot = "http://localhost:3000/users";
@@ -10,17 +12,13 @@ async function postLogin(info) {
     return axios.post(`${apiRoot}/login`, info);
 }
 
-async function getUserInfo(token) {
+async function getUserInfo() {
     const cfg = {
         headers: {
-           Authorization: "Bearer " + token
+           Authorization: `Bearer ${store.state.token}`
         }
-     }
+     };
     return axios.get(`${apiRoot}/me`, cfg);
 }
 
-module.exports = {
-    postRegister,
-    postLogin,
-    getUserInfo
-}
+export { getUserInfo, postRegister, postLogin }
