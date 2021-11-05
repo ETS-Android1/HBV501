@@ -11,18 +11,34 @@
         <v-btn text to="/">
           <span class="mr-2">Home</span>
         </v-btn>
-        <v-btn text to="/account">
+        <v-btn v-if="this.$store.state.authenticated" text to="/account">
           <span class="mr-2">Account</span>
         </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-btn
+        v-if="!this.$store.state.authenticated"
         class="ma-2"
         plain
         color="white"
         to="/login"
       >
         Login
+        <v-icon
+          dark
+          right
+        >
+          mdi-login-variant
+        </v-icon>
+      </v-btn>
+      <v-btn
+        v-if="this.$store.state.authenticated"
+        class="ma-2"
+        plain
+        color="white"
+        @click="logout"
+      >
+        Logout
         <v-icon
           dark
           right
@@ -42,16 +58,26 @@
 </template>
 
 <script>
-
 export default {
   name: 'App',
-  data: () => ({
-    //
-  }),
+  data() {
+        return {
+
+        }
+  },
   methods: {
     isPath(path) {
       return this.$route.path === path;
+    },
+    logout() {
+      this.$store.commit('setUser', null);
+      this.$store.commit('setToken', null);
+      this.$store.commit('setAuth', false);
+      this.$router.push('/');
     }
+  },
+  mounted() {
+
   }
 };
 </script>

@@ -38,7 +38,7 @@
             color="orange darken-1"
             class="mr-4"
             width="100%"
-            @click="submit"
+            @click="login"
             >
             Login
             </v-btn>          
@@ -86,7 +86,7 @@ export default ({
         },
     },
     methods: {
-        async submit() {
+        async login() {
             this.$v.$touch()  
             this.error.visible = false;  
             if(!this.$v.$anyError) {
@@ -94,6 +94,7 @@ export default ({
                     if(response.status === 200) {
                         this.$store.commit('setUser', response.data.user);
                         this.$store.commit('setToken', response.data.token);
+                        this.$store.commit('setAuth', true);
                         this.$router.push({ name: "Account"})
                     }
                 })

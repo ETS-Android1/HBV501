@@ -10,7 +10,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     user: null,
-    token: null
+    token: null,
+    authenticated: false
   },
   mutations: {
     setUser (state, user) {
@@ -18,9 +19,13 @@ const store = new Vuex.Store({
     },
     setToken (state, token) {
       state.token = token
+    },
+    setAuth (state, val) {
+      state.authenticated = val;
     }
   },
-})
+});
+
 
 new Vue({
   vuetify,
