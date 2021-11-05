@@ -75,7 +75,6 @@
 						</v-card>
 					</v-col>
 				</v-row>
-			</v-container>
 			<v-card flat width="80%">
 				<v-card-title>Instructions</v-card-title>
 				<v-card-subtitle
@@ -89,21 +88,20 @@
 				<v-card-title>Reviews</v-card-title>
         <v-card-subtitle>Feedback from our users</v-card-subtitle>
         <v-card-text>
-				<v-list v-if="items.length > 0" three-line>
-					<template v-for="(item, index) in items">
+				<v-list v-if="reviewList.length > 0" three-line>
+					<template v-for="(item, index) in reviewList">
 						<v-divider v-if="item.divider" :key="index"></v-divider>
 
 						<v-list-item v-else :key="item.title">
 							<v-list-item-avatar>
-								<v-img :src="item.avatar"></v-img>
+								<v-img :src="'https://icons.iconarchive.com/icons/papirus-team/papirus-status/128/avatar-default-icon.png'"></v-img>
 							</v-list-item-avatar>
 
 							<v-list-item-content>
 								<v-list-item-title>{{ item.title }}</v-list-item-title>
 								<v-list-item-subtitle
-									><span class="text--primary">{{ item.name }}</span
-									><br />{{ item.subtitle }}</v-list-item-subtitle
-								>
+									><span class="text--primary">{{ item.username }}</span
+									><br />{{ item.subtitle }}</v-list-item-subtitle>
 								<v-list-item-action>
 									<v-rating
 										v-model="item.rating"
@@ -123,6 +121,7 @@
         <p v-else class="text--primary">This recipe has no reviews so far.</p>
         </v-card-text>
 			</v-card>
+      </v-container>
 		</v-card>
 	</v-container>
 </template>
@@ -135,56 +134,28 @@ export default {
 	data() {
 		return {
 			recipe: {},
-			desserts: [
-				{
-					name: "Frozen Yogurt",
-					calories: 159
-				},
-				{
-					name: "Ice cream sandwich",
-					calories: 237
-				},
-				{
-					name: "Eclair",
-					calories: 262
-				},
-				{
-					name: "Cupcake",
-					calories: 305
-				},
-				{
-					name: "Gingerbread",
-					calories: 356
-				},
-				{
-					name: "Jelly bean",
-					calories: 375
-				},
-				{
-					name: "Lollipop",
-					calories: 392
-				},
-				{
-					name: "Honeycomb",
-					calories: 408
-				},
-				{
-					name: "Donut",
-					calories: 452
-				},
-				{
-					name: "KitKat",
-					calories: 518
-				}
-			],
-			items: [
+			reviewList: [
 			]
 		};
 	},
-	async mounted() {
+	async created() {
 		const recipeid = parseInt(this.$route.query.id);
 		this.recipe = (await getRecipeById(recipeid)).data;
-		console.log(this.recipe);
-	}
+    await this.setReviews(this.recipe.reviews);
+		console.log(this.recipe.reviews);
+	},
+  methods: {
+    async setReviews(reviews) {
+      let list = [];
+      for(let review in reviews) {
+        list.push(review);
+        list.push({divider: true, inset: true})
+      }
+      if(reviews.length <= 1)
+        this.reviewList = reviews;
+      else
+        this.reviewList = list;
+    }
+  }
 };
 </script>
