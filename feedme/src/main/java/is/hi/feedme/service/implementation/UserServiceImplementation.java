@@ -185,6 +185,17 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     }
 
     /**
+     * Standard function to save user info from an updated entity.
+     * Mainly used for updates.
+     * 
+     * @param user the user to update
+     * @return the updated user
+     */
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    /**
      * Standard function to save a user obtained from a request body. It is worth
      * keeping in mind that any newly registered users are automatically made into
      * normal users and not admins. If authorization is to be escalated it has to be

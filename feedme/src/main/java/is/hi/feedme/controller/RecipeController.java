@@ -143,6 +143,15 @@ public class RecipeController {
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ResponseEntity<?> findRecipeInfoById(@PathVariable long id) {
+        User user = null;
+        
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            user = userService.findUserByUsername(auth.getName());
+        } catch (Exception e) {
+            // Unused
+        }
+
         Recipe r = null;
         try {
             r = recipeService.findRecipeById(id);
@@ -152,6 +161,10 @@ public class RecipeController {
 
         if (r == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no recipe with that id exists");
+        }
+
+        if (user != null && user.getRecipes().contains(r)) {
+            r.setUserStored(true);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(r);

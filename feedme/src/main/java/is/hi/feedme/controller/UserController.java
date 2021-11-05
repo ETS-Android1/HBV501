@@ -4,10 +4,13 @@ import is.hi.feedme.config.TokenProvider;
 import is.hi.feedme.model.LoginResponse;
 import is.hi.feedme.model.CompositeUser;
 import is.hi.feedme.model.LoginUser;
+import is.hi.feedme.model.Recipe;
 import is.hi.feedme.model.SimplifiedUser;
 import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
+import is.hi.feedme.service.RecipeService;
 import is.hi.feedme.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <pre>
@@ -41,6 +45,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RecipeService recipeService;
 
     /**
      * POST on /users/login, no authentication required
@@ -112,6 +119,78 @@ public class UserController {
     }
 
     /**
+     * POST on /recipes/{id}/reviews, user authentication is required
+     * 
+     * @param id the id of the recipe to add
+     * @return the status of the creation request
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "me/recipes/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?> addUserRecipe(@PathVariable long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Recipe r = null;
+
+        try {
+            r = recipeService.findRecipeById(id);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (r == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no recipe with that id exists");
+        }
+
+        Set<Recipe> userRecipes = user.getRecipes(); 
+
+
+        if (userRecipes.contains(r)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("user already has this recipe stored");
+        }
+
+        userRecipes.add(r);
+        user.setRecipes(userRecipes);
+        userService.updateUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    /**
+     * DELETE on /recipes/{id}/reviews, user authentication is required
+     * 
+     * @param id the id of the recipe to delete
+     * @return the status of the creation request
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "me/recipes/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUserRecipe(@PathVariable long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Recipe r = null;
+
+        try {
+            r = recipeService.findRecipeById(id);
+        } catch (Exception e) {
+            // Unused
+        }
+
+        if (r == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no recipe with that id exists");
+        }
+
+        Set<Recipe> userRecipes = user.getRecipes(); 
+
+
+        if (!userRecipes.contains(r)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user does not have this recipe stored");
+        }
+
+        userRecipes.remove(r);
+        user.setRecipes(userRecipes);
+        userService.updateUser(user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    /**
      * GET on /users, admin authentication required
      * 
      * @return a list of all simple user information
@@ -157,4 +236,5 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(u);
     }
+
 }

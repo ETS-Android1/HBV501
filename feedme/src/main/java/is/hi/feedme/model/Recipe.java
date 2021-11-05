@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -38,6 +39,11 @@ public class Recipe implements Serializable {
 
     @Column(length = 1024)
     private String instructions;
+
+    @Transient
+    @JsonInclude
+    @JsonProperty("user_stored")
+    boolean userStored = false;
 
     @Column
     private double calories;
@@ -98,6 +104,14 @@ public class Recipe implements Serializable {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public boolean getUserStored() {
+        return userStored;
+    }
+
+    public void setUserStored(boolean userStored) {
+        this.userStored = userStored;
     }
 
     public double getCalories() {
