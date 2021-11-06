@@ -73,6 +73,7 @@ export default {
       this.$store.commit('setUser', null);
       this.$store.commit('setToken', null);
       this.$store.commit('setAuth', false);
+      sessionStorage.clear();
       this.$router.push('/');
     }
   },
