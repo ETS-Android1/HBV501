@@ -103,15 +103,14 @@
 						<p class="text--primary">{{ recipe.description }}</p>
 					</v-card-text>
 				</v-card>
-				<v-card class="mx-auto" flat>
+				<v-card flat>
 					<v-card-title>Reviews</v-card-title>
 					<v-card-subtitle>Feedback from our users</v-card-subtitle>
 					<v-card-text>
 						<v-list v-if="reviewList.length > 0" three-line>
-							<template v-for="(item, index) in reviewList">
-								<v-divider v-if="item.divider" :key="index"></v-divider>
-
-								<v-list-item v-else :key="item.title">
+							<template v-for="(item, index) in pageInfo.historyList">
+								<v-divider :key="index"></v-divider>
+								<v-list-item :key="item.title">
 									<v-list-item-avatar>
 										<v-img
 											:src="
@@ -145,6 +144,15 @@
 						</v-list>
 						<p v-else class="text--primary">This recipe has no reviews so far.</p>
 					</v-card-text>
+					<v-card-actions>
+						<v-pagination
+							v-model="pageInfo.page" 
+							class="my-4"
+							circle
+							:length="pages"
+							@input="updatePage"
+						></v-pagination>
+					</v-card-actions>
 				</v-card>
 			</v-container>
 		</v-card>
@@ -153,12 +161,18 @@
 
 <script>
 import { getRecipeById } from "../service/recipeapi";
-
+import { initPage, updatePage, pages } from "../misc/pagination"
 export default {
 	name: "ViewRecipe",
 	data() {
 		return {
 			recipe: { ingredients: [] },
+			pageInfo: {
+				historyList: [],
+				page: 1,
+				pageSize: 1,
+				listCount: 0
+			},
 			reviewList: []
 		};
 	},
@@ -166,18 +180,22 @@ export default {
 		const recipeid = parseInt(this.$route.query.id);
 		this.recipe = (await getRecipeById(recipeid)).data;
 		this.recipe.ingredients.sort((a,b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
-		this.setReviews(this.recipe.reviews);
+		this.reviewList = this.recipe.reviews;
 		console.log(this.recipe);
+		this.initPage();
+		this.updatePage(this.pageInfo.page);
 	},
 	methods: {
-		setReviews(reviews) {
-			let list = [];
-			for (let review in reviews) {
-				list.push(review);
-				list.push({ divider: true, inset: true });
-			}
-			if (reviews.length <= 1) this.reviewList = reviews;
-			else this.reviewList = list;
+		initPage: function() {
+			this.pageInfo = initPage(this.reviewList, this.pageInfo);
+		},
+		updatePage: function(pageIndex) {
+			this.pageInfo = updatePage(pageIndex, this.reviewList, this.pageInfo);
+		}
+	},
+	computed: {
+      pages() {
+			return pages(this.pageInfo);
 		}
 	}
 };

@@ -39,7 +39,7 @@
     </v-expansion-panel>
     </v-expansion-panels>
     <v-row no-gutters>
-      <template v-for="(recipe,index) in historyList">
+      <template v-for="(recipe,index) in pageInfo.historyList">
         <v-col :key="recipe.id">
           <v-container
             class="pa-2"
@@ -121,7 +121,7 @@
       </template>
     </v-row>
     <v-pagination
-        v-model="page" 
+        v-model="pageInfo.page" 
         class="my-4"
         circle
         :length="pages"
@@ -133,15 +133,18 @@
 
 <script>
 import { getIngredients, getRecipes } from "../service/recipeapi";
+import { initPage, updatePage, pages} from "../misc/pagination";
   export default {
     name: 'Home',
     data() {
       return {
-        page: 1,
-        pageSize: 6,
+        pageInfo: {
+				historyList: [],
+				page: 1,
+				pageSize: 6,
+				listCount: 0
+			},
         list: [],
-        listCount: 0,
-        historyList: [],
         types: []
       }
     },
@@ -152,26 +155,15 @@ import { getIngredients, getRecipes } from "../service/recipeapi";
       });     
 
       this.list = (await getRecipes()).data.recipes;
-		let _this = this;
-		_this.initPage();
-		_this.updatePage(_this.page);
+		this.initPage();
+		this.updatePage(this.pageInfo.page);
 	},
     methods: {
       initPage: function() {
-			let _this = this;
-			_this.listCount = _this.list.length;
-			if (_this.listCount < _this.pageSize) {
-				_this.historyList = _this.list;
-			} else {
-				_this.historyList = _this.list.slice(0, _this.pageSize);
-			}
+        this.pageInfo = initPage(this.list, this.pageInfo);
 		},
 		updatePage: function(pageIndex) {
-			let _this = this;
-			let _start = (pageIndex - 1) * _this.pageSize;
-			let _end = pageIndex * _this.pageSize;
-			_this.historyList = _this.list.slice(_start, _end);
-			_this.page = pageIndex;
+			this.pageInfo = updatePage(pageIndex, this.list, this.pageInfo);
 		},
       setSubtitle: function(description) {
         if(description.length <= 49) {
@@ -191,9 +183,7 @@ import { getIngredients, getRecipes } from "../service/recipeapi";
     },
     computed: {
       pages() {
-			let _this = this;
-			if (_this.pageSize == null || _this.listCount == null) return 0;
-			return Math.ceil(_this.listCount / _this.pageSize);
+			return pages(this.pageInfo);
 		}
     }
   }
