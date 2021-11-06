@@ -1,4 +1,64 @@
 <template>
+<div>
+	<v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-top-transition"
+    >
+      <v-card>
+        <v-toolbar color="orange darken-1">
+          <v-btn icon dark v-on:click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title style="color:white;"
+            >Write a review for <b>{{recipe.name}}</b></v-toolbar-title
+          >
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn
+              dark
+              text
+              v-on:click="dialog = false; addReview();"
+            >
+              Post
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                label="Title"
+                :value="selectedItem.title"
+                v-model="selectedItem.title"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                counter
+                label="Text"
+                :value="selectedItem.subtitle"
+                v-model="selectedItem.subtitle"
+              ></v-textarea>
+            </v-col>
+			<v-col cols="12">
+				Rate the recipe
+				<v-rating
+				v-model="selectedItem.rating"
+				color="yellow darken-3"
+				background-color="grey darken-1"
+				empty-icon="$ratingFull"
+				half-increments
+				hover
+				large
+				></v-rating>
+			</v-col>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-dialog>
 	<v-container fluid>
 		<v-btn fab light small @click="$router.go(-1)">
 			<v-icon>mdi-arrow-left</v-icon>
@@ -153,20 +213,37 @@
 							@input="updatePage"
 						></v-pagination>
 					</v-card-actions>
+											<v-btn
+						v-if="this.$store.state.authenticated"
+						color="orange darken-1"
+						class="ma-2 white--text"
+						@click="dialog = true;"
+						>
+						Write review
+						<v-icon
+							right
+							dark
+						>
+							mdi-message-draw
+						</v-icon>
+						</v-btn>
 				</v-card>
 			</v-container>
 		</v-card>
 	</v-container>
+</div>
 </template>
 
 <script>
-import { getRecipeById } from "../service/recipeapi";
+import { getRecipeById, postReview } from "../service/recipeapi";
 import { initPage, updatePage, pages } from "../misc/pagination"
 export default {
 	name: "ViewRecipe",
 	data() {
 		return {
 			recipe: { ingredients: [] },
+			dialog: false,
+			selectedItem: { title:'', subtitle: '', rating: 0.0},
 			pageInfo: {
 				historyList: [],
 				page: 1,
@@ -177,11 +254,7 @@ export default {
 		};
 	},
 	async created() {
-		const recipeid = parseInt(this.$route.query.id);
-		this.recipe = (await getRecipeById(recipeid)).data;
-		this.recipe.ingredients.sort((a,b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
-		this.reviewList = this.recipe.reviews;
-		console.log(this.recipe);
+		await this.getRecipe();
 		this.initPage();
 		this.updatePage(this.pageInfo.page);
 	},
@@ -191,6 +264,24 @@ export default {
 		},
 		updatePage: function(pageIndex) {
 			this.pageInfo = updatePage(pageIndex, this.reviewList, this.pageInfo);
+		},
+		async getRecipe() {
+			const recipeid = parseInt(this.$route.query.id);
+			this.recipe = (await getRecipeById(recipeid)).data;
+			this.recipe.ingredients.sort((a,b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
+			this.reviewList = this.recipe.reviews;
+			console.log(this.recipe);
+		},
+		async addReview() {
+			postReview(this.recipe.id, this.selectedItem).then(async (response) => {
+				if(response.status === 201) {
+				await this.getRecipe();
+				this.initPage();
+			}
+			})
+			.catch((err) => {
+				console.log('err',err);
+			})
 		}
 	},
 	computed: {
