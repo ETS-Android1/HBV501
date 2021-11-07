@@ -21,8 +21,17 @@ async function postReview(id, review) {
     return axios.post(`${apiRoot}/recipes/${id}/reviews`, review, cfg);
 }
 
+async function deleteReview(userId, recipeId) {
+    const cfg = {
+        headers: {
+           Authorization: `Bearer ${store.state.token}`
+        }
+    };
+    return axios.delete(`${apiRoot}/recipes/${recipeId}/reviews/${userId}`, cfg);
+}
+
 async function getIngredients() {
     return axios.get(`${apiRoot}/ingredients`);
 }
 
-export { getRecipes, getIngredients, getRecipeById, postReview }
+export { getRecipes, getIngredients, getRecipeById, postReview, deleteReview }

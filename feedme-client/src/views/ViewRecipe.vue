@@ -182,7 +182,7 @@
 									<v-list-item-content>
 										<v-list-item-title>{{ item.title }}</v-list-item-title>
 										<v-list-item-subtitle
-											><span class="text--primary">{{ item.username }}</span
+											><span class="text--primary">Posted by: {{ item.username }}</span
 											><br />{{ item.subtitle }}</v-list-item-subtitle
 										>
 										<v-list-item-action>
@@ -198,6 +198,21 @@
 										</v-list-item-action>
 										<v-list-item-action-text>{{ new Date(item.date).toDateString() }}<v-spacer></v-spacer>
                     </v-list-item-action-text>
+								<v-btn 
+								v-if="madeReviewOrAdmin(item.username)"
+								class="mx-2"
+								max-width="40"
+								max-height="40"
+								fab
+								dark
+								small
+								color="pink"
+								@click="deleteReview()"
+								>
+								<v-icon dark>
+									mdi-delete
+								</v-icon>
+								</v-btn>
 									</v-list-item-content>
 								</v-list-item>
 							</template>
@@ -235,8 +250,9 @@
 </template>
 
 <script>
-import { getRecipeById, postReview } from "../service/recipeapi";
-import { initPage, updatePage, pages } from "../misc/pagination"
+import { getRecipeById, postReview, deleteReview} from "../service/recipeapi";
+import { initPage, updatePage, pages } from "../misc/pagination";
+import { getUserInfo } from "../service/userapi";
 export default {
 	name: "ViewRecipe",
 	data() {
@@ -247,7 +263,7 @@ export default {
 			pageInfo: {
 				historyList: [],
 				page: 1,
-				pageSize: 1,
+				pageSize: 2,
 				listCount: 0
 			},
 			reviewList: []
@@ -270,18 +286,46 @@ export default {
 			this.recipe = (await getRecipeById(recipeid)).data;
 			this.recipe.ingredients.sort((a,b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
 			this.reviewList = this.recipe.reviews;
-			console.log(this.recipe);
+			console.log(this.reviewList);
+			console.log(this.$store.state.user);
 		},
 		async addReview() {
 			postReview(this.recipe.id, this.selectedItem).then(async (response) => {
 				if(response.status === 201) {
-				await this.getRecipe();
-				this.initPage();
-			}
+					await this.getRecipe();
+					this.initPage();
+				}
 			})
 			.catch((err) => {
 				console.log('err',err);
+				//User already has a review
 			})
+		},
+		madeReviewOrAdmin(username) {
+			return this.$store.state.user.username === username || this.$store.state.user.admin;
+		},
+		async deleteReview()  {
+			try {
+				const getUser = await getUserInfo();
+				const user = getUser.data.user;
+				if(user) {
+					if(confirm('Do you really want to delete the review?')) {
+						deleteReview(user.id, this.recipe.id).then(async (response) => {
+							if(response.status === 200) {
+								//successful delete
+								await this.getRecipe();
+								this.initPage();
+							}
+						})
+						.catch((err) => {
+							console.log('Error while deleting review:',err);
+						})
+					}
+				}
+			}
+			catch {
+				console.log('err');
+			}
 		}
 	},
 	computed: {
