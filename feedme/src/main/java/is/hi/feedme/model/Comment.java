@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * <pre>
@@ -24,9 +26,6 @@ public class Comment implements Serializable {
     private Long id;
 
     @Column
-    private String username;
-
-    @Column
     private String body;
 
     @JsonIgnore
@@ -39,12 +38,29 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Transient
+    @JsonInclude
+    private String username;
+
+    @Transient
+    @JsonInclude
+    @JsonProperty("user_id")
+    private long userId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public long getUserId() {
+        return this.user.getId();
+    }
+
+    public void setUserId() {
+        // Do not actually allow explicit setting
     }
 
     public String getUsername() {

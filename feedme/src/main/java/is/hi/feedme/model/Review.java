@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * <pre>
@@ -37,9 +39,6 @@ public class Review implements Serializable {
     Recipe recipe;
 
     @Column
-    private String username;
-
-    @Column
     private String title;
 
     @Column
@@ -50,6 +49,15 @@ public class Review implements Serializable {
 
     @Column
     private int rating;
+
+    @Transient
+    @JsonInclude
+    private String username;
+
+    @Transient
+    @JsonInclude
+    @JsonProperty("user_id")
+    private long userId;
 
     public User getUser() {
         return user;
@@ -65,6 +73,14 @@ public class Review implements Serializable {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public long getUserId() {
+        return this.user.getId();
+    }
+
+    public void setUserId() {
+        // Do not actually allow explicit setting
     }
 
     public String getUsername() {
@@ -84,7 +100,7 @@ public class Review implements Serializable {
     }
 
     public String getSubtitle() {
-        return subtitle; 
+        return subtitle;
     }
 
     public void setSubtitle(String subtitle) {
