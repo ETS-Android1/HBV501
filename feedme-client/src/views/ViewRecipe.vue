@@ -207,10 +207,25 @@
 								dark
 								small
 								color="pink"
-								@click="deleteReview()"
+								@click="deleteReview(item.user_id)"
 								>
 								<v-icon dark>
 									mdi-delete
+								</v-icon>
+								</v-btn>
+								<v-btn 
+								v-if="madeReviewOrAdmin(item.username)"
+								class="mx-2"
+								max-width="40"
+								max-height="40"
+								fab
+								dark
+								small
+								color="indigo lighten-1"
+								@click="editReview()"
+								>
+								<v-icon dark>
+									mdi-lead-pencil
 								</v-icon>
 								</v-btn>
 									</v-list-item-content>
@@ -304,13 +319,14 @@ export default {
 		madeReviewOrAdmin(username) {
 			return this.$store.state.user.username === username || this.$store.state.user.admin;
 		},
-		async deleteReview()  {
+		async deleteReview(userId = null)  {
 			try {
 				const getUser = await getUserInfo();
 				const user = getUser.data.user;
 				if(user) {
+					if(!user.admin) userId = user.id;
 					if(confirm('Do you really want to delete the review?')) {
-						deleteReview(user.id, this.recipe.id).then(async (response) => {
+						deleteReview(userId, this.recipe.id).then(async (response) => {
 							if(response.status === 200) {
 								//successful delete
 								await this.getRecipe();
