@@ -161,7 +161,7 @@ import { initPage, updatePage, pages} from "../misc/pagination";
         pageInfo: {
 				historyList: [],
 				page: 1,
-				pageSize: 6,
+				pageSize: 3,
 				listCount: 0
 			},
         list: [],
