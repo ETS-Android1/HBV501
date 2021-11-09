@@ -4,8 +4,13 @@ import { store } from '../main.js'
 
 const apiRoot = "http://localhost:3000";
 
-async function getRecipes() {
+async function getAllRecipes() {
     return axios.get(`${apiRoot}/recipes`);
+}
+
+async function getRecipes(ingredients) {
+    let ingValues = ingredients.map(e => e.value).join(",");
+    return axios.get(`${apiRoot}/recipes?ingredients=${ingValues}`)
 }
 
 async function getRecipeById(id) {
@@ -34,4 +39,4 @@ async function getIngredients() {
     return axios.get(`${apiRoot}/ingredients`);
 }
 
-export { getRecipes, getIngredients, getRecipeById, postReview, deleteReview }
+export { getRecipes, getAllRecipes, getIngredients, getRecipeById, postReview, deleteReview }

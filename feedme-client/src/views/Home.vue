@@ -18,6 +18,12 @@
                   </v-checkbox>
                 </v-flex>
         </v-layout>
+        <v-btn
+          color="orange darken-1"
+          @click="getRecipeList"
+        >
+        Search
+        </v-btn>
         </v-card-text>
       </v-card>
       <v-card flat>
@@ -38,7 +44,7 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
     </v-expansion-panels>
-    <v-row no-gutters>
+    <v-row no-gutters v-if="this.list.length > 0" >
       <template v-for="(recipe,index) in pageInfo.historyList">
         <v-col :key="recipe.id">
           <v-container
@@ -120,6 +126,20 @@
         ></v-responsive>
       </template>
     </v-row>
+    <v-card 
+    v-else
+    class="mx-auto"
+    flat
+    >
+      <v-card-title>Could not find any recipe using these search parameters.</v-card-title>
+      <v-card-text>
+                    <v-img
+        src="https://cdn.discordapp.com/attachments/882918702826278942/900005348658798653/madChicken.png"
+        max-height="500"
+        max-width="500"
+        ></v-img>
+      </v-card-text>
+    </v-card>
     <v-pagination
         v-model="pageInfo.page" 
         class="my-4"
@@ -132,7 +152,7 @@
 </template>
 
 <script>
-import { getIngredients, getRecipes } from "../service/recipeapi";
+import { getIngredients, getAllRecipes, getRecipes } from "../service/recipeapi";
 import { initPage, updatePage, pages} from "../misc/pagination";
   export default {
     name: 'Home',
@@ -154,7 +174,7 @@ import { initPage, updatePage, pages} from "../misc/pagination";
         this.types.push({ text: ing.name, value: ing.id , selected : false  })
       });     
 
-      this.list = (await getRecipes()).data.recipes;
+    this.list = (await getAllRecipes()).data.recipes;
 		this.initPage();
 		this.updatePage(this.pageInfo.page);
 	},
@@ -165,6 +185,13 @@ import { initPage, updatePage, pages} from "../misc/pagination";
 		updatePage: function(pageIndex) {
 			this.pageInfo = updatePage(pageIndex, this.list, this.pageInfo);
 		},
+    getRecipeList: async function() {
+      let getFilteredTypes = this.types.filter((elem) => {
+        return elem.selected;
+      });
+      this.list = (await getRecipes(getFilteredTypes)).data.recipes;
+      this.initPage();
+    },
       setSubtitle: function(description) {
         if(description.length <= 49) {
           let spaceToAdd = (49 - description.length)*3;
