@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -116,6 +117,23 @@ public class UserController {
         // This route doesn't need explicit error handling, 401 is handled automatically
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.findCompositeUser(auth.getName());
+    }
+
+    /**
+     * PATCH on /recipes/{id}, admin authentication required. Used to change a
+     * recipe.
+     * 
+     * @param id the id of the recipe to remove
+     * @return a response indicating whether update was successful
+     */
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @RequestMapping(value = "/me", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateCurrentUserInfo(@RequestBody Map<String, Object> changes) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        user = userService.updateUserInfo(user, changes);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findCompositeUser(user.getUsername()));
     }
 
     /**

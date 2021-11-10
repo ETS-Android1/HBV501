@@ -6,6 +6,7 @@ import is.hi.feedme.model.User;
 import is.hi.feedme.model.UserDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface definitions for the UserService.
@@ -14,15 +15,6 @@ import java.util.List;
  * directory.
  */
 public interface UserService {
-
-    /**
-     * Standard function to save user info from an updated entity.
-     * Mainly used for updates.
-     * 
-     * @param user the user to update
-     * @return the updated user
-     */
-    public User updateUser(User user);
 
     /**
      * Standard function to save a user obtained from a request body. It is worth
@@ -43,6 +35,25 @@ public interface UserService {
      * @param user the User entity to delete
      */
     void deleteUser(User user);
+
+    /**
+     * Standard function to save user info from an updated entity.
+     * Mainly used for updates.
+     * 
+     * @param user the user to update
+     * @return the updated user
+     */
+    public User updateUser(User user);
+
+    /**
+     * Standard function to save user info from an updated entity.
+     * Mainly used for updates.
+     * 
+     * @param user the user to update
+     * @param changes the changes to apply
+     * @return the updated user
+     */
+    public User updateUserInfo(User user, Map<String, Object> changes);
 
     /**
      * Basic find all service, returns a list of all users ordered by their IDs

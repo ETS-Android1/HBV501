@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import is.hi.feedme.repository.ReviewRepository;
@@ -192,6 +193,29 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
      * @return the updated user
      */
     public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    /**
+     * Standard function to save user info from an updated entity.
+     * Mainly used for updates.
+     * 
+     * @param user the user to update
+     * @param changes the changes to apply
+     * @return the updated user
+     */
+    public User updateUserInfo(User user, Map<String, Object> changes) {
+        changes.forEach((change, value) -> {
+            switch (change) {
+            case "password":
+                user.setPassword(bcryptEncoder.encode((String) value));
+                break;
+            case "email":
+                user.setEmail((String) value);
+                break;
+           }
+        });
+
         return userRepository.save(user);
     }
 
