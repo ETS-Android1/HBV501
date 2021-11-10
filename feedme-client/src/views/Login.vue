@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { postLogin } from "../service/userapi";
+import { postLogin, getUserInfo } from "../service/userapi";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 export default {
@@ -81,11 +81,14 @@ export default {
       this.error.visible = false;
       if (!this.$v.$anyError) {
         postLogin({ username: this.username, password: this.password })
-          .then((response) => {
+          .then(async (response) => {
+            console.log('res',response);
             if (response.status === 200) {
               this.$store.commit("setUser", response.data.user);
               this.$store.commit("setToken", response.data.token);
               this.$store.commit("setAuth", true);
+              const recipes = (await getUserInfo()).data.recipes;
+              this.$store.commit("setSavedRecipes", recipes);
               this.$router.push({ name: "Account" });
             }
           })

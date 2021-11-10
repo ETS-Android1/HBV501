@@ -14,6 +14,7 @@ const store = new Vuex.Store({
   })],
   state: {
     user: null,
+    savedRecipes: [],
     token: null,
     authenticated: false
   },
@@ -26,6 +27,9 @@ const store = new Vuex.Store({
     },
     setAuth (state, val) {
       state.authenticated = val;
+    },
+    setSavedRecipes (state, recipes) {
+      state.savedRecipes = recipes;
     }
   },
 });

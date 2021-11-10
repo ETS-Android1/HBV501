@@ -53,7 +53,7 @@
           <v-card
         class="mx-auto"
         width="22rem"
-        height="30rem"
+        height="31rem"
         style="margin-top:3rem"
         >
         <v-card-title>{{recipe.name}}</v-card-title>
@@ -103,18 +103,40 @@
         <v-divider></v-divider>
          <v-card-actions>
            <v-btn
-                color="orange"
-                text
-                :to="{path:'/viewrecipe',query:{id: recipe.id}}"
-            >
-                View
-            </v-btn>
-            <v-btn
-                color="orange"
-                text
-            >
-                Favorite
-            </v-btn>
+            color="orange darken-1"
+            class="ma-2 white--text"
+            :to="{path:'/viewrecipe',query:{id: recipe.id}}"
+          >
+      View
+      <v-icon
+        right
+        dark
+        small
+      >
+        mdi-magnify
+      </v-icon>
+    </v-btn>
+    <v-spacer></v-spacer>
+          <v-btn 
+          v-if="isAuth() && !isFavorited(recipe.id)"
+          fab 
+          dark 
+          color="pink lighten-1" 
+          small 
+          @click="setFavorite(recipe.id)"
+          >
+        <v-icon>mdi-heart</v-icon>
+        </v-btn>
+        <v-btn 
+          v-if="isAuth() && isFavorited(recipe.id)"
+          fab 
+          dark 
+          color="cyan darken-2" 
+          small 
+          @click="setUnfavorite(recipe.id)"
+          >
+        <v-icon>mdi-heart-broken</v-icon>
+        </v-btn>  
             </v-card-actions>
           </v-card>
           </v-container>
@@ -154,6 +176,8 @@
 <script>
 import { getIngredients, getAllRecipes, getRecipes } from "../service/recipeapi";
 import { initPage, updatePage, pages} from "../misc/pagination";
+import { postFavorite, postUnfavorite, getUserInfo } from "../service/userapi";
+import { store } from '../main';
   export default {
     name: 'Home',
     data() {
@@ -190,7 +214,39 @@ import { initPage, updatePage, pages} from "../misc/pagination";
         return elem.selected;
       });
       this.list = (await getRecipes(getFilteredTypes)).data.recipes;
+
       this.initPage();
+    },
+    isFavorited: function(recipeId) {
+      return (store.state.savedRecipes.some(e => e.id === recipeId));
+    },
+    setUnfavorite: async function(id) {
+      await postUnfavorite(id).then(async (response) => {
+        if(response.status === 204) {
+          const recipes = (await getUserInfo()).data.recipes;
+          this.$store.commit("setSavedRecipes", recipes);
+          this.updatePage(this.pageInfo.page);
+        } 
+      })
+      .catch((err) => {
+        console.log('error occured with favorites:', err);
+      })
+    },
+    setFavorite: async function(id) {
+      await postFavorite(id).then(async (response) => {
+        console.log(response);
+        if(response.status === 201) {
+          const recipes = (await getUserInfo()).data.recipes;
+          this.$store.commit("setSavedRecipes", recipes);
+          this.updatePage(this.pageInfo.page);
+        } 
+      })
+      .catch((err) => {
+        console.log('error occured with favorites:', err);
+      })
+    },
+    isAuth: function() {
+      return store.state.authenticated;
     },
       setSubtitle: function(description) {
         if(description.length <= 49) {

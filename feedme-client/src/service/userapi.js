@@ -12,6 +12,24 @@ async function postLogin(info) {
     return axios.post(`${apiRoot}/login`, info);
 }
 
+async function postFavorite(recipeId) {
+    const cfg = {
+        headers: {
+           Authorization: `Bearer ${store.state.token}`
+        }
+     };
+    return axios.post(`${apiRoot}/me/recipes/${recipeId}`, recipeId, cfg)
+}
+
+async function postUnfavorite(recipeId) {
+    const cfg = {
+        headers: {
+           Authorization: `Bearer ${store.state.token}`
+        }
+     };
+    return axios.delete(`${apiRoot}/me/recipes/${recipeId}`, cfg)
+}
+
 async function getUserInfo() {
     const cfg = {
         headers: {
@@ -21,4 +39,4 @@ async function getUserInfo() {
     return axios.get(`${apiRoot}/me`, cfg);
 }
 
-export { getUserInfo, postRegister, postLogin }
+export { getUserInfo, postRegister, postLogin, postFavorite, postUnfavorite }
