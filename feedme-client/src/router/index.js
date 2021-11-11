@@ -11,16 +11,16 @@ Vue.use(VueRouter)
 
 const ifAuthenticated = async (to, from, next) => {
     if (store.state.user !== null && store.state.token !== null) {
-      next()
-      return
+        next()
+        return
     }
     next('/login')
 }
 
 const ifNotAuthenticated = (to, from, next) => {
     if (store.state.user === null || store.state.token === null) {
-      next()
-      return
+        next()
+        return
     }
     next('/account')
 }

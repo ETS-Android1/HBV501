@@ -82,7 +82,7 @@ export default {
       if (!this.$v.$anyError) {
         postLogin({ username: this.username, password: this.password })
           .then(async (response) => {
-            console.log('res',response);
+            console.log("res", response);
             if (response.status === 200) {
               this.$store.commit("setUser", response.data.user);
               this.$store.commit("setToken", response.data.token);

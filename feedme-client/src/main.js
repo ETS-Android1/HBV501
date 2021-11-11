@@ -19,16 +19,16 @@ const store = new Vuex.Store({
     authenticated: false
   },
   mutations: {
-    setUser (state, user) {
+    setUser(state, user) {
       state.user = user
     },
-    setToken (state, token) {
+    setToken(state, token) {
       state.token = token
     },
-    setAuth (state, val) {
+    setAuth(state, val) {
       state.authenticated = val;
     },
-    setSavedRecipes (state, recipes) {
+    setSavedRecipes(state, recipes) {
       state.savedRecipes = recipes;
     }
   },

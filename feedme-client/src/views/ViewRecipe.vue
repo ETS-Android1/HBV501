@@ -8,7 +8,14 @@
     >
       <v-card>
         <v-toolbar color="orange darken-1">
-          <v-btn icon dark v-on:click="dialog = false; selectedItemError = { message:'', show:false}">
+          <v-btn
+            icon
+            dark
+            v-on:click="
+              dialog = false;
+              selectedItemError = { message: '', show: false };
+            "
+          >
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title style="color: white"
@@ -16,15 +23,7 @@
           >
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn
-              dark
-              text
-              v-on:click="
-                addReview();
-              "
-            >
-              Post
-            </v-btn>
+            <v-btn dark text v-on:click="addReview()"> Post </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-container>
@@ -69,14 +68,14 @@
             </v-col>
             <v-col cols="12">
               <v-alert
-              v-if="selectedItemError.show"
-      outlined
-      type="error"
-      prominent
-      border="left"
-    >
-      {{selectedItemError.message}}
-    </v-alert>
+                v-if="selectedItemError.show"
+                outlined
+                type="error"
+                prominent
+                border="left"
+              >
+                {{ selectedItemError.message }}
+              </v-alert>
             </v-col>
           </v-row>
         </v-container>
@@ -187,9 +186,9 @@
             <v-card-title>
               Reviews
               <v-chip class="ma-2" color="green" text-color="white">
-                    {{ recipe.reviews.length }}
+                {{ recipe.reviews.length }}
               </v-chip>
-              </v-card-title>
+            </v-card-title>
             <v-card-subtitle>Feedback from our users</v-card-subtitle>
             <v-card-text>
               <v-list v-if="reviewList.length > 0" three-line>
@@ -296,15 +295,15 @@ export default {
     selectedItem: {
       title: { required, maxLength: maxLength(30) },
       subtitle: { required, maxLength: maxLength(200) },
-      rating: { required }
-    }
+      rating: { required },
+    },
   },
   data() {
     return {
       recipe: { ingredients: [] },
       dialog: false,
       selectedItem: { title: "", subtitle: "", rating: 0.0 },
-      selectedItemError: { message: "", show: false},
+      selectedItemError: { message: "", show: false },
       pageInfo: {
         historyList: [],
         page: 1,
@@ -335,26 +334,27 @@ export default {
       this.reviewList = this.recipe.reviews;
     },
     async addReview() {
-      this.selectedItemError = { message:'', show:false};
+      this.selectedItemError = { message: "", show: false };
       this.$v.$touch();
       if (!this.$v.$anyError) {
         //can submit
-      postReview(this.recipe.id, this.selectedItem)
-        .then(async (response) => {
-          if (response.status === 201) {
-            this.dialog = false;
-            await this.getRecipe();
-            this.initPage();
-          } 
-        })
-        .catch(() => {
-            this.selectedItemError.message = "You can only write one review per recipe. Use edit, or delete your post before writing another one.";
+        postReview(this.recipe.id, this.selectedItem)
+          .then(async (response) => {
+            if (response.status === 201) {
+              this.dialog = false;
+              await this.getRecipe();
+              this.initPage();
+            }
+          })
+          .catch(() => {
+            this.selectedItemError.message =
+              "You can only write one review per recipe. Use edit, or delete your post before writing another one.";
             this.selectedItemError.show = true;
-        });
+          });
       }
     },
     madeReviewOrAdmin(username) {
-      if(this.$store.state.user == undefined || this.$store.state.user == null)
+      if (this.$store.state.user == undefined || this.$store.state.user == null)
         return false;
       return (
         this.$store.state.user.username === username ||
@@ -403,15 +403,17 @@ export default {
       if (!this.$v.selectedItem.title.$dirty) return errors;
       !this.$v.selectedItem.title.maxLength &&
         errors.push("Content must be at most 200 characters long");
-      !this.$v.selectedItem.title.required && errors.push("Content is required.");
+      !this.$v.selectedItem.title.required &&
+        errors.push("Content is required.");
       return errors;
     },
     ratingErrors() {
       const errors = [];
       if (!this.$v.selectedItem.rating.$dirty) return errors;
-      !this.$v.selectedItem.rating.required && errors.push("Rating is required.");
+      !this.$v.selectedItem.rating.required &&
+        errors.push("Rating is required.");
       return errors;
-    }
+    },
   },
 };
 </script>

@@ -12,6 +12,15 @@ async function postLogin(info) {
     return axios.post(`${apiRoot}/login`, info);
 }
 
+async function patchUser(info) {
+    const cfg = {
+        headers: {
+           Authorization: `Bearer ${store.state.token}`
+        }
+    };
+    return axios.patch(`${apiRoot}/me`, info, cfg);
+}
+
 async function postFavorite(recipeId) {
     const cfg = {
         headers: {
@@ -39,4 +48,4 @@ async function getUserInfo() {
     return axios.get(`${apiRoot}/me`, cfg);
 }
 
-export { getUserInfo, postRegister, postLogin, postFavorite, postUnfavorite }
+export { getUserInfo, postRegister, postLogin, postFavorite, postUnfavorite, patchUser}

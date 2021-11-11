@@ -1,4 +1,4 @@
-function initPage(mainList, pageInfo){
+function initPage(mainList, pageInfo) {
     pageInfo.listCount = mainList.length;
     if (pageInfo.listCount < pageInfo.pageSize) {
         pageInfo.historyList = mainList;

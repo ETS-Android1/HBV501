@@ -20,16 +20,16 @@ async function getRecipeById(id) {
 async function postReview(id, review) {
     const cfg = {
         headers: {
-           Authorization: `Bearer ${store.state.token}`
+            Authorization: `Bearer ${store.state.token}`
         }
-     };
+    };
     return axios.post(`${apiRoot}/recipes/${id}/reviews`, review, cfg);
 }
 
 async function deleteReview(userId, recipeId) {
     const cfg = {
         headers: {
-           Authorization: `Bearer ${store.state.token}`
+            Authorization: `Bearer ${store.state.token}`
         }
     };
     return axios.delete(`${apiRoot}/recipes/${recipeId}/reviews/${userId}`, cfg);
