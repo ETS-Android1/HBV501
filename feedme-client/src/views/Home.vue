@@ -45,6 +45,7 @@
     </v-expansion-panel>
     </v-expansion-panels>
     <v-switch
+      v-if="isAuth()"
       v-model="favonly"
       :label="`Show only favorite`"
       @click="getRecipeList()"
@@ -225,6 +226,7 @@ import { store } from '../main';
         this.list = favorites.filter(e => this.list.some(m => m.id === e.id));
       }
       this.initPage();
+      this.updatePage(this.pageInfo.page);
     },
     isFavorited: function(recipeId) {
       return (store.state.savedRecipes.some(e => e.id === recipeId));
@@ -234,7 +236,7 @@ import { store } from '../main';
         if(response.status === 204) {
           const recipes = (await getUserInfo()).data.recipes;
           this.$store.commit("setSavedRecipes", recipes);
-          this.updatePage(this.pageInfo.page);
+          this.getRecipeList();
         } 
       })
       .catch((err) => {
@@ -243,11 +245,10 @@ import { store } from '../main';
     },
     setFavorite: async function(id) {
       await postFavorite(id).then(async (response) => {
-        console.log(response);
         if(response.status === 201) {
           const recipes = (await getUserInfo()).data.recipes;
           this.$store.commit("setSavedRecipes", recipes);
-          this.updatePage(this.pageInfo.page);
+          this.getRecipeList();
         } 
       })
       .catch((err) => {
