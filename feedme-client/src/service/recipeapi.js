@@ -30,7 +30,6 @@ async function getRecipes(ingredients, minmaxlist, sortType) {
     if(sortType !== 'nothing' || sortType == undefined) {
         urlparam = andParam(urlparam, `sort=${sortType}`);
     }
-    console.log('the param:',urlparam);
     return axios.get(`${apiRoot}/recipes?${urlparam}`)
 }
 

@@ -136,8 +136,8 @@ export default {
           email: this.email,
           admin: false,
         })
-          .then((res) => {
-            console.log("success", res);
+          .then(() => {       
+             this.$router.push({name: 'Login', query: {id: this.username}});
           })
           .catch(() => {
             this.error.visible = true;

@@ -229,7 +229,6 @@ export default {
         let filterInvalid = Object.fromEntries(
           Object.entries(data).filter(([e]) => e != null)
         );
-        console.log("fv", filterInvalid);
         patchUser(filterInvalid)
           .then((response) => {
             if (response.status === 200) {

@@ -44,10 +44,11 @@ const routes = [
         beforeEnter: ifAuthenticated
     },
     {
-        path: '/login',
+        path: '/login/:username?',
         name: 'Login',
         component: Login,
-        beforeEnter: ifNotAuthenticated
+        beforeEnter: ifNotAuthenticated,
+        props: route => ({query: route.query.id})
     },
     {
         path: '/register',
