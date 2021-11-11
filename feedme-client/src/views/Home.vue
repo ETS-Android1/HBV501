@@ -44,6 +44,11 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
     </v-expansion-panels>
+    <v-switch
+      v-model="favonly"
+      :label="`Show only favorite`"
+      @click="getRecipeList()"
+    ></v-switch>
     <v-row no-gutters v-if="this.list.length > 0" >
       <template v-for="(recipe,index) in pageInfo.historyList">
         <v-col :key="recipe.id">
@@ -182,6 +187,7 @@ import { store } from '../main';
     name: 'Home',
     data() {
       return {
+        favonly: false,
         pageInfo: {
 				historyList: [],
 				page: 1,
@@ -214,7 +220,10 @@ import { store } from '../main';
         return elem.selected;
       });
       this.list = (await getRecipes(getFilteredTypes)).data.recipes;
-
+      if(this.favonly) {
+        const favorites = (await getUserInfo()).data.recipes;
+        this.list = favorites.filter(e => this.list.some(m => m.id === e.id));
+      }
       this.initPage();
     },
     isFavorited: function(recipeId) {
