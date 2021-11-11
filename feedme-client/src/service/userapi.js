@@ -4,6 +4,14 @@ const axios = require('axios').default;
 
 const apiRoot = "http://localhost:3000/users";
 
+function getConfig() {
+    return {
+        headers: {
+            Authorization: `Bearer ${store.state.token}`
+        }
+    };
+}
+
 async function postRegister(info) {
     return axios.post(`${apiRoot}/register`, info);
 }
@@ -13,39 +21,19 @@ async function postLogin(info) {
 }
 
 async function patchUser(info) {
-    const cfg = {
-        headers: {
-           Authorization: `Bearer ${store.state.token}`
-        }
-    };
-    return axios.patch(`${apiRoot}/me`, info, cfg);
+    return axios.patch(`${apiRoot}/me`, info, getConfig());
 }
 
 async function postFavorite(recipeId) {
-    const cfg = {
-        headers: {
-           Authorization: `Bearer ${store.state.token}`
-        }
-     };
-    return axios.post(`${apiRoot}/me/recipes/${recipeId}`, recipeId, cfg)
+    return axios.post(`${apiRoot}/me/recipes/${recipeId}`, recipeId, getConfig())
 }
 
 async function postUnfavorite(recipeId) {
-    const cfg = {
-        headers: {
-           Authorization: `Bearer ${store.state.token}`
-        }
-     };
-    return axios.delete(`${apiRoot}/me/recipes/${recipeId}`, cfg)
+    return axios.delete(`${apiRoot}/me/recipes/${recipeId}`, getConfig())
 }
 
 async function getUserInfo() {
-    const cfg = {
-        headers: {
-           Authorization: `Bearer ${store.state.token}`
-        }
-     };
-    return axios.get(`${apiRoot}/me`, cfg);
+    return axios.get(`${apiRoot}/me`, getConfig());
 }
 
 export { getUserInfo, postRegister, postLogin, postFavorite, postUnfavorite, patchUser}

@@ -19,11 +19,11 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title style="color: white"
-            >Write a review for <b>{{ recipe.name }}</b></v-toolbar-title
+            >{{selectedMode.headline}}<b>{{recipe.name}}</b></v-toolbar-title
           >
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text v-on:click="addReview()"> Post </v-btn>
+            <v-btn dark text v-on:click="selectedMode.edit ? updateReview(selectedItem.user_id): addReview() "> {{selectedMode.buttonText}} </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-container>
@@ -245,7 +245,7 @@
                         dark
                         small
                         color="indigo lighten-1"
-                        @click="editReview()"
+                        @click="setDialog(true, item)"
                       >
                         <v-icon dark> mdi-lead-pencil </v-icon>
                       </v-btn>
@@ -270,7 +270,7 @@
               v-if="this.$store.state.authenticated"
               color="orange darken-1"
               class="ma-2 white--text"
-              @click="dialog = true"
+              @click="setDialog(false)"
             >
               Write review
               <v-icon right dark> mdi-message-draw </v-icon>
@@ -283,7 +283,7 @@
 </template>
 
 <script>
-import { getRecipeById, postReview, deleteReview } from "../service/recipeapi";
+import { getRecipeById, postReview, deleteReview, patchReview } from "../service/recipeapi";
 import { initPage, updatePage, pages } from "../misc/pagination";
 import { getUserInfo } from "../service/userapi";
 import { validationMixin } from "vuelidate";
@@ -303,6 +303,7 @@ export default {
       recipe: { ingredients: [] },
       dialog: false,
       selectedItem: { title: "", subtitle: "", rating: 0.0 },
+      selectedMode: { headline: "", buttonText: "", edit: false },
       selectedItemError: { message: "", show: false },
       pageInfo: {
         historyList: [],
@@ -371,7 +372,6 @@ export default {
             deleteReview(userId, this.recipe.id)
               .then(async (response) => {
                 if (response.status === 200) {
-                  //successful delete
                   await this.getRecipe();
                   this.initPage();
                 }
@@ -385,6 +385,43 @@ export default {
         console.log("err");
       }
     },
+    async updateReview(userId = null) {
+      this.selectedItemError = { message: "", show: false };
+      this.$v.$touch();
+      if (!this.$v.$anyError) {
+        try {
+          const getUser = await getUserInfo();
+          const user = getUser.data.user;
+          if(user) {
+            if (!user.admin) userId = user.id;
+            patchReview(this.recipe.id, userId, this.selectedItem)
+            .then(async (response) => {
+              if(response.status === 200) {
+                //successful update
+                this.dialog = false;
+                await this.getRecipe();
+                this.initPage();
+              }
+            })
+            .catch((err) => {
+              console.log('error while patching review', err);
+            })
+          }
+        } catch {
+          console.log("err");
+        }
+      }
+    },
+    setDialog(edit, review={title: "", subtitle: "", rating: 0}) {
+      if(edit) {
+        this.selectedMode = { headline: `Edit your review for `, buttonText: "Update", edit: true};
+        this.selectedItem = review;
+      } 
+      else {
+        this.selectedMode = { headline: `Write your review for `, buttonText: "Post", edit: false};
+      }
+      this.dialog = true;
+    }
   },
   computed: {
     pages() {
@@ -401,9 +438,9 @@ export default {
     contentErrors() {
       const errors = [];
       if (!this.$v.selectedItem.title.$dirty) return errors;
-      !this.$v.selectedItem.title.maxLength &&
+      !this.$v.selectedItem.subtitle.maxLength &&
         errors.push("Content must be at most 200 characters long");
-      !this.$v.selectedItem.title.required &&
+      !this.$v.selectedItem.subtitle.required &&
         errors.push("Content is required.");
       return errors;
     },
