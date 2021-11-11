@@ -4,13 +4,34 @@ import { store } from '../main.js'
 
 const apiRoot = "http://localhost:3000";
 
+function andParam(param, addition) {
+    if(param.endsWith('&') || param.length <= 0){
+        param += addition;
+    } else {
+        param += "&"
+        param += addition;
+    }
+    return param;
+}
+
 async function getAllRecipes() {
     return axios.get(`${apiRoot}/recipes`);
 }
 
-async function getRecipes(ingredients) {
+async function getRecipes(ingredients, minmaxlist, sortType) {
+    let urlparam = '';
     let ingValues = ingredients.map(e => e.value).join(",");
-    return axios.get(`${apiRoot}/recipes?ingredients=${ingValues}`)
+    if(ingValues.length > 0)
+        urlparam += `ingredients=${ingValues}`
+    minmaxlist.forEach(e => {
+        if(e.enabled) 
+            urlparam = andParam(urlparam, `min${e.name}=${e.range[0]}&max${e.name}=${e.range[1]}`);
+    });
+    if(sortType !== 'nothing' || sortType == undefined) {
+        urlparam = andParam(urlparam, `sort=${sortType}`);
+    }
+    console.log('the param:',urlparam);
+    return axios.get(`${apiRoot}/recipes?${urlparam}`)
 }
 
 async function getRecipeById(id) {

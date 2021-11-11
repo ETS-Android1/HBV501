@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-container>
-      <v-expansion-panels>
+      <v-expansion-panels multiple>
         <v-expansion-panel>
-          <v-expansion-panel-header> Filter / sort </v-expansion-panel-header>
+          <v-expansion-panel-header> Ingredients filtering </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-card flat>
               <v-card-title>Ingredients</v-card-title>
@@ -28,28 +28,250 @@
                 </v-layout>
               </v-card-text>
             </v-card>
-            <v-card flat>
-              <v-card-title>Nutritional values</v-card-title>
-              <v-card-subtitle
-                >If you need to be careful with your calories
-                intake!</v-card-subtitle
-              >
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-expansion-panel>
+          <v-expansion-panel-header> Min/max nutrition values </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-row>
+              <v-col cols="6">
+                <v-card flat width="600">
+                  <v-card-title>Filter by calories</v-card-title>
+                  <v-card-subtitle
+                    >Finds recipes within the calories boundaries that you
+                    set.</v-card-subtitle
+                  >
+                  <v-card-text>
+                    <v-checkbox
+                      v-model="caloriesSlider.enabled"
+                      :label="`Enable`"
+                    ></v-checkbox>
+                    <v-row>
+                      <v-col class="px-4">
+                        <v-range-slider
+                          v-model="caloriesSlider.range"
+                          :max="caloriesSlider.max"
+                          :min="caloriesSlider.min"
+                          :disabled="!caloriesSlider.enabled"
+                          hide-details
+                          class="align-center"
+                        >
+                          <template v-slot:prepend>
+                            <v-text-field
+                              :value="caloriesSlider.range[0]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(caloriesSlider.range, 0, $event)"
+                            ></v-text-field>
+                          </template>
+                          <template v-slot:append>
+                            <v-text-field
+                              :value="caloriesSlider.range[1]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(caloriesSlider.range, 1, $event)"
+                            ></v-text-field>
+                          </template>
+                        </v-range-slider>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="6">
+                <v-card flat width="600">
+                  <v-card-title>Filter by carbs</v-card-title>
+                  <v-card-subtitle
+                    >Finds recipes within the carbs boundaries that you
+                    set.</v-card-subtitle
+                  >
+                  <v-card-text>
+                    <v-checkbox
+                      v-model="carbsSlider.enabled"
+                      :label="`Enable`"
+                    ></v-checkbox>
+                    <v-row>
+                      <v-col class="px-4">
+                        <v-range-slider
+                          v-model="carbsSlider.range"
+                          :max="carbsSlider.max"
+                          :min="carbsSlider.min"
+                          :disabled="!carbsSlider.enabled"
+                          hide-details
+                          class="align-center"
+                        >
+                          <template v-slot:prepend>
+                            <v-text-field
+                              :value="carbsSlider.range[0]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(carbsSlider.range, 0, $event)"
+                            ></v-text-field>
+                          </template>
+                          <template v-slot:append>
+                            <v-text-field
+                              :value="carbsSlider.range[1]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(carbsSlider.range, 1, $event)"
+                            ></v-text-field>
+                          </template>
+                        </v-range-slider>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="6">
+                <v-card flat width="600">
+                  <v-card-title>Filter by protein</v-card-title>
+                  <v-card-subtitle
+                    >Finds recipes within the protein boundaries that you
+                    set.</v-card-subtitle
+                  >
+                  <v-card-text>
+                    <v-checkbox
+                      v-model="proteinsSlider.enabled"
+                      :label="`Enable`"
+                    ></v-checkbox>
+                    <v-row>
+                      <v-col class="px-4">
+                        <v-range-slider
+                          v-model="proteinsSlider.range"
+                          :max="proteinsSlider.max"
+                          :min="proteinsSlider.min"
+                          :disabled="!proteinsSlider.enabled"
+                          hide-details
+                          class="align-center"
+                        >
+                          <template v-slot:prepend>
+                            <v-text-field
+                              :value="proteinsSlider.range[0]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(proteinsSlider.range, 0, $event)"
+                            ></v-text-field>
+                          </template>
+                          <template v-slot:append>
+                            <v-text-field
+                              :value="proteinsSlider.range[1]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(proteinsSlider.range, 1, $event)"
+                            ></v-text-field>
+                          </template>
+                        </v-range-slider>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="6">
+                <v-card flat width="600">
+                  <v-card-title>Filter by fat</v-card-title>
+                  <v-card-subtitle
+                    >Finds recipes within the fat boundaries that you
+                    set.</v-card-subtitle
+                  >
+                  <v-card-text>
+                    <v-checkbox
+                      v-model="fatsSlider.enabled"
+                      :label="`Enable`"
+                    ></v-checkbox>
+                    <v-row>
+                      <v-col class="px-4">
+                        <v-range-slider
+                          v-model="fatsSlider.range"
+                          :max="fatsSlider.max"
+                          :min="fatsSlider.min"
+                          :disabled="!fatsSlider.enabled"
+                          hide-details
+                          class="align-center"
+                        >
+                          <template v-slot:prepend>
+                            <v-text-field
+                              :value="fatsSlider.range[0]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(fatsSlider.range, 0, $event)"
+                            ></v-text-field>
+                          </template>
+                          <template v-slot:append>
+                            <v-text-field
+                              :value="fatsSlider.range[1]"
+                              class="mt-0 pt-0"
+                              hide-details
+                              single-line
+                              type="number"
+                              style="width: 60px"
+                              @change="$set(fatsSlider.range, 1, $event)"
+                            ></v-text-field>
+                          </template>
+                        </v-range-slider>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-expansion-panel>
+          <v-expansion-panel-header> Sorting </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-card flat width="600">
+              <v-card-title>Sort by...</v-card-title>
               <v-card-text>
-                <form width="300">
-                  <v-range-slider
-                    hint="Calories"
-                    max="0"
-                    min="100"
-                  ></v-range-slider>
-                </form>
+                <v-select
+                  v-model="sortedItem"
+                  :items="sortItems"
+                  label="Pick a category to sort by!"
+                  :value="sortItems[0]"
+                  dense
+                ></v-select>
               </v-card-text>
-              <v-btn color="orange darken-1" @click="getRecipeList">
-                Search
-              </v-btn>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <v-btn
+        color="orange darken-1"
+        style="margin-top: 1rem"
+        @click="getRecipeList"
+      >
+        Search
+      </v-btn>
+      <v-btn
+        color="orange darken-1"
+        style="margin-top: 1rem; margin-left: 1rem"
+        @click="getRecipeList"
+      >
+        Clear
+      </v-btn>
       <v-switch
         v-if="isAuth()"
         v-model="favonly"
@@ -188,6 +410,36 @@ export default {
   name: "Home",
   data() {
     return {
+      sortedItem: 'nothing',
+      sortItems: ["nothing", "calories", "carbs", "fats", "proteins"],
+      caloriesSlider: {
+        name: 'calories',
+        min: 0,
+        max: 1000,
+        range: [0, 1000],
+        enabled: false,
+      },
+      carbsSlider: {
+        name: 'carbs',
+        min: 0,
+        max: 100,
+        range: [0, 100],
+        enabled: false,
+      },
+      proteinsSlider: {
+        name: 'proteins',
+        min: 0,
+        max: 100,
+        range: [0, 100],
+        enabled: false,
+      },
+      fatsSlider: {
+        name: 'fats',
+        min: 0,
+        max: 100,
+        range: [0, 100],
+        enabled: false,
+      },
       favonly: false,
       pageInfo: {
         historyList: [],
@@ -220,7 +472,8 @@ export default {
       let getFilteredTypes = this.types.filter((elem) => {
         return elem.selected;
       });
-      this.list = (await getRecipes(getFilteredTypes)).data.recipes;
+      let sliderValues = [this.caloriesSlider, this.carbsSlider, this.proteinsSlider, this.fatsSlider];
+      this.list = (await getRecipes(getFilteredTypes, sliderValues, this.sortedItem)).data.recipes;
       if (this.favonly) {
         const favorites = (await getUserInfo()).data.recipes;
         this.list = favorites.filter((e) =>
@@ -261,18 +514,7 @@ export default {
     },
     isAuth: function () {
       return store.state.authenticated;
-    },
-    setSubtitle: function (description) {
-      if (description.length <= 49) {
-        let spaceToAdd = (49 - description.length) * 3;
-        let buffer = "​ ".repeat(spaceToAdd);
-        description = description + buffer;
-      } else if (description.length >= 98) {
-        description = description.substring(0, 98);
-        description += "...";
-      }
-      return description;
-    },
+    }
   },
   async mounted() {},
   computed: {
