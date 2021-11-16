@@ -90,6 +90,27 @@
           <v-toolbar-title>
             {{ recipe.name }}
           </v-toolbar-title>
+          <v-spacer></v-spacer>
+                    <v-btn
+            v-if="isAuth() && !isFavorited(recipe.id)"
+            fab
+            dark
+            color="pink lighten-1"
+            small
+            @click="setFavorite(recipe.id)"
+          >
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="isAuth() && isFavorited(recipe.id)"
+            fab
+            dark
+            color="cyan darken-2"
+            small
+            @click="setUnfavorite(recipe.id)"
+          >
+            <v-icon>mdi-heart-broken</v-icon>
+          </v-btn>
         </v-toolbar>
         <v-container fluid>
           <v-rating
@@ -285,9 +306,10 @@
 <script>
 import { getRecipeById, postReview, deleteReview, patchReview } from "../service/recipeapi";
 import { initPage, updatePage, pages } from "../misc/pagination";
-import { getUserInfo } from "../service/userapi";
+import { getUserInfo, postFavorite, postUnfavorite } from "../service/userapi";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
+import { store } from "../main";
 export default {
   name: "ViewRecipe",
   mixins: [validationMixin],
@@ -421,6 +443,38 @@ export default {
         this.selectedMode = { headline: `Write your review for `, buttonText: "Post", edit: false};
       }
       this.dialog = true;
+    },
+    isFavorited: function (recipeId) {
+      return store.state.savedRecipes.some((e) => e.id === recipeId);
+    },
+    setUnfavorite: async function (id) {
+      await postUnfavorite(id)
+        .then(async (response) => {
+          if (response.status === 204) {
+            const recipes = (await getUserInfo()).data.recipes;
+            this.$store.commit("setSavedRecipes", recipes);
+            this.getRecipeList();
+          }
+        })
+        .catch((err) => {
+          console.log("error occured with favorites:", err);
+        });
+    },
+    setFavorite: async function (id) {
+      await postFavorite(id)
+        .then(async (response) => {
+          if (response.status === 201) {
+            const recipes = (await getUserInfo()).data.recipes;
+            this.$store.commit("setSavedRecipes", recipes);
+            this.getRecipeList();
+          }
+        })
+        .catch((err) => {
+          console.log("error occured with favorites:", err);
+        });
+    },
+    isAuth: function () {
+      return store.state.authenticated;
     }
   },
   computed: {
