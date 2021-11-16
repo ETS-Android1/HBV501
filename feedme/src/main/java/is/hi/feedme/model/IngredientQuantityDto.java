@@ -3,7 +3,7 @@ package is.hi.feedme.model;
 public class IngredientQuantityDto {
 
     long ingredient;
-    int quantity;
+    double quantity;
     String unit;
 
     public long getIngredient() {
@@ -14,11 +14,11 @@ public class IngredientQuantityDto {
         this.ingredient = id;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 

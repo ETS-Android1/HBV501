@@ -295,7 +295,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
         @Modifying
         @Transactional
         void saveRecipeIngredient(@Param("recipeId") long recipeId, @Param("ingredientId") long ingredientId,
-                        @Param("quant") int quant, @Param("unit") String unit);
+                        @Param("quant") double quant, @Param("unit") String unit);
 
         @Query(value = "DELETE FROM ingredient_quantity WHERE recipe_id = :recipeId AND ingredient_id = :ingredientId", nativeQuery = true)
         @Modifying

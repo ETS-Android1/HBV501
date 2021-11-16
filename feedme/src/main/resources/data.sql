@@ -545,7 +545,7 @@ VALUES
 INSERT INTO
   ingredient_quantity (recipe_id, ingredient_id, quantity, unit)
 VALUES
-  (6, 27, 3, 'g');
+  (6, 27, 3.5, 'g');
 
 -- DUMMY STORED USER RECIPES
 INSERT INTO

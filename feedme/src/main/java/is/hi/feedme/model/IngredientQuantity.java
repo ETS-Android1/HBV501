@@ -38,7 +38,7 @@ public class IngredientQuantity {
     Recipe recipe;
 
     // The amount of the ingredient
-    int quantity;
+    double quantity;
     // The describing unit ( cup, kg, liter, eggs, ... )
     String unit;
 
@@ -58,11 +58,11 @@ public class IngredientQuantity {
         this.recipe = recipe;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
