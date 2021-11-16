@@ -34,10 +34,10 @@ public class Recipe implements Serializable {
     @Column(unique = true)
     private String name;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String description;
 
-    @Column(length = 1024)
+    @Column(length = 4096)
     private String instructions;
 
     @Transient
