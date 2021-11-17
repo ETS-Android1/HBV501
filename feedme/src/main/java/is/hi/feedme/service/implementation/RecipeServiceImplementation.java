@@ -178,6 +178,17 @@ public class RecipeServiceImplementation implements RecipeService {
                         minProteins, maxProteins, minFats, maxFats).iterator();
             }
             break;
+        case "rating":
+            url += "rating";
+            if (identifiers.size() > 0) {
+                recipeIterator = recipeRepository.findByIngredientIdsSortedByRating(identifiers, identifiers.size(),
+                        minCalories, maxCalories, minCarbs, maxCarbs, minProteins, maxProteins, minFats, maxFats)
+                        .iterator();
+            } else {
+                recipeIterator = recipeRepository.findAllSortedByRating(minCalories, maxCalories, minCarbs, maxCarbs,
+                        minProteins, maxProteins, minFats, maxFats).iterator();
+            }
+            break;
         default:
             url += "name";
             if (identifiers.size() > 0) {
@@ -299,6 +310,18 @@ public class RecipeServiceImplementation implements RecipeService {
             } else {
                 recipeIterator = recipeRepository.findAllSortedByFatsPaginated(limit, offset, minCalories, maxCalories,
                         minCarbs, maxCarbs, minProteins, maxProteins, minFats, maxFats).iterator();
+            }
+
+            break;
+        case "rating":
+            url += "rating";
+            if (identifiers.size() > 0) {
+                recipeIterator = recipeRepository.findByIngredientIdsSortedByRatingPaginated(identifiers,
+                        identifiers.size(), limit, offset, minCalories, maxCalories, minCarbs, maxCarbs, minProteins,
+                        maxProteins, minFats, maxFats).iterator();
+            } else {
+                recipeIterator = recipeRepository.findAllSortedByRatingPaginated(limit, offset, minCalories,
+                        maxCalories, minCarbs, maxCarbs, minProteins, maxProteins, minFats, maxFats).iterator();
             }
 
             break;
@@ -513,10 +536,11 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Standard function to find a review with the primary key pair of recipeId and userId
+     * Standard function to find a review with the primary key pair of recipeId and
+     * userId
      * 
      * @param recipeId the recipe to find the review for
-     * @param userId the user to find the review for
+     * @param userId   the user to find the review for
      * @return the Review entity if one is found
      */
     public Review findReview(long recipeId, long userId) {
@@ -530,13 +554,14 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public int createReview(long recipeId, long userId, ReviewDto review) {
-        return reviewRepository.saveRecipeReview(recipeId, userId, review.getTitle(), review.getSubtitle(), review.getRating());
+        return reviewRepository.saveRecipeReview(recipeId, userId, review.getTitle(), review.getSubtitle(),
+                review.getRating());
     }
 
     /**
      * Standard function to update a review in the database
      * 
-     * @param review the current review information to update
+     * @param review  the current review information to update
      * @param changes the list of changes to apply
      * @return the Review entity created from saving it
      */
@@ -553,7 +578,7 @@ public class RecipeServiceImplementation implements RecipeService {
             case "rating":
                 review.setRating((int) value);
                 break;
-           }
+            }
         });
 
         return reviewRepository.save(review);
@@ -582,8 +607,8 @@ public class RecipeServiceImplementation implements RecipeService {
     /**
      * Standard function to save a comment received from a request body
      * 
-     * @param recipe the recipe to use for the comment
-     * @param user the user who made the comment
+     * @param recipe  the recipe to use for the comment
+     * @param user    the user who made the comment
      * @param comment the request body information
      * @return the created Comment entity
      */
@@ -611,7 +636,7 @@ public class RecipeServiceImplementation implements RecipeService {
             case "body":
                 comment.setBody((String) value);
                 break;
-           }
+            }
         });
 
         return commentRepository.save(comment);

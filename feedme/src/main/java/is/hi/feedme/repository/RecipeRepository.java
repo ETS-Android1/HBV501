@@ -282,6 +282,62 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                         @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
                         @Param("minFats") int minFats, @Param("maxFats") int maxFats);
 
+        @Query(value = "SELECT id, calories, carbs, description, fats, image, instructions, name, proteins, avg AS rating FROM "
+                        + "(SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+                        + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+                        + "(proteins > :minProteins AND proteins < :maxProteins) AND "
+                        + "(fats > :minFats AND fats < :maxFats)) tbl1 "
+                        + "LEFT JOIN (SELECT recipe_id, AVG(rating) FROM reviews GROUP BY recipe_id) tbl2 ON tbl1.id = tbl2.recipe_id "
+                        + "ORDER BY avg DESC NULLS LAST", nativeQuery = true)
+        List<Recipe> findAllSortedByRating(@Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+                        @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
+                        @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
+                        @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+        @Query(value = "SELECT id, calories, carbs, description, fats, image, instructions, name, proteins, avg AS rating FROM "
+                        + "(SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+                        + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+                        + "(calories > :minCalories AND calories < :maxCalories) AND "
+                        + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+                        + "(proteins > :minProteins AND proteins < :maxProteins) AND"
+                        + "(fats > :minFats AND fats < :maxFats)"
+                        + "tbl1 LEFT JOIN (SELECT recipe_id, AVG(rating) FROM reviews GROUP BY recipe_id) tbl2 ON tbl1.id = tbl2.recipe_id) "
+                        + "ORDER BY avg DESC NULLS LAST", nativeQuery = true)
+        List<Recipe> findByIngredientIdsSortedByRating(@Param("ids") List<Long> recipeIdsList, @Param("size") int size,
+                        @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+                        @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
+                        @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
+                        @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+        @Query(value = "SELECT id, calories, carbs, description, fats, image, instructions, name, proteins, avg AS rating FROM "
+                        + "(SELECT * FROM recipes WHERE " + "(calories > :minCalories AND calories < :maxCalories) AND "
+                        + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+                        + "(proteins > :minProteins AND proteins < :maxProteins) AND "
+                        + "(fats > :minFats AND fats < :maxFats)) tbl1 "
+                        + "LEFT JOIN (SELECT recipe_id, AVG(rating) FROM reviews GROUP BY recipe_id) tbl2 ON tbl1.id = tbl2.recipe_id "
+                        + "ORDER BY avg DESC NULLS LAST LIMIT :limit OFFSET :offset", nativeQuery = true)
+        List<Recipe> findAllSortedByRatingPaginated(@Param("limit") int limit, @Param("offset") int offset,
+                        @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+                        @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
+                        @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
+                        @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
+        @Query(value = "SELECT id, calories, carbs, description, fats, image, instructions, name, proteins, avg AS rating FROM "
+                        + "(SELECT * FROM recipes WHERE id IN (SELECT recipe_id FROM "
+                        + "(SELECT recipe_id, COUNT(ingredient_id) FROM ingredient_quantity WHERE ingredient_id IN :ids GROUP BY recipe_id HAVING COUNT(ingredient_id) >= :size) t) AND"
+                        + "(calories > :minCalories AND calories < :maxCalories) AND "
+                        + "(carbs > :minCarbs AND carbs < :maxCarbs) AND "
+                        + "(proteins > :minProteins AND proteins < :maxProteins) AND"
+                        + "(fats > :minFats AND fats < :maxFats)"
+                        + "tbl1 LEFT JOIN (SELECT recipe_id, AVG(rating) FROM reviews GROUP BY recipe_id) tbl2 ON tbl1.id = tbl2.recipe_id) "
+                        + "ORDER BY avg DESC NULLS LAST LIMIT :limit OFFSET :offset", nativeQuery = true)
+        List<Recipe> findByIngredientIdsSortedByRatingPaginated(@Param("ids") List<Long> recipeIdsList,
+                        @Param("size") int size, @Param("limit") int limit, @Param("offset") int offset,
+                        @Param("minCalories") int minCalories, @Param("maxCalories") int maxCalories,
+                        @Param("minCarbs") int minCarbs, @Param("maxCarbs") int maxCarbs,
+                        @Param("minProteins") int minProteins, @Param("maxProteins") int maxProteins,
+                        @Param("minFats") int minFats, @Param("maxFats") int maxFats);
+
         @Query(value = "SELECT COUNT(*) FROM recipes", nativeQuery = true)
         int findCount();
 
