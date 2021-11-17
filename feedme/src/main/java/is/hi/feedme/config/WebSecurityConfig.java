@@ -46,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // NOTE: Java Spring does not consider routes with an ending slash to be
         // equivalent so we define both variations for ease of use
+        http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'");
+
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/", "/recipes", "/recipes/", "/recipes/{id}", "/recipes/{id}", "/ingredients",
                         "/ingredients/", "/users/login", "/users/login/", "/users/register", "/users/register/",
