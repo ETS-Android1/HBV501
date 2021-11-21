@@ -411,7 +411,7 @@ export default {
   data() {
     return {
       sortedItem: 'nothing',
-      sortItems: ["nothing", "calories", "carbs", "fats", "proteins"],
+      sortItems: ["nothing", "rating", "calories", "carbs", "fats", "proteins"],
       caloriesSlider: {
         name: 'calories',
         min: 0,
@@ -444,7 +444,7 @@ export default {
       pageInfo: {
         historyList: [],
         page: 1,
-        pageSize: 3,
+        pageSize: 6,
         listCount: 0,
       },
       list: [],

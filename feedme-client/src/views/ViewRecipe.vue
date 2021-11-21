@@ -194,13 +194,17 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-card flat width="80%">
+          <v-card flat width="50%">
+            <v-card-title>Details</v-card-title>
+            <v-card-text class="text--primary">{{recipe.description}}</v-card-text>
+          </v-card>
+          <v-card flat width="50%">
             <v-card-title>Instructions</v-card-title>
             <v-card-subtitle
               >A guide from the author to ensure your success</v-card-subtitle
             >
             <v-card-text>
-              <p class="text--primary">{{ recipe.description }}</p>
+              <p class="text--primary">{{ recipe.instructions }}</p>
             </v-card-text>
           </v-card>
           <v-card flat>
