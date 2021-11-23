@@ -1,5 +1,12 @@
 # Feed Me!
 
+**Hosted demo versions are available:**
+
+*Mind the heroku cold start period...*
+
+* Heroku hosted back-end: https://obscure-headland-63204.herokuapp.com/
+* Heroku hosted front-end: https://gentle-plateau-25334.herokuapp.com/
+
 ## File format:
 
 - `/feedme`, contains the file structure of the back end REST api
@@ -26,11 +33,7 @@
 
 ## Additional information:
 
-* Heroku hosted back-end: https://obscure-headland-63204.herokuapp.com/
-* Heroku hosted front-end: **TODO**
 * Predefined test users:
     - `username`: admin, `password`: 1234567890
     - `username`: johndoe, `password`: 1234567890
 * Project slides: https://docs.google.com/presentation/d/12KbHSgmvhcvZVQPyeoTjsKT7fdy2Hao5Zzg7kkmjkf4/edit?usp=sharing
-
-
