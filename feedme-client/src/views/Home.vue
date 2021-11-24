@@ -261,7 +261,7 @@
       <v-btn
         color="orange darken-1"
         style="margin-top: 1rem"
-        @click="getRecipeList"
+        @click="getRecipeList(forceStartPage = true)"
       >
         Search
       </v-btn>
@@ -276,7 +276,7 @@
         v-if="isAuth()"
         v-model="favonly"
         :label="`Show only favorite`"
-        @click="getRecipeList()"
+        @click="getRecipeList(forceStartPage = true)"
       ></v-switch>
       <v-row no-gutters v-if="this.list.length > 0">
         <template v-for="(recipe, index) in pageInfo.historyList">
@@ -284,7 +284,7 @@
             <v-container class="pa-2">
               <v-card
                 class="mx-auto"
-                width="22rem"
+                width="23rem"
                 height="28rem"
                 style="margin-top: 3rem"
               >
@@ -468,7 +468,7 @@ export default {
     updatePage: function (pageIndex) {
       this.pageInfo = updatePage(pageIndex, this.list, this.pageInfo);
     },
-    getRecipeList: async function () {
+    getRecipeList: async function (forceStartPage = false) {
       let getFilteredTypes = this.types.filter((elem) => {
         return elem.selected;
       });
@@ -476,12 +476,15 @@ export default {
       this.list = (await getRecipes(getFilteredTypes, sliderValues, this.sortedItem)).data.recipes;
       if (this.favonly) {
         const favorites = (await getUserInfo()).data.recipes;
-        this.list = favorites.filter((e) =>
-          this.list.some((m) => m.id === e.id)
+        this.list = this.list.filter((e) =>
+          favorites.some((m) => m.id === e.id)
         );
       }
       this.initPage();
-      this.updatePage(this.pageInfo.page);
+      if(forceStartPage) 
+        this.updatePage(1);   
+      else
+        this.updatePage(this.pageInfo.page);
     },
     isFavorited: function (recipeId) {
       return store.state.savedRecipes.some((e) => e.id === recipeId);
