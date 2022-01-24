@@ -49,7 +49,10 @@ the ingredients they already have.
 
 ### 3.3 Deployment considerations
 
-* The goal is to work with Google to provide the app on the Play Store
+* Users who want to use the application should be using a relatively new android smartphone.
+  - The application will be made available on the Google Play Store
+
+\pagebreak
 
 # 2. Product backlog
 
