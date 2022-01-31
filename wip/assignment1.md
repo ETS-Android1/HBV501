@@ -44,13 +44,14 @@ the ingredients they already have.
 
 ### 2.3 Scope of subsequent releases
 
-* An iOS port of the application.
-  - When? When the company provides a test iPhone.
+* Creator tier to allow user recipes
+* Additional login methods such as Google Credentials or Facebook
 
 ### 3.3 Deployment considerations
 
-* Users who want to use the application should be using a relatively new android smartphone.
-  - The application will be made available on the Google Play Store
+* A relatively new android smartphone is required to run the application.
+* The application requires an internet connection to run.
+* It will initially be available on the Google Play store.
 
 \pagebreak
 
@@ -58,19 +59,45 @@ the ingredients they already have.
 
 ## User Stories
 
-* Ingredient filtering
-  – A user arrives at the website looking for a meal to cook for dinner. They add the ingredients they have
-at home. Recipes containing these ingredients are displayed to the user. The user finds a recipe they can
-cook with the ingredients at hand.
+1. As a user it would be comfortable to have recipes initially shown in brief format so that I can quickly flip through them.
 
-* Rating sorting
-  – A user, having gotten a list of recipes, wants to see which ones are popular. They choose the option to
-sort by rating to see which recipes have gotten the best ratings and pick a recipe that appeals to them.
+2. As a user I would like to have the ability to filter recipes by their ingredients. This will enable me to use the ingredients I have at home.
 
-* Account creation
-  – A user, who is new to the site, wants to be able to store recipes for future use. They see that there is an
-option to create an account. They do so and can then start marking which recipes they want to store.
+3. As fitness coach I want the ability to filter recipes based on the nutritional requirements of my clients diet. This will let me quickly put together meal plans for my work.
+
+4. As a user I want to be able to give recipes I have used a rating. This way I can let others know how good the recipes are.
+
+5. As a user I would like to be able to order recipes by their rating grade. This way I can be sure that I will be using a good recipe.
+
+6. As a user I would like to be able to sort recipes in order of their macro nutrients. This will let me pick healthier versions of the meals I am looking for.
+
+7. As a user I want to be able to create an account so that I can more easily interact with the app.
+
+8. As a user I want to be able to store my favorite recipes. That way I can easily find them later.
+
+9. As a user I want to be able to share recipes to my social media accounts. This will allow me to let friends know what I'm cooking.
+
+10. As an ad provider I want my products to be shown on relevant recipes. That way interested people can buy my product.
+
 
 # 3. User Story estimates
 
+| Feature              | Best Case | Most Likely Case | Worst Case | Expected Case |
+| -                    | -         | -                | -          | -             |
+| 1.                   | 2         | 3                | 4          | 3             |
+| 2.                   | 5         | 6                | 8          | 6.167         |
+| 3.                   | 3         | 3.5              | 5          | 3.667         |
+| 4.                   | 1         | 1.5              | 2          | 1.5           |
+| 5.                   | 1         | 1.5              | 2          | 1.5           |
+| 6.                   | 5         | 6                | 7          | 6             |
+| 7.                   | 5         | 6.5              | 8          | 6.5           |
+| 8.                   | 2         | 3                | 4          | 3             |
+| 9.                   | 1         | 1.5              | 3          | 1.667         |
+| 10.                  | 4         | 6                | 8          | 6             |
+| Total                |           |                  |            | 39.001        |
+
 # 4. Project schedule
+
+| Sprint   | Feature | Priority | Work | Start | Finish |
+| -        | -       | -        | -    | -     | -      |
+| Sprint 1 | 1       |          |      |       |        |
