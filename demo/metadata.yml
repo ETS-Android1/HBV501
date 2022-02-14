@@ -1,0 +1,11 @@
+---
+:id: 110268523
+:submitters:
+- :name: Kjartan Óli Ágústsson
+  :email: koa20@hi.is
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2022-02-09 20:30:14.103424000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2022-02-09 12:30:14.103424000 Z
+:status: processed

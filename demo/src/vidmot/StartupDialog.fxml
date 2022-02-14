@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root headerText="Nafn" type="javafx.scene.control.DialogPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="200.0">
+         <children>
+            <Label minWidth="33.0" text="Nafn:" />
+            <TextField fx:id="name" promptText="Nafn" />
+         </children>
+      </HBox>
+   </content>
+   <header>
+      <Label text="Hvað heitir þú?">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="5.0" />
+         </padding></Label>
+   </header>
+   <graphic>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+   </graphic>
+</fx:root>
