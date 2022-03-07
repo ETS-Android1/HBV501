@@ -2,6 +2,7 @@ package hi.feedme.feedme;
 
 import android.os.Bundle;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,11 +12,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
+import hi.feedme.feedme.logic.Networking;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
+    private Networking network;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        try {
+            network = new Networking();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 }
