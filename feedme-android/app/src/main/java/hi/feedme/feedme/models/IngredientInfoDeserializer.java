@@ -22,7 +22,7 @@ public class IngredientInfoDeserializer extends StdDeserializer<IngredientInfo> 
     @Override
     public IngredientInfo deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
-        int id = (Integer) ((IntNode) node.get("id")).numberValue();
+        int id = (Integer) node.get("id").numberValue();
         String name = node.get("name").asText();
         return new IngredientInfo(id, name);
     }

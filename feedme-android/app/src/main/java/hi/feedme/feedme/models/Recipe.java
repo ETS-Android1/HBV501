@@ -16,7 +16,17 @@ public class Recipe {
     private double carbs;
     private double proteins;
     private double fats;
+    private Boolean user_stored;
     private ArrayList<Ingredient> ingredients;
+    private ArrayList<Review> reviews;
+
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ArrayList<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
@@ -28,6 +38,14 @@ public class Recipe {
 
     public Recipe() {
 
+    }
+
+    public Boolean getUser_stored() {
+        return user_stored;
+    }
+
+    public void setUser_stored(Boolean user_stored) {
+        this.user_stored = user_stored;
     }
 
     public int getId() {

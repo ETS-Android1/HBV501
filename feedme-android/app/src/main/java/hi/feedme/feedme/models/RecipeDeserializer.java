@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,6 +36,7 @@ public class RecipeDeserializer extends StdDeserializer<Recipe> {
         double carbs = (double) ((DoubleNode) node.get("carbs")).numberValue();
         double fats = (double) ((DoubleNode) node.get("carbs")).numberValue();
         double proteins = (double) ((DoubleNode) node.get("proteins")).numberValue();
+        Boolean user_stored = (Boolean) node.get("user_stored").asBoolean();
         Recipe nrec = new Recipe();
         nrec.setName(name);
         nrec.setId(id);
@@ -47,18 +48,31 @@ public class RecipeDeserializer extends StdDeserializer<Recipe> {
         nrec.setCarbs(carbs);
         nrec.setFats(fats);
         nrec.setProteins(proteins);
-        JsonNode t = node.get("ingredients");
-        ArrayList<Ingredient> ingrs = new ArrayList<Ingredient>();
-        if (t.isArray()) {
-            Iterator<JsonNode> itr = t.iterator();
+        nrec.setUser_stored(user_stored);
+        JsonNode ing_arr = node.get("ingredients");
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        if (ing_arr.isArray()) {
+            Iterator<JsonNode> itr = ing_arr.iterator();
             while (itr.hasNext()) {
                 JsonNode item=itr.next();
-                // do something with array elements
                 Ingredient in = new ObjectMapper().readValue(item.toString(), Ingredient.class);
-                ingrs.add(in);
+                ingredients.add(in);
             }
         }
-        nrec.setIngredients(ingrs);
+        nrec.setIngredients(ingredients);
+
+        JsonNode rev_arr = node.get("reviews");
+        ArrayList<Review> revs = new ArrayList<>();
+        if (rev_arr.isArray()) {
+            Iterator<JsonNode> itr = rev_arr.iterator();
+            while (itr.hasNext()) {
+                JsonNode item = itr.next();
+                Review rev = new ObjectMapper().readValue(item.toString(), Review.class);
+                revs.add(rev);
+            }
+        }
+        nrec.setReviews(revs);
+        System.out.println("Test: " + revs.size());
         return nrec;
     }
 }
