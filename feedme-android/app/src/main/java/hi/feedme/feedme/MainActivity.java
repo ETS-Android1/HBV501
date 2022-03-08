@@ -35,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         try {
-            network = new Networking();
+            network = new Networking(this);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        network.sendReq(this);
     }
 
 }
