@@ -31,11 +31,11 @@ public class RecipeDeserializer extends StdDeserializer<Recipe> {
         String desc = node.get("description").asText();
         String inst = node.get("instructions").asText();
         String img = node.get("image").asText();
-        double rating = (double) ((DoubleNode) node.get("rating")).numberValue();
-        double calories = (double) ((DoubleNode) node.get("calories")).numberValue();
-        double carbs = (double) ((DoubleNode) node.get("carbs")).numberValue();
-        double fats = (double) ((DoubleNode) node.get("carbs")).numberValue();
-        double proteins = (double) ((DoubleNode) node.get("proteins")).numberValue();
+        double rating = node.get("rating").asDouble();
+        double calories = node.get("calories").asDouble();
+        double carbs = node.get("carbs").asDouble();
+        double fats = node.get("carbs").asDouble();
+        double proteins = node.get("proteins").asDouble();
         Boolean user_stored = (Boolean) node.get("user_stored").asBoolean();
         Recipe nrec = new Recipe();
         nrec.setName(name);

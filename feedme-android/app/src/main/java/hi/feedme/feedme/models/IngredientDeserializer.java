@@ -26,7 +26,7 @@ public class IngredientDeserializer extends StdDeserializer<Ingredient> {
     @Override
     public Ingredient deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
-        double quantity = (double) ((DoubleNode) node.get("quantity")).numberValue();
+        double quantity = node.get("quantity").asDouble();
         String unit = node.get("unit").asText();
         IngredientInfo ingInfo = new ObjectMapper().readValue(node.get("ingredient").toString(), IngredientInfo.class);
         return new Ingredient(ingInfo, quantity, unit);

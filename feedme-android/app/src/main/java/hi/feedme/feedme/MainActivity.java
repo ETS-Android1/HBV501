@@ -1,8 +1,12 @@
 package hi.feedme.feedme;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,17 +15,25 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import org.json.JSONObject;
+
 import hi.feedme.feedme.databinding.ActivityMainBinding;
+import hi.feedme.feedme.logic.NetworkCallback;
 import hi.feedme.feedme.logic.Networking;
+import hi.feedme.feedme.models.Recipe;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private Networking network;
+    private NetworkCallback callBackListener;
+    private Context context;
+    private Recipe recipe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        context = this;
+        initCallBack();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -34,12 +46,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        try {
-            network = new Networking(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        network.sendReq(this);
+        network = new Networking(callBackListener, context);
+        network.fetchGET("recipes/4");
+    }
+
+    private void initCallBack() {
+
+        callBackListener = new NetworkCallback() {
+            @Override
+            public void notifySuccess(JSONObject response) throws JsonProcessingException {
+                System.out.println("Great success! " + response.toString());
+                recipe = new ObjectMapper().readValue(response.toString(), Recipe.class);
+                System.out.println("xd");
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                System.out.println("Failure! " + error.toString());
+            }
+        };
     }
 
 }
