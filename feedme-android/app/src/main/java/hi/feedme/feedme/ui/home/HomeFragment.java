@@ -3,6 +3,7 @@ package hi.feedme.feedme.ui.home;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import hi.feedme.feedme.R;
+import hi.feedme.feedme.MainActivity;
 
 /**
  * A fragment representing a list of Items.
@@ -23,6 +26,7 @@ public class HomeFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -55,17 +59,34 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        this.recyclerView = view.findViewById(R.id.list);
+        Context context = recyclerView.getContext();
+
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new RecipeRecyclerViewAdapter(RecipeContent.ITEMS));
+        if (mColumnCount <= 1) {
+            this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            this.recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+        this.recyclerView.setAdapter(new RecipeRecyclerViewAdapter(RecipeContent.ITEMS));
+
+        Button btn = view.findViewById(R.id.button2);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getActivity()).getNetwork().fetchGET("recipes/4");
+            }
+        });
+
         return view;
+    }
+
+    public void setData() {
+        // Test wipe "some" items
+        for (int i = 24; i >= 5; i--) {
+            RecipeContent.ITEMS.remove(i);
+        }
+
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 }
