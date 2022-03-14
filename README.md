@@ -11,6 +11,7 @@
 
 - `/feedme`, contains the file structure of the back end REST api
 - `/feedme-client`, contains the Vue.js front-end client
+- `/feedme-android`, contains the Android front-end client
 - `/docs`, contains current UML diagrams and introductory documents
 
 ## Required setup to run the project:
