@@ -5,21 +5,28 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 public class ReqQueue {
+    private static ReqQueue instance;
     private RequestQueue requestQueue;
     private static Context ctx;
 
-    ReqQueue(Context context) {
+    private ReqQueue(Context context) {
         ctx = context;
         requestQueue = getRequestQueue();
     }
 
-    public synchronized ReqQueue getInstance() {
-        return this;
+    public static synchronized ReqQueue getInstance(Context context) {
+        if (instance == null) {
+            instance = new ReqQueue(context);
+        }
+        return instance;
     }
 
     public RequestQueue getRequestQueue() {
-        if (requestQueue == null)
+        if (requestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
             requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
+        }
         return requestQueue;
     }
 

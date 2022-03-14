@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        initCallBack();
+        //initCallBack();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        network = new Networking(callBackListener, context);
+        network = new Networking(context);
     }
-
+    /*
     private void initCallBack() {
 
         callBackListener = new NetworkCallback() {
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-
+    */
     public Networking getNetwork() { return network; }
 
 }

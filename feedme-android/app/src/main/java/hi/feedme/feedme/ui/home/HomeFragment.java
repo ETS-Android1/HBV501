@@ -13,9 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.android.volley.VolleyError;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.json.JSONObject;
 
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.MainActivity;
+import hi.feedme.feedme.logic.JSONParser;
+import hi.feedme.feedme.logic.NetworkCallback;
+import hi.feedme.feedme.logic.Networking;
+import hi.feedme.feedme.models.Recipe;
 
 /**
  * A fragment representing a list of Items.
@@ -74,7 +84,20 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).getNetwork().fetchGET("recipes/4");
+                Networking c = ((MainActivity) getActivity()).getNetwork();
+                c.getRecipeById("5", new NetworkCallback() {
+
+                    @Override
+                    public void notifySuccess(JSONObject response) throws JsonProcessingException {
+                        Recipe r = JSONParser.toRecipe(response.toString());
+                        Toast.makeText(((MainActivity) getActivity()), r.getName(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void notifyError(VolleyError error) {
+
+                    }
+                });
             }
         });
 

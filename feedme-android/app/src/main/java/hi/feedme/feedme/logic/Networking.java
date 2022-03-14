@@ -2,6 +2,7 @@ package hi.feedme.feedme.logic;
 
 import android.content.Context;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,44 +22,27 @@ import hi.feedme.feedme.models.Recipe;
 
 public class Networking {
     // Database stuff
-    private ReqQueue req;
-    private NetworkCallback resultCallback = null;
-    private Context mContext;
-    private final String ROOT = "https://obscure-headland-63204.herokuapp.com/";
+    private Context context;
+    public static final String ROOT = "https://obscure-headland-63204.herokuapp.com/";
 
-    public Networking(NetworkCallback result, Context ctx) {
-        mContext = ctx;
-        resultCallback = result;
+    public Networking(Context context) {
+        this.context = context;
     }
 
-    public void fetchGET(String path) {
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, ROOT + path, null,
-                response -> {
-                    if (resultCallback != null) {
-                        try {
-                            resultCallback.notifySuccess(response);
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                error -> {
-                    if (resultCallback != null)
-                        resultCallback.notifyError(error);
-                });
-        queue.add(jsonObjectRequest);
-    }
-
-    public void sendReq() {
-        String url = "https://obscure-headland-63204.herokuapp.com/recipes/5";
+    public void getRecipeById(String id, NetworkCallback nwcb) {
+        String url = ROOT + "recipes/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-        (Request.Method.GET, url, null, response -> System.out.println("Response: " + response.toString())
-                , error -> {
-            // TODO: Handle error
-            System.out.println("Error!: " + error.toString());
-        });
-        req.getInstance().addToRequestQueue(jsonObjectRequest);
+                (Request.Method.GET, url, null, response -> {
+                    Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                    try {
+                        nwcb.notifySuccess(response);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    // TODO: Handle error
+                    System.out.println("Error!: " + error.toString());
+                });
+        ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 }
