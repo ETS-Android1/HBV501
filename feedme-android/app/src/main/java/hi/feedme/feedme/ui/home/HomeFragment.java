@@ -3,7 +3,6 @@ package hi.feedme.feedme.ui.home;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,14 +17,15 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
 
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.MainActivity;
-import hi.feedme.feedme.logic.JSONParser;
-import hi.feedme.feedme.logic.NetworkCallback;
+import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.logic.Networking;
+import hi.feedme.feedme.listeners.RecipeNwCallback;
 import hi.feedme.feedme.models.Recipe;
+import hi.feedme.feedme.models.SimplifiedRecipe;
 
 /**
  * A fragment representing a list of Items.
@@ -85,12 +85,26 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Networking c = ((MainActivity) getActivity()).getNetwork();
-                c.getRecipeById("5", new NetworkCallback() {
+                /*
+                c.getRecipeById("5", new RecipeNwCallback() {
 
                     @Override
-                    public void notifySuccess(JSONObject response) throws JsonProcessingException {
-                        Recipe r = JSONParser.toRecipe(response.toString());
-                        Toast.makeText(((MainActivity) getActivity()), r.getName(), Toast.LENGTH_LONG).show();
+                    public void notifySuccess(Recipe response) throws JsonProcessingException {
+                        Toast.makeText(((MainActivity) getActivity()), response.getName(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void notifyError(VolleyError error) {
+
+                    }
+                });
+                 */
+                c.getRecipes(new RecipeListNwCallback() {
+                    @Override
+                    public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
+                        for(SimplifiedRecipe r : response) {
+                            System.out.println("recipe name: " + r.getName());
+                        }
                     }
 
                     @Override

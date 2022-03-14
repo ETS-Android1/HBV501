@@ -3,17 +3,27 @@ package hi.feedme.feedme.logic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+
 import hi.feedme.feedme.models.Ingredient;
 import hi.feedme.feedme.models.Recipe;
+import hi.feedme.feedme.models.SimplifiedRecipe;
 
 public class JSONParser {
-    public static Recipe toRecipe(String json) throws JsonProcessingException {
-        Recipe rec = new ObjectMapper().readValue(json.toString(), Recipe.class);
-        return rec;
+    public static Recipe parseRecipe(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json.toString(), Recipe.class);
     }
 
-    public static Ingredient toIngredient(String json) throws JsonProcessingException {
-        Ingredient in = new ObjectMapper().readValue(json.toString(), Ingredient.class);
-        return in;
+    public static SimplifiedRecipe parseSimplifiedRecipe(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json.toString(), SimplifiedRecipe.class);
+    }
+
+    public static ArrayList<Recipe> parseRecipes(String json) throws JsonProcessingException {
+        ArrayList<Recipe> recipeList = new ArrayList<>();
+        return recipeList;
+    }
+
+    public static Ingredient parseIngredient(String json) throws JsonProcessingException {
+        return new ObjectMapper().readValue(json.toString(), Ingredient.class);
     }
 }

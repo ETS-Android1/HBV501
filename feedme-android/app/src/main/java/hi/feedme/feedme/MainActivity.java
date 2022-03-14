@@ -19,7 +19,6 @@ import androidx.navigation.ui.NavigationUI;
 import org.json.JSONObject;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
-import hi.feedme.feedme.logic.NetworkCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.models.Recipe;
 
@@ -30,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
     private Networking network;
-    private NetworkCallback callBackListener;
     private Context context;
     private Recipe recipe;
     @Override
