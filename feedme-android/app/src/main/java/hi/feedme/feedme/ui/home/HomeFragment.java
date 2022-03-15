@@ -39,7 +39,6 @@ public class HomeFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private RecyclerView recyclerView;
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -118,10 +117,8 @@ public class HomeFragment extends Fragment {
                  */
                 c.postLogin("admin", "1234567890", new LoginNwCallback() {
                     @Override
-                    public void notifySuccess(JSONObject response) throws JsonProcessingException {
-                        System.out.println(response.toString());
-                        LoginInformation login = JSONParser.parseLogin(response.toString());
-                        System.out.println("Token: " + login.getToken());
+                    public void notifySuccess(LoginInformation response) {
+                        System.out.println("Some UI stuff\nToken: " + response.getToken());
                     }
 
                     @Override

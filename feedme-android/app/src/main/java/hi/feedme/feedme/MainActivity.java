@@ -51,28 +51,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         network = new Networking(context);
     }
-    /*
-    private void initCallBack() {
 
-        callBackListener = new NetworkCallback() {
-            @Override
-            public void notifySuccess(JSONObject response) throws JsonProcessingException {
-                System.out.println("Great success! " + response.toString());
-                recipe = new ObjectMapper().readValue(response.toString(), Recipe.class);
-
-                NavHostFragment nhf = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-                ((HomeFragment) nhf.getChildFragmentManager().getFragments().get(0)).setData();
-
-                System.out.println("xd");
-            }
-
-            @Override
-            public void notifyError(VolleyError error) {
-                System.out.println("Failure! " + error.toString());
-            }
-        };
-    }
-    */
     public Networking getNetwork() { return network; }
 
 }

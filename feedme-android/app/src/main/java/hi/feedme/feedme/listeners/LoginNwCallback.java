@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.json.JSONObject;
 
+import hi.feedme.feedme.models.LoginInformation;
+
 public interface LoginNwCallback {
-    void notifySuccess(JSONObject response) throws JsonProcessingException;
+    void notifySuccess(LoginInformation response);
     void notifyError(VolleyError error);
 }

@@ -78,7 +78,8 @@ public class Networking {
         params.put("password", pw);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), response -> {
             try {
-                nwcb.notifySuccess(response);
+                Storage.setJsonLogin(context, response.toString());
+                nwcb.notifySuccess(Storage.getLoginInformation(context));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
