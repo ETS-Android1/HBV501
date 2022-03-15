@@ -13,7 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import hi.feedme.feedme.listeners.LoginNwCallback;
 import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.listeners.RecipeNwCallback;
 import hi.feedme.feedme.models.Recipe;
@@ -41,6 +43,7 @@ public class Networking {
                     }
                 }, error -> {
                     System.out.println("Error!: " + error.toString());
+                    nwcb.notifyError(error);
                 });
         ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
@@ -63,7 +66,23 @@ public class Networking {
                 }
             }, error -> {
                 System.out.println("Error!: " + error.toString());
+                nwcb.notifyError(error);
             });
         ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void postLogin(String user, String pw, LoginNwCallback nwcb) {
+        String url = ROOT + "users/login";
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", user);
+        params.put("password", pw);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), response -> {
+            try {
+                nwcb.notifySuccess(response);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }, nwcb::notifyError);
+        ReqQueue.getInstance(context).addToRequestQueue(req);
     }
 }

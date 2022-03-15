@@ -1,5 +1,9 @@
 package hi.feedme.feedme.ui.home;
 
+import hi.feedme.feedme.models.*;
+import hi.feedme.feedme.listeners.*;
+import hi.feedme.feedme.logic.*;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,15 +21,13 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.MainActivity;
-import hi.feedme.feedme.listeners.RecipeListNwCallback;
-import hi.feedme.feedme.logic.Networking;
-import hi.feedme.feedme.listeners.RecipeNwCallback;
-import hi.feedme.feedme.models.Recipe;
-import hi.feedme.feedme.models.SimplifiedRecipe;
+
 
 /**
  * A fragment representing a list of Items.
@@ -99,12 +101,27 @@ public class HomeFragment extends Fragment {
                     }
                 });
                  */
+                /*
                 c.getRecipes(new RecipeListNwCallback() {
                     @Override
                     public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
                         for(SimplifiedRecipe r : response) {
                             System.out.println("recipe name: " + r.getName());
                         }
+                    }
+
+                    @Override
+                    public void notifyError(VolleyError error) {
+
+                    }
+                });
+                 */
+                c.postLogin("admin", "1234567890", new LoginNwCallback() {
+                    @Override
+                    public void notifySuccess(JSONObject response) throws JsonProcessingException {
+                        System.out.println(response.toString());
+                        LoginInformation login = JSONParser.parseLogin(response.toString());
+                        System.out.println("Token: " + login.getToken());
                     }
 
                     @Override
