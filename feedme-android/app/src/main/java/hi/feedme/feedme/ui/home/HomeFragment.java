@@ -148,7 +148,11 @@ public class HomeFragment extends Fragment {
     }
 
     public void setData(ArrayList<SimplifiedRecipe> rs) {
-        // RecipeContent.ITEMS = rs; // CHANGE TO SIMPLIFIED RECIPE INSTEAD OF PLACEHOLDER
+        //RecipeContent.ITEMS = rs; // CHANGE TO SIMPLIFIED RECIPE INSTEAD OF PLACEHOLDER
+        for(SimplifiedRecipe r : rs) {
+            RecipeContent.ITEMS.add(r);
+            RecipeContent.ITEM_MAP.put(r.getId(), r);
+            }
 
         recyclerView.getAdapter().notifyDataSetChanged();
     }

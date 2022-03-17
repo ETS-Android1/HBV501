@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import hi.feedme.feedme.models.SimplifiedRecipe;
 import hi.feedme.feedme.ui.home.RecipeContent.PlaceholderItem;
 import hi.feedme.feedme.databinding.FragmentRecipeBinding;
 
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private final List<SimplifiedRecipe> mValues;
 
-    public RecipeRecyclerViewAdapter(List<PlaceholderItem> items) {
+    public RecipeRecyclerViewAdapter(List<SimplifiedRecipe> items) {
         mValues = items;
     }
 
@@ -32,9 +33,10 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        System.out.println("vb jaan");
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getName());
+        holder.mContentView.setText(mValues.get(position).getDescription());
     }
 
     @Override
@@ -45,7 +47,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public SimplifiedRecipe mItem;
 
         public ViewHolder(FragmentRecipeBinding binding) {
             super(binding.getRoot());
