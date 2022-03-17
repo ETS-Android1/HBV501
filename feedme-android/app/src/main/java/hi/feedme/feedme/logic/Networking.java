@@ -18,6 +18,7 @@ import java.util.HashMap;
 import hi.feedme.feedme.listeners.LoginNwCallback;
 import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.listeners.RecipeNwCallback;
+import hi.feedme.feedme.listeners.RegisterNwCallback;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 
@@ -29,6 +30,9 @@ public class Networking {
     public Networking(Context context) {
         this.context = context;
     }
+
+
+    //GET
 
     public void getRecipeById(String id, RecipeNwCallback nwcb) {
         String url = ROOT + "recipes/" + id;
@@ -71,6 +75,10 @@ public class Networking {
         ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
+
+
+    //POST
+
     public void postLogin(String user, String pw, LoginNwCallback nwcb) {
         String url = ROOT + "users/login";
         HashMap<String, String> params = new HashMap<String, String>();
@@ -86,4 +94,21 @@ public class Networking {
         }, nwcb::notifyError);
         ReqQueue.getInstance(context).addToRequestQueue(req);
     }
+
+    public void postRegister(String user, String pw, String email, Boolean admin, RegisterNwCallback nwcb) {
+        String url = ROOT + "users/register";
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", user);
+        params.put("password", pw);
+        params.put("email", email);
+        params.put("admin", admin.toString());
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), response -> {
+            nwcb.notifySuccess("Success");
+        }, nwcb::notifyError);
+        ReqQueue.getInstance(context).addToRequestQueue(req);
+    }
+
+
 }
+
+

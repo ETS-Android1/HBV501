@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-                 */
+                 */ //getRecipeById example
                 /*
                 c.getRecipes(new RecipeListNwCallback() {
                     @Override
@@ -114,16 +114,30 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-                 */
+                 */ //getRecipes example
+                /*
                 c.postLogin("admin", "1234567890", new LoginNwCallback() {
                     @Override
                     public void notifySuccess(LoginInformation response) {
-                        System.out.println("Some UI stuff\nToken: " + response.getToken());
+                        Toast.makeText(getActivity(), "Successful login!", Toast.LENGTH_SHORT).show();
+                        System.out.println("Token: " + response.getToken());
                     }
 
                     @Override
                     public void notifyError(VolleyError error) {
+                        Toast.makeText(getActivity(), "Wrong username/password combination!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                */ //login example
+                c.postRegister("testuser126", "1234567890", "test6@test.com", false, new RegisterNwCallback() {
+                    @Override
+                    public void notifySuccess(String response) {
+                        System.out.println("test register: " + response);
+                    }
 
+                    @Override
+                    public void notifyError(VolleyError error) {
+                        System.out.println(error.toString());
                     }
                 });
             }
