@@ -100,13 +100,14 @@ public class HomeFragment extends Fragment {
                     }
                 });
                  */ //getRecipeById example
-                /*
+
                 c.getRecipes(new RecipeListNwCallback() {
                     @Override
                     public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
-                        for(SimplifiedRecipe r : response) {
-                            System.out.println("recipe name: " + r.getName());
-                        }
+                        setData(response);
+                        // for(SimplifiedRecipe r : response) {
+                        //    System.out.println("recipe name: " + r.getName());
+                        //}
                     }
 
                     @Override
@@ -114,7 +115,7 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
-                 */ //getRecipes example
+                //getRecipes example
                 /*
                 c.postLogin("admin", "1234567890", new LoginNwCallback() {
                     @Override
@@ -129,7 +130,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
                 */ //login example
-                c.postRegister("testuser126", "1234567890", "test6@test.com", false, new RegisterNwCallback() {
+                /*c.postRegister("testuser126", "1234567890", "test6@test.com", false, new RegisterNwCallback() {
                     @Override
                     public void notifySuccess(String response) {
                         System.out.println("test register: " + response);
@@ -139,18 +140,15 @@ public class HomeFragment extends Fragment {
                     public void notifyError(VolleyError error) {
                         System.out.println(error.toString());
                     }
-                });
+                }); */
             }
         });
 
         return view;
     }
 
-    public void setData() {
-        // Test wipe "some" items
-        for (int i = 24; i >= 5; i--) {
-            RecipeContent.ITEMS.remove(i);
-        }
+    public void setData(ArrayList<SimplifiedRecipe> rs) {
+        // RecipeContent.ITEMS = rs; // CHANGE TO SIMPLIFIED RECIPE INSTEAD OF PLACEHOLDER
 
         recyclerView.getAdapter().notifyDataSetChanged();
     }
