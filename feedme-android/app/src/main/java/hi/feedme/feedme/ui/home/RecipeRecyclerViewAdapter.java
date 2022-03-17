@@ -33,8 +33,15 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        System.out.println("vb jaan");
+        String r = "";
+        double cr = mValues.get(position).getRating();
+        for (int i = 0; i < 5; i++) {
+            r += i >= cr ? "☆" : "★";
+        }
+
+
         holder.mItem = mValues.get(position);
+        holder.mRatingView.setText(r);
         holder.mIdView.setText(mValues.get(position).getName());
         holder.mContentView.setText(mValues.get(position).getDescription());
     }
@@ -47,12 +54,14 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
+        public final TextView mRatingView;
         public SimplifiedRecipe mItem;
 
         public ViewHolder(FragmentRecipeBinding binding) {
             super(binding.getRoot());
             mIdView = binding.itemNumber;
             mContentView = binding.content;
+            mRatingView = binding.rating;
         }
 
         @Override
