@@ -20,6 +20,7 @@ import android.widget.Button;
 
 import com.android.volley.VolleyError;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.android.material.slider.RangeSlider;
 
 import org.json.JSONObject;
 
@@ -65,27 +66,48 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+    private void initSliders(View v) {
+        RangeSlider scals = v.findViewById(R.id.slider_calories);
+        scals.setValues(0.0f,5.0f);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar2);
+        RangeSlider sf = v.findViewById(R.id.slider_fats);
+        sf.setValues(0.0f,5.0f);
+
+        RangeSlider scarbs = v.findViewById(R.id.slider_carbs);
+        scarbs.setValues(0.0f,5.0f);
+
+        RangeSlider sp = v.findViewById(R.id.slider_protein);
+        sp.setValues(0.0f,5.0f);
+    }
+
+    private void initToolbar(View v) {
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar2);
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
 
         // May want to show something here later
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
 
-        this.recyclerView = view.findViewById(R.id.list);
+    private void initAdapter(View v) {
+        this.recyclerView = v.findViewById(R.id.list);
         Context context = recyclerView.getContext();
 
-        // Set the adapter
         if (mColumnCount <= 1) {
             this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
             this.recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+
         this.recyclerView.setAdapter(new RecipeRecyclerViewAdapter(RecipeContent.ITEMS));
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        initSliders(view);
+        initToolbar(view);
+        initAdapter(view);
 
         Button btn = view.findViewById(R.id.button2);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -154,12 +176,13 @@ public class HomeFragment extends Fragment {
     }
 
     public void setData(ArrayList<SimplifiedRecipe> rs) {
-        //RecipeContent.ITEMS = rs; // CHANGE TO SIMPLIFIED RECIPE INSTEAD OF PLACEHOLDER
         for(SimplifiedRecipe r : rs) {
             RecipeContent.ITEMS.add(r);
             RecipeContent.ITEM_MAP.put(r.getId(), r);
             }
 
+        // This is fine for the purpose of changing the entire set
+        // It is only more efficient to use ItemChanged if changing single items
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

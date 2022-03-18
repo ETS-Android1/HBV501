@@ -5,6 +5,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,32 +16,203 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="false"
+            android:layout_height="512dp"
+            android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar2">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="84dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/text_calories"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Calories:"
+                    app:layout_constraintBottom_toTopOf="@id/slider_calories"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/slider_calories"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:stepSize="5.0"
+                    android:contentDescription="Calories"
+                    app:haloColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@id/text_fats"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_calories"
+                    app:thumbColor="@color/white"
+                    app:thumbStrokeColor="@color/teal_200"
+                    app:tickColor="@color/black"
+                    app:tickColorActive="@color/white"
+                    app:tickColorInactive="@color/teal_200"
+                    app:trackColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/text_fats"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Fat:"
+                    app:layout_constraintBottom_toTopOf="@id/slider_fats"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/slider_calories" />
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/slider_fats"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:stepSize="5.0"
+                    android:contentDescription="Fat"
+                    app:haloColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@id/text_carbs"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_fats"
+                    app:thumbColor="@color/white"
+                    app:thumbStrokeColor="@color/teal_200"
+                    app:tickColor="@color/black"
+                    app:tickColorActive="@color/white"
+                    app:tickColorInactive="@color/teal_200"
+                    app:trackColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/text_carbs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Carbs:"
+                    app:layout_constraintBottom_toTopOf="@id/slider_carbs"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/slider_fats" />
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/slider_carbs"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:stepSize="5.0"
+                    android:contentDescription="Carbs"
+                    app:haloColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@id/text_protein"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_carbs"
+                    app:thumbColor="@color/white"
+                    app:thumbStrokeColor="@color/teal_200"
+                    app:tickColor="@color/black"
+                    app:tickColorActive="@color/white"
+                    app:tickColorInactive="@color/teal_200"
+                    app:trackColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/text_protein"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Protein:"
+                    app:layout_constraintBottom_toTopOf="@id/slider_protein"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/slider_carbs" />
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/slider_protein"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:stepSize="5.0"
+                    android:contentDescription="Carbs"
+                    app:haloColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@id/search"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_protein"
+                    app:thumbColor="@color/white"
+                    app:thumbStrokeColor="@color/teal_200"
+                    app:tickColor="@color/black"
+                    app:tickColorActive="@color/white"
+                    app:tickColorInactive="@color/teal_200"
+                    app:trackColor="@color/white"/>
+
+                <SearchView
+                    android:id="@+id/search"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toTopOf="@id/button2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/slider_protein" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Search"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="56dp"
                 android:background="?attr/colorPrimary"
-                android:theme="?attr/actionBarTheme" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="160dp"
-                android:layout_height="95dp"
-                android:text="Search" />
+                android:gravity="center"
+                android:theme="?attr/actionBarTheme"
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
+        android:layout_height="wrap_content"
 
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -50,6 +222,4 @@
             android:layout_height="wrap_content"
             app:layoutManager="LinearLayoutManager" />
     </androidx.core.widget.NestedScrollView>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
