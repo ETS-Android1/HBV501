@@ -39,11 +39,11 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             r += i >= cr ? "☆" : "★";
         }
 
-
         holder.mItem = mValues.get(position);
         holder.mRatingView.setText(r);
         holder.mIdView.setText(mValues.get(position).getName());
         holder.mContentView.setText(mValues.get(position).getDescription());
+        holder.mRealIdView.setText(mValues.get(position).getId()+"");
     }
 
     @Override
@@ -55,6 +55,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         public final TextView mIdView;
         public final TextView mContentView;
         public final TextView mRatingView;
+        public final TextView mRealIdView;
         public SimplifiedRecipe mItem;
 
         public ViewHolder(FragmentRecipeBinding binding) {
@@ -62,6 +63,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             mIdView = binding.itemNumber;
             mContentView = binding.content;
             mRatingView = binding.rating;
+            mRealIdView = binding.ID;
         }
 
         @Override
