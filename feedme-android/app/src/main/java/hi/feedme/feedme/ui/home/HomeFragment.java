@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -69,6 +69,12 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar2);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+
+        // May want to show something here later
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         this.recyclerView = view.findViewById(R.id.list);
         Context context = recyclerView.getContext();
