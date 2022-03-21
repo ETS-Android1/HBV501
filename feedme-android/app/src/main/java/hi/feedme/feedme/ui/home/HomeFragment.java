@@ -26,53 +26,6 @@ import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 
-//getRecipeById example
-/*
-c.getRecipeById("5", new RecipeNwCallback() {
-    @Override
-    public void notifySuccess(Recipe response) throws JsonProcessingException {
-        Toast.makeText(((MainActivity) getActivity()), response.getName(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void notifyError(VolleyError error) {
-
-    }
-});
-*/
-
-//getRecipes example
-/*
-c.postLogin("admin", "1234567890", new LoginNwCallback() {
-    @Override
-    public void notifySuccess(LoginInformation response) {
-        Toast.makeText(getActivity(), "Successful login!", Toast.LENGTH_SHORT).show();
-        System.out.println("Token: " + response.getToken());
-    }
-
-    @Override
-    public void notifyError(VolleyError error) {
-        Toast.makeText(getActivity(), "Wrong username/password combination!", Toast.LENGTH_SHORT).show();
-    }
-});
-*/
-
-//login example
-/*
-c.postRegister("testuser126", "1234567890", "test6@test.com", false, new RegisterNwCallback() {
-    @Override
-    public void notifySuccess(String response) {
-        System.out.println("test register: " + response);
-    }
-
-    @Override
-    public void notifyError(VolleyError error) {
-        System.out.println(error.toString());
-    }
-});
-*/
-
-
 /**
  * The main fragment of the application.
  *
@@ -89,15 +42,6 @@ public class HomeFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public HomeFragment() {
-    }
-
-    // Unused
-    public static HomeFragment newInstance(int columnCount) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -210,6 +154,8 @@ public class HomeFragment extends Fragment {
         initToolbar(view);
         initAdapter(view);
 
+        // Would split this initialization into another function using view as argument
+        // But we need these sliders anyway for the onclick method
         RangeSlider scals = view.findViewById(R.id.slider_calories);
         scals.setValues(0.0f, 1000.0f);
 
