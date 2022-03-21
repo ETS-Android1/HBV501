@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,12 +20,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
+import hi.feedme.feedme.listeners.IngredientListNwCallback;
 import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.logic.Networking;
+import hi.feedme.feedme.models.IngredientInfo;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 
 /**
@@ -32,10 +39,11 @@ import hi.feedme.feedme.models.SimplifiedRecipe;
  * It contains a filters toolbar as well as a list of SimplifiedRecipes
  */
 public class HomeFragment extends Fragment {
-    // Column count currently unused
+    // Column count currently unused, may used it for landscape layout if time allows
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private RecyclerView recyclerView;
+    private HashMap<String, Integer> ingredientIds = new HashMap<String, Integer>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,12 +52,34 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
     }
 
+    private void setIngredients() {
+        Networking conn = ((MainActivity) getActivity()).getNetwork();
+
+        conn.getIngredients(new IngredientListNwCallback() {
+            @Override
+            public void notifySuccess(ArrayList<IngredientInfo> response) throws JsonProcessingException {
+                for (IngredientInfo i : response) {
+                    ingredientIds.put(i.getName(), i.getId());
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+
+            }
+        });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+
+        if (ingredientIds.isEmpty()) {
+            setIngredients();
         }
     }
 
@@ -153,6 +183,11 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initToolbar(view);
         initAdapter(view);
+
+        if (!ingredientIds.isEmpty()) {
+            SearchView sv = view.findViewById(R.id.search);
+            // So this cant actually be done this way, kill me
+        }
 
         // Would split this initialization into another function using view as argument
         // But we need these sliders anyway for the onclick method

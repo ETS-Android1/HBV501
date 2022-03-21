@@ -49,7 +49,7 @@
                     android:layout_marginEnd="16dp"
                     android:valueFrom="0"
                     android:valueTo="1000"
-                    android:stepSize="5.0"
+                    android:stepSize="50.0"
                     android:contentDescription="Calories"
                     app:haloColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@id/text_fats"
