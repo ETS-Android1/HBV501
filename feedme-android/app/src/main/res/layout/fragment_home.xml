@@ -48,7 +48,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:valueFrom="0"
-                    android:valueTo="100"
+                    android:valueTo="1000"
                     android:stepSize="5.0"
                     android:contentDescription="Calories"
                     app:haloColor="@color/black"
@@ -178,14 +178,14 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    app:layout_constraintBottom_toTopOf="@id/button2"
+                    app:layout_constraintBottom_toTopOf="@id/search_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/slider_protein" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/search_button"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"

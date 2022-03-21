@@ -25,6 +25,7 @@ import com.google.android.material.slider.RangeSlider;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.MainActivity;
@@ -66,20 +67,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void initSliders(View v) {
-        RangeSlider scals = v.findViewById(R.id.slider_calories);
-        scals.setValues(0.0f,5.0f);
-
-        RangeSlider sf = v.findViewById(R.id.slider_fats);
-        sf.setValues(0.0f,5.0f);
-
-        RangeSlider scarbs = v.findViewById(R.id.slider_carbs);
-        scarbs.setValues(0.0f,5.0f);
-
-        RangeSlider sp = v.findViewById(R.id.slider_protein);
-        sp.setValues(0.0f,5.0f);
-    }
-
     private void initToolbar(View v) {
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar2);
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
@@ -101,19 +88,79 @@ public class HomeFragment extends Fragment {
         this.recyclerView.setAdapter(new RecipeRecyclerViewAdapter(RecipeContent.ITEMS));
     }
 
+    public void setData(ArrayList<SimplifiedRecipe> rs) {
+        RecipeContent.ITEMS.clear();
+
+        for(SimplifiedRecipe r : rs) {
+            RecipeContent.ITEMS.add(r);
+            RecipeContent.ITEM_MAP.put(r.getId(), r);
+        }
+
+        // This is fine for the purpose of changing the entire set
+        // It is only more efficient to use ItemChanged if changing single items
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    private void refreshRecipes(RangeSlider scals, RangeSlider sf, RangeSlider scarbs, RangeSlider sp) {
+        Networking conn = ((MainActivity) getActivity()).getNetwork();
+        // ?mincalories=0&maxcalories=2147483647&mincarbs=0&maxcarbs=2147483647&minproteins=0&maxproteins=2147483647&minfats=0&maxfats=2147483647&sort=name"
+        List<Float> currVals;
+
+        String query = "?sort=rating";
+        currVals = scals.getValues();
+        query += "&mincalories=" + Math.round(currVals.get(0));
+        query += "&maxcalories=" + Math.round(currVals.get(1));
+
+        currVals = sf.getValues();
+        query += "&minfats=" + Math.round(currVals.get(0));
+        query += "&maxfats=" + Math.round(currVals.get(1));
+
+        currVals = scarbs.getValues();
+        query += "&mincarbs=" + Math.round(currVals.get(0));
+        query += "&maxcarbs=" + Math.round(currVals.get(1));
+
+        currVals = sp.getValues();
+        query += "&minproteins=" + Math.round(currVals.get(0));
+        query += "&maxproteins=" + Math.round(currVals.get(1));
+
+        conn.getRecipes(new RecipeListNwCallback() {
+            @Override
+            public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
+                setData(response);
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+
+            }
+        }, query);
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        initSliders(view);
         initToolbar(view);
         initAdapter(view);
 
-        Button btn = view.findViewById(R.id.button2);
+        RangeSlider scals = view.findViewById(R.id.slider_calories);
+        scals.setValues(0.0f,1000.0f);
+
+        RangeSlider sf = view.findViewById(R.id.slider_fats);
+        sf.setValues(0.0f,100.0f);
+
+        RangeSlider scarbs = view.findViewById(R.id.slider_carbs);
+        scarbs.setValues(0.0f,100.0f);
+
+        RangeSlider sp = view.findViewById(R.id.slider_protein);
+        sp.setValues(0.0f,100.0f);
+
+        Button btn = view.findViewById(R.id.search_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Networking c = ((MainActivity) getActivity()).getNetwork();
+                refreshRecipes(scals, sf, scarbs, sp);
+
                 /*
                 c.getRecipeById("5", new RecipeNwCallback() {
 
@@ -129,20 +176,6 @@ public class HomeFragment extends Fragment {
                 });
                  */ //getRecipeById example
 
-                c.getRecipes(new RecipeListNwCallback() {
-                    @Override
-                    public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
-                        setData(response);
-                        // for(SimplifiedRecipe r : response) {
-                        //    System.out.println("recipe name: " + r.getName());
-                        //}
-                    }
-
-                    @Override
-                    public void notifyError(VolleyError error) {
-
-                    }
-                });
                 //getRecipes example
                 /*
                 c.postLogin("admin", "1234567890", new LoginNwCallback() {
@@ -173,16 +206,5 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public void setData(ArrayList<SimplifiedRecipe> rs) {
-        for(SimplifiedRecipe r : rs) {
-            RecipeContent.ITEMS.add(r);
-            RecipeContent.ITEM_MAP.put(r.getId(), r);
-            }
-
-        // This is fine for the purpose of changing the entire set
-        // It is only more efficient to use ItemChanged if changing single items
-        recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

@@ -52,8 +52,9 @@ public class Networking {
         ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void getRecipes(RecipeListNwCallback nwcb) {
-        String url = ROOT + "recipes";
+    public void getRecipes(RecipeListNwCallback nwcb, String q) {
+        String url = ROOT + "recipes" + q;
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
             (Request.Method.GET, url, null, response -> {
                 try {
