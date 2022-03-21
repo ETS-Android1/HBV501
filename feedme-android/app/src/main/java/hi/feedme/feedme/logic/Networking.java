@@ -15,10 +15,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import hi.feedme.feedme.listeners.IngredientListNwCallback;
 import hi.feedme.feedme.listeners.LoginNwCallback;
 import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.listeners.RecipeNwCallback;
 import hi.feedme.feedme.listeners.RegisterNwCallback;
+import hi.feedme.feedme.models.Ingredient;
+import hi.feedme.feedme.models.IngredientInfo;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 
@@ -76,6 +79,27 @@ public class Networking {
         ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
+    public void getIngredients(IngredientListNwCallback nwcb) {
+        String url = ROOT + "ingredients";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            ArrayList<IngredientInfo> ingList = new ArrayList<>();
+            for(int i=0;i<response.length();i++) {
+                try {
+                    JSONObject ing = response.getJSONObject(i);
+                    IngredientInfo inginfo = JSONParser.parseIngredientInfo(ing.toString());
+                    ingList.add(inginfo);
+                } catch (JSONException | JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                nwcb.notifySuccess(ingList);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }, nwcb::notifyError);
+        ReqQueue.getInstance(context).addToRequestQueue(jsonArrayRequest);
+    }
 
 
     //POST
