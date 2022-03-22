@@ -41,7 +41,6 @@ public class Networking {
         String url = ROOT + "recipes/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, response -> {
-                    //Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
                     try {
                         Recipe r = JSONParser.parseRecipe(response.toString());
                         nwcb.notifySuccess(r);

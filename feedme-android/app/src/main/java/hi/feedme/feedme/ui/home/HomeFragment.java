@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -149,7 +150,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void notifyError(VolleyError error) {
-
+                Toast.makeText((Context) getActivity(), "Failed to fetch recipes!", Toast.LENGTH_SHORT).show();
             }
         }, query);
     }

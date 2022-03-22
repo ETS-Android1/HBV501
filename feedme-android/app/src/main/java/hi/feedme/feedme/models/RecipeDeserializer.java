@@ -72,7 +72,6 @@ public class RecipeDeserializer extends StdDeserializer<Recipe> {
             }
         }
         nrec.setReviews(revs);
-        System.out.println("Test: " + revs.size());
         return nrec;
     }
 }

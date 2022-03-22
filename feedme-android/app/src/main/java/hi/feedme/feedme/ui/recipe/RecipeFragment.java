@@ -1,5 +1,6 @@
 package hi.feedme.feedme.ui.recipe;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +21,14 @@ import java.util.List;
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.Ingredient;
 import hi.feedme.feedme.models.Recipe;
+import hi.feedme.feedme.models.Review;
+import hi.feedme.feedme.models.SimplifiedRecipe;
+import hi.feedme.feedme.ui.home.RecipeContent;
+import hi.feedme.feedme.ui.home.RecipeRecyclerViewAdapter;
 
 public class RecipeFragment extends Fragment {
     private Recipe shownRecipe;
+    private RecyclerView recyclerView;
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -75,10 +84,34 @@ public class RecipeFragment extends Fragment {
         listView.requestLayout();
     }
 
+    /**
+     * Initialize and set the recyclerView adapter for the list reviews
+     *
+     * @param v the view the recyclerView is in
+     */
+    private void initAdapter(View v) {
+        this.recyclerView = v.findViewById(R.id.review_list);
+        Context context = recyclerView.getContext();
+
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        ArrayList<Review> rs = shownRecipe.getReviews();
+
+        for (int i = 0; i < rs.size(); i++) {
+            Review r = rs.get(i);
+            ReviewContent.items.add(r);
+            ReviewContent.itemMap.put(i, r);
+        }
+
+        this.recyclerView.setAdapter(new ReviewRecyclerViewAdapter(ReviewContent.items));
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
+
+        initAdapter(view);
 
         ((TextView) view.findViewById(R.id.recipe_name)).setText(shownRecipe.getName());
         ((TextView) view.findViewById(R.id.recipe_description)).setText(shownRecipe.getDescription());
