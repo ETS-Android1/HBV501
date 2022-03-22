@@ -76,7 +76,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         @Override
         public void onClick(View view) {
             // TODO: Rest of the fucking owl
-            System.out.println(mRealIdView.getText());
+            System.out.println("Onclick ID:" + mRealIdView.getText());
         }
 
         @NonNull
