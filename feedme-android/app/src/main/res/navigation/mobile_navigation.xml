@@ -23,4 +23,10 @@
         android:label="@string/title_login"
         tools:layout="@layout/fragment_login" />
 
+    <fragment
+        android:id="@+id/recipe"
+        android:name="hi.feedme.feedme.ui.recipe.RecipeFragment"
+        android:label="fragment_recipe"
+        tools:layout="@layout/fragment_recipe" />
+
 </navigation>

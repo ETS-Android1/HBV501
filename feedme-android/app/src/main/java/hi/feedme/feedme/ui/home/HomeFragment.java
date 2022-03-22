@@ -185,7 +185,7 @@ public class HomeFragment extends Fragment {
         initAdapter(view);
 
         if (!ingredientIds.isEmpty()) {
-            SearchView sv = view.findViewById(R.id.search);
+            // SearchView sv = view.findViewById(R.id.search);
             // So this cant actually be done this way, kill me
         }
 

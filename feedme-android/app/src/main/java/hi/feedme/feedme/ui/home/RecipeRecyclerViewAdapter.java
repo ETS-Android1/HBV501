@@ -3,11 +3,14 @@ package hi.feedme.feedme.ui.home;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import hi.feedme.feedme.MainActivity;
+import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 import hi.feedme.feedme.databinding.FragmentSimplifiedRecipeBinding;
 
@@ -77,6 +80,12 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         public void onClick(View view) {
             // TODO: Rest of the fucking owl
             System.out.println("Onclick ID:" + mRealIdView.getText());
+
+            ((MainActivity) view.getContext()).getNavController().navigate(R.id.recipe);
+
+            //AppCompatActivity a = (AppCompatActivity) view.getContext();
+            //RecipeFragment rf = new RecipeFragment();
+            //a.getSupportFragmentManager().beginTransaction().replace(R.id.home, rf).addToBackStack(null).commit();
         }
 
         @NonNull
