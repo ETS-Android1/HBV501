@@ -2,10 +2,11 @@ package hi.feedme.feedme.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @JsonDeserialize(using = RecipeDeserializer.class)
-public class Recipe {
+public class Recipe implements Serializable {
     private int id;
     private String name;
     private String description;

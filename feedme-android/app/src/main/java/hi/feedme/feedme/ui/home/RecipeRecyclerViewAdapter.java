@@ -4,16 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
+import hi.feedme.feedme.listeners.RecipeListNwCallback;
+import hi.feedme.feedme.listeners.RecipeNwCallback;
+import hi.feedme.feedme.logic.Networking;
+import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 import hi.feedme.feedme.databinding.FragmentSimplifiedRecipeBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,14 +87,23 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
 
         @Override
         public void onClick(View view) {
-            // TODO: Rest of the fucking owl
-            System.out.println("Onclick ID:" + mRealIdView.getText());
+            MainActivity activity = (MainActivity) view.getContext();
+            Networking conn = activity.getNetwork();
 
-            ((MainActivity) view.getContext()).getNavController().navigate(R.id.recipe);
+            // Backend call
+            conn.getRecipeById(mRealIdView.getText().toString(), new RecipeNwCallback() {
+                @Override
+                public void notifySuccess(Recipe response) throws JsonProcessingException {
+                    Bundle b = new Bundle();
+                    b.putSerializable("recipe", response);
+                    activity.getNavController().navigate(R.id.recipe, b);
+                };
 
-            //AppCompatActivity a = (AppCompatActivity) view.getContext();
-            //RecipeFragment rf = new RecipeFragment();
-            //a.getSupportFragmentManager().beginTransaction().replace(R.id.home, rf).addToBackStack(null).commit();
+                @Override
+                public void notifyError(VolleyError error) {
+
+                };
+            });
         }
 
         @NonNull
