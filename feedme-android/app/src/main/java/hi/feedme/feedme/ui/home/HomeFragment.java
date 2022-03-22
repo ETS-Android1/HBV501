@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private RecyclerView recyclerView;
-    private HashMap<String, Integer> ingredientIds = new HashMap<String, Integer>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,34 +51,12 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
     }
 
-    private void setIngredients() {
-        Networking conn = ((MainActivity) getActivity()).getNetwork();
-
-        conn.getIngredients(new IngredientListNwCallback() {
-            @Override
-            public void notifySuccess(ArrayList<IngredientInfo> response) throws JsonProcessingException {
-                for (IngredientInfo i : response) {
-                    ingredientIds.put(i.getName(), i.getId());
-                }
-            }
-
-            @Override
-            public void notifyError(VolleyError error) {
-
-            }
-        });
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-
-        if (ingredientIds.isEmpty()) {
-            setIngredients();
         }
     }
 
@@ -184,23 +161,16 @@ public class HomeFragment extends Fragment {
         initToolbar(view);
         initAdapter(view);
 
-        if (!ingredientIds.isEmpty()) {
-            // SearchView sv = view.findViewById(R.id.search);
-            // So this cant actually be done this way, kill me
-        }
-
         // Would split this initialization into another function using view as argument
         // But we need these sliders anyway for the onclick method
         RangeSlider scals = view.findViewById(R.id.slider_calories);
-        scals.setValues(0.0f, 1000.0f);
-
         RangeSlider sf = view.findViewById(R.id.slider_fats);
-        sf.setValues(0.0f, 100.0f);
-
         RangeSlider scarbs = view.findViewById(R.id.slider_carbs);
-        scarbs.setValues(0.0f, 100.0f);
+        RangeSlider sp = ((RangeSlider) view.findViewById(R.id.slider_protein));
 
-        RangeSlider sp = view.findViewById(R.id.slider_protein);
+        scals.setValues(0.0f, 1000.0f);
+        sf.setValues(0.0f, 100.0f);
+        scarbs.setValues(0.0f, 100.0f);
         sp.setValues(0.0f, 100.0f);
 
         Button btn = view.findViewById(R.id.search_button);

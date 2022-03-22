@@ -39,13 +39,20 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int lstPosn, final int expanded_ListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = ((Ingredient) getChild(lstPosn, expanded_ListPosition)).getIngredient().getName();
+        final Ingredient curr = (Ingredient) getChild(lstPosn, expanded_ListPosition);
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.ingredient_list_item, null);
         }
-        TextView expandedListTextView = (TextView) convertView.findViewById(R.id.expanded_ingredient);
-        expandedListTextView.setText(expandedListText);
+
+        TextView expandedListTextViewName = (TextView) convertView.findViewById(R.id.expanded_ingredient_name);
+        expandedListTextViewName.setText(curr.getIngredient().getName());
+
+        String displayedQuant = curr.getQuantity() + " " + curr.getUnit();
+        TextView expandedListTextViewQuantity = (TextView) convertView.findViewById(R.id.expanded_ingredient_quantity);
+        expandedListTextViewQuantity.setText(displayedQuant);
+
         return convertView;
     }
 

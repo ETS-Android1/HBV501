@@ -1,15 +1,14 @@
 package hi.feedme.feedme.ui.recipe;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,10 +19,6 @@ import hi.feedme.feedme.models.Ingredient;
 import hi.feedme.feedme.models.Recipe;
 
 public class RecipeFragment extends Fragment {
-    private ExpandableListView expandableIngredientListView;
-    private ExpandableListAdapter expandableIngredientListAdapter;
-    private List<String> expandableIngredientTitleList;
-    private HashMap<String, List<Ingredient>> expandableIngredientDetailList;
     private Recipe shownRecipe;
 
     public RecipeFragment() {
@@ -40,22 +35,74 @@ public class RecipeFragment extends Fragment {
         }
     }
 
+    private void setListViewHeight(ExpandableListView listView, int group) {
+        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+
+            if (((listView.isGroupExpanded(i)) && (i != group))
+                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+                //Add Divider Height
+                totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(i) - 1);
+            } else {
+                totalHeight += 72; // Seems to break with one collapsed group, add back some padding
+            }
+        }
+        //Add Divider Height
+        totalHeight += listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        TextView txt = view.findViewById(R.id.recipe_name);
 
-        txt.setText(shownRecipe.getName());
+        ((TextView) view.findViewById(R.id.recipe_name)).setText(shownRecipe.getName());
+        ((TextView) view.findViewById(R.id.recipe_description)).setText(shownRecipe.getDescription());
+        ((TextView) view.findViewById(R.id.cal_quant)).setText(String.format("%s", shownRecipe.getCalories()));
+        ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
+        ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
+        ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
+        ((TextView) view.findViewById(R.id.recipe_instructions)).setText(shownRecipe.getInstructions());
 
         ArrayList<Ingredient> ingredients = shownRecipe.getIngredients();
-
-        expandableIngredientListView = (ExpandableListView) view.findViewById(R.id.ingredients_list);
-        expandableIngredientDetailList = new HashMap<String, List<Ingredient>>();
-        expandableIngredientDetailList.put("Ingredients", ingredients);
-        expandableIngredientTitleList = new ArrayList<String>(expandableIngredientDetailList.keySet());
-        expandableIngredientListAdapter = new ExpandableIngredientListAdapter(view.getContext(), expandableIngredientTitleList, expandableIngredientDetailList);
+        ExpandableListView expandableIngredientListView = (ExpandableListView) view.findViewById(R.id.ingredients_list);
+        HashMap<String, List<Ingredient>> expandableIngredientDetailList = new HashMap<String, List<Ingredient>>();
+        expandableIngredientDetailList.put("Ingredients:", ingredients);
+        List<String> expandableIngredientTitleList = new ArrayList<String>(expandableIngredientDetailList.keySet());
+        ExpandableListAdapter expandableIngredientListAdapter = new ExpandableIngredientListAdapter(view.getContext(), expandableIngredientTitleList, expandableIngredientDetailList);
         expandableIngredientListView.setAdapter(expandableIngredientListAdapter);
+        expandableIngredientListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,
+                                        int groupPosition, long id) {
+                setListViewHeight(parent, groupPosition);
+                return false;
+            }
+        });
 
         return view;
     }
