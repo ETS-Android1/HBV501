@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -34,17 +35,19 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        SimplifiedRecipe sr = mValues.get(position);
+
         String r = "";
-        double cr = mValues.get(position).getRating();
+        double cr = sr.getRating();
         for (int i = 0; i < 5; i++) {
             r += i >= cr ? "☆" : "★"; // Placeholder, replace with rating view thingy
         }
 
-        holder.mItem = mValues.get(position);
+        holder.mItem = sr;
         holder.mRatingView.setText(r);
-        holder.mIdView.setText(mValues.get(position).getName());
-        holder.mContentView.setText(mValues.get(position).getDescription());
-        holder.mRealIdView.setText(mValues.get(position).getId()+""); // Hidden element
+        holder.mIdView.setText(sr.getName());
+        holder.mContentView.setText(sr.getDescription());
+        holder.mRealIdView.setText(sr.getId()+""); // Hidden element
     }
 
     @Override
@@ -52,7 +55,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         return mValues.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView mIdView;
         public final TextView mContentView;
         public final TextView mRatingView;
@@ -65,6 +68,15 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             mContentView = binding.content;
             mRatingView = binding.rating;
             mRealIdView = binding.ID;
+
+            View v = binding.getRoot();
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            // TODO: Rest of the fucking owl
+            System.out.println(mRealIdView.getText());
         }
 
         @NonNull
