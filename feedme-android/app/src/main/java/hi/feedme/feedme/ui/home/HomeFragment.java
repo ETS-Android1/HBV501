@@ -1,5 +1,6 @@
 package hi.feedme.feedme.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
@@ -67,10 +69,10 @@ public class HomeFragment extends Fragment {
      */
     private void initToolbar(View v) {
         Toolbar toolbar = v.findViewById(R.id.toolbar2);
-        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) requireActivity()).setSupportActionBar(toolbar);
 
         // May want to show something here later
-        ((MainActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
     }
 
     /**
@@ -96,6 +98,7 @@ public class HomeFragment extends Fragment {
      *
      * @param rs a list of SimplifiedRecipe objects to replace the current content with
      */
+    @SuppressLint("NotifyDataSetChanged")
     private void setData(ArrayList<SimplifiedRecipe> rs) {
         RecipeContent.items.clear();
 
@@ -106,7 +109,7 @@ public class HomeFragment extends Fragment {
 
         // This is fine for the purpose of changing the entire set
         // It is only more efficient to use ItemChanged if changing single items
-        recyclerView.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
     }
 
     /**

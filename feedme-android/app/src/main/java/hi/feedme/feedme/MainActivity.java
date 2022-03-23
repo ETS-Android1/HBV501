@@ -20,8 +20,6 @@ import hi.feedme.feedme.databinding.ActivityMainBinding;
 import hi.feedme.feedme.listeners.IngredientListNwCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.models.IngredientInfo;
-import hi.feedme.feedme.models.Recipe;
-
 
 public class MainActivity extends AppCompatActivity {
     private NavController navController;

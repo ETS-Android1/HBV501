@@ -16,8 +16,6 @@ import hi.feedme.feedme.models.Recipe;
 
 /**
  * Adapter for the Ingredient list displayed on the RecipeFragment
- *
- * A lot of the vague Object types are a result of the rules for Overriding methods of the parent
  */
 public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
     private Context context;
@@ -32,19 +30,19 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int lstPosn, int expanded_ListPosition) {
-        return this.expandableDetailList.get(this.expandableTitleList.get(lstPosn)).get(expanded_ListPosition);
+    public Object getChild(int listPosition, int expandedListPosition) {
+        return this.expandableDetailList.get(this.expandableTitleList.get(listPosition)).get(expandedListPosition);
     }
 
     @Override
-    public long getChildId(int listPosition, int expanded_ListPosition) {
-        return expanded_ListPosition;
+    public long getChildId(int listPosition, int expandedListPosition) {
+        return expandedListPosition;
     }
 
     @Override
-    public View getChildView(int lstPosn, final int expanded_ListPosition,
+    public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        final Ingredient curr = (Ingredient) getChild(lstPosn, expanded_ListPosition);
+        final Ingredient curr = (Ingredient) getChild(listPosition, expandedListPosition);
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

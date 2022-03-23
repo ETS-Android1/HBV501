@@ -72,13 +72,13 @@ public class RecipeFragment extends Fragment {
                     totalHeight += listItem.getMeasuredHeight();
 
                 }
-                //Add Divider Height
+                // Add Divider Height
                 totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(i) - 1);
             } else {
                 totalHeight += 72; // Seems to break with one collapsed group, add back some padding
             }
         }
-        //Add Divider Height
+        // Add Divider Height
         totalHeight += listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();

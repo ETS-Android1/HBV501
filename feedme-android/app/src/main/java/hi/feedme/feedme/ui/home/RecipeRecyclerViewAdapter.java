@@ -3,6 +3,7 @@ package hi.feedme.feedme.ui.home;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,25 +40,27 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         mValues = items;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         return new ViewHolder(FragmentSimplifiedRecipeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    @SuppressLint("SetTextI18n")
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         SimplifiedRecipe sr = mValues.get(position);
 
-        String r = "";
+        StringBuilder r = new StringBuilder();
         double cr = sr.getRating();
         for (int i = 0; i < 5; i++) {
-            r += i >= cr ? "☆" : "★"; // Placeholder, replace with rating view thingy
+            r.append(i >= cr ? "☆" : "★"); // Placeholder, replace with rating view thingy
         }
 
         holder.mItem = sr;
-        holder.mRatingView.setText(r);
+        holder.mRatingView.setText(r.toString());
         holder.mIdView.setText(sr.getName());
         holder.mContentView.setText(sr.getDescription());
         holder.mRealIdView.setText(sr.getId()+""); // Hidden element
