@@ -31,7 +31,7 @@ import java.util.List;
  *
  * This mostly provides a translation layer between the Java object and the xml view
  */
-public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<hi.feedme.feedme.ui.recipe.ReviewRecyclerViewAdapter.ViewHolder> {
+public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecyclerViewAdapter.ViewHolder> {
 
     private final List<Review> mValues;
 
