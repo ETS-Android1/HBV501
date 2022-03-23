@@ -96,7 +96,7 @@ public class RecipeFragment extends Fragment {
      *
      * @param v the view the recyclerView is in
      */
-    private void initAdapter(View v) {
+    private void initReviews(View v) {
         this.recyclerView = v.findViewById(R.id.review_list);
 
         Context context = recyclerView.getContext();
@@ -114,27 +114,20 @@ public class RecipeFragment extends Fragment {
         this.recyclerView.setAdapter(new ReviewRecyclerViewAdapter(ReviewContent.items));
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-
-        initAdapter(view);
-
-        ((TextView) view.findViewById(R.id.recipe_name)).setText(shownRecipe.getName());
-        ((TextView) view.findViewById(R.id.recipe_description)).setText(shownRecipe.getDescription());
-        ((TextView) view.findViewById(R.id.recipe_instructions)).setText(shownRecipe.getInstructions());
-        ((TextView) view.findViewById(R.id.cal_quant)).setText(String.format("%s", shownRecipe.getCalories()));
-        ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
-        ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
-        ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
-
+    /**
+     * Initialize and set the adapter for the ingredient list
+     *
+     * @param v the view the list is in
+     */
+    private void initIngredients(View v) {
         ArrayList<Ingredient> ingredients = shownRecipe.getIngredients();
-        ExpandableListView expandableIngredientListView = (ExpandableListView) view.findViewById(R.id.ingredients_list);
+        ExpandableListView expandableIngredientListView = (ExpandableListView) v.findViewById(R.id.ingredients_list);
+
         HashMap<String, List<Ingredient>> expandableIngredientDetailList = new HashMap<String, List<Ingredient>>();
         expandableIngredientDetailList.put("Ingredients:", ingredients);
         List<String> expandableIngredientTitleList = new ArrayList<String>(expandableIngredientDetailList.keySet());
-        ExpandableListAdapter expandableIngredientListAdapter = new ExpandableIngredientListAdapter(view.getContext(), expandableIngredientTitleList, expandableIngredientDetailList);
+        ExpandableListAdapter expandableIngredientListAdapter = new ExpandableIngredientListAdapter(v.getContext(), expandableIngredientTitleList, expandableIngredientDetailList);
+
         expandableIngredientListView.setAdapter(expandableIngredientListAdapter);
         expandableIngredientListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -144,6 +137,22 @@ public class RecipeFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_recipe, container, false);
+        initReviews(view);
+        initIngredients(view);
+
+        ((TextView) view.findViewById(R.id.recipe_name)).setText(shownRecipe.getName());
+        ((TextView) view.findViewById(R.id.recipe_description)).setText(shownRecipe.getDescription());
+        ((TextView) view.findViewById(R.id.recipe_instructions)).setText(shownRecipe.getInstructions());
+        ((TextView) view.findViewById(R.id.cal_quant)).setText(String.format("%s", shownRecipe.getCalories()));
+        ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
+        ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
+        ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
 
         return view;
     }
