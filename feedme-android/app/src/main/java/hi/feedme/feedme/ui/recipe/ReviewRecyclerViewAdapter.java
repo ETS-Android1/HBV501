@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Adapter for the SimplifiedRecipe list displayed on the HomeFragment
+ * Adapter for the Review list displayed on the RecipeFragment
  *
  * This mostly provides a translation layer between the Java object and the xml view
  */

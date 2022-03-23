@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import hi.feedme.feedme.databinding.FragmentDashboardBinding;
 
+/**
+ * TODO: All of it
+ */
 public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;

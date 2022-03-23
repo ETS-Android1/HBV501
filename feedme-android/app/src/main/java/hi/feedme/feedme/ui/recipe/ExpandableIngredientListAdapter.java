@@ -14,6 +14,11 @@ import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.Ingredient;
 import hi.feedme.feedme.models.Recipe;
 
+/**
+ * Adapter for the Ingredient list displayed on the RecipeFragment
+ *
+ * A lot of the vague Object types are a result of the rules for Overriding methods of the parent
+ */
 public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> expandableTitleList;

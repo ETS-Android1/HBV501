@@ -86,6 +86,14 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             v.setOnClickListener(this);
         }
 
+        /**
+         * Hacky onClick for list recipes, performance would be better
+         * if onClick were provided to a specific element in the
+         * onBindViewHolder function, but that creates an inconsistent
+         * user experience compared to making the entire list component clickable...
+         *
+         * @param view the View to bind the onClick function to
+         */
         @Override
         public void onClick(View view) {
             MainActivity activity = (MainActivity) view.getContext();
@@ -95,6 +103,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             conn.getRecipeById(mRealIdView.getText().toString(), new RecipeNwCallback() {
                 @Override
                 public void notifySuccess(Recipe response) throws JsonProcessingException {
+                    // Before we load the RecipeFragment we fetch the recipe and bundle it
                     Bundle b = new Bundle();
                     b.putSerializable("recipe", response);
                     activity.getNavController().navigate(R.id.recipe, b);

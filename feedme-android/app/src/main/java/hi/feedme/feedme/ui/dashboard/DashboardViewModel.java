@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * TODO: All of it
+ */
 public class DashboardViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;

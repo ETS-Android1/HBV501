@@ -37,13 +37,20 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle b = getArguments();
+        Bundle b = getArguments(); // Should receive a serialized Recipe object
 
         if (b != null) {
             shownRecipe = (Recipe) b.getSerializable("recipe");
         }
     }
 
+    /**
+     * Helper function to provide size collapsing for an ExpandableListView
+     * Collapsing feature does not work by default when the list is embedded in a ScrollView
+     *
+     * @param listView  The list to expand
+     * @param group     The position of the group
+     */
     private void setListViewHeight(ExpandableListView listView, int group) {
         ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
         int totalHeight = 0;
@@ -91,10 +98,11 @@ public class RecipeFragment extends Fragment {
      */
     private void initAdapter(View v) {
         this.recyclerView = v.findViewById(R.id.review_list);
-        Context context = recyclerView.getContext();
 
+        Context context = recyclerView.getContext();
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        ReviewContent.items.clear();
         ArrayList<Review> rs = shownRecipe.getReviews();
 
         for (int i = 0; i < rs.size(); i++) {
@@ -115,11 +123,11 @@ public class RecipeFragment extends Fragment {
 
         ((TextView) view.findViewById(R.id.recipe_name)).setText(shownRecipe.getName());
         ((TextView) view.findViewById(R.id.recipe_description)).setText(shownRecipe.getDescription());
+        ((TextView) view.findViewById(R.id.recipe_instructions)).setText(shownRecipe.getInstructions());
         ((TextView) view.findViewById(R.id.cal_quant)).setText(String.format("%s", shownRecipe.getCalories()));
         ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
         ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
         ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
-        ((TextView) view.findViewById(R.id.recipe_instructions)).setText(shownRecipe.getInstructions());
 
         ArrayList<Ingredient> ingredients = shownRecipe.getIngredients();
         ExpandableListView expandableIngredientListView = (ExpandableListView) view.findViewById(R.id.ingredients_list);

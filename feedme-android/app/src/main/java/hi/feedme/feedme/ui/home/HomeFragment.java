@@ -46,8 +46,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
 
     /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * Mandatory empty constructor for the fragment manager to instantiate the fragment
      */
     public HomeFragment() {
     }
@@ -175,6 +174,7 @@ public class HomeFragment extends Fragment {
         sp.setValues(0.0f, 100.0f);
 
         Button btn = view.findViewById(R.id.search_button);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
