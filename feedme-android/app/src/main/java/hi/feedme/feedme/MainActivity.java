@@ -2,11 +2,11 @@ package hi.feedme.feedme;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
-
-import com.android.volley.VolleyError;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,10 +14,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android.volley.VolleyError;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
-import hi.feedme.feedme.listeners.IngredientListNwCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.models.IngredientInfo;
 
@@ -25,29 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private Networking network;
     private Context context;
-    private ArrayList<IngredientInfo> appIngredients;
-
-    public void refreshIngredients() { // Because of Heroku delays we provide access to this
-        network.getIngredients(new IngredientListNwCallback() {
-            @Override
-            public void notifySuccess(ArrayList<IngredientInfo> response) throws JsonProcessingException {
-                appIngredients = response;
-            }
-
-            @Override
-            public void notifyError(VolleyError error) {
-                Toast.makeText(context, "Heroku cold start...", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
         network = new Networking(context);
-
-        refreshIngredients();
 
         hi.feedme.feedme.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -62,10 +48,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
-    public Networking getNetwork() { return network; }
-
-    public NavController getNavController() { return navController; }
 
 
-    public ArrayList<IngredientInfo> getIngredients() { return appIngredients; }
+    public Networking getNetwork() {
+        return network;
+    }
+
+    public NavController getNavController() {
+        return navController;
+    }
 }

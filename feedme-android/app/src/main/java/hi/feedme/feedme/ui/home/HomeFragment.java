@@ -4,13 +4,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.SearchView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,10 +28,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import hi.feedme.feedme.MainActivity;
@@ -38,14 +43,19 @@ import hi.feedme.feedme.models.SimplifiedRecipe;
 
 /**
  * The main fragment of the application.
- *
+ * <p>
  * It contains a filters toolbar as well as a list of SimplifiedRecipes
  */
 public class HomeFragment extends Fragment {
     // Column count currently unused, may used it for landscape layout if time allows
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
+    private String[] appIngredients;
+    private Map<String, Integer> ingredientMap = new HashMap<String, Integer>();
+
     private RecyclerView recyclerView;
+    private AutoCompleteTextView ingredientSuggestView;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
@@ -63,13 +73,70 @@ public class HomeFragment extends Fragment {
     }
 
     /**
+     * Helper class to populate autosuggestions when backend response returns
+     *
+     * @param a The Activity the adapter should be bound to
+     * @param m The menu that contains the autosuggestion item
+     */
+    private void searchHelper(MainActivity a, Menu m) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(a, android.R.layout.select_dialog_item, appIngredients);
+
+        MenuItem searchItem = m.findItem(R.id.search);
+        ingredientSuggestView = (AutoCompleteTextView) searchItem.getActionView();
+        ingredientSuggestView.setWidth((int) Math.round(a.getWindow().getDecorView().getWidth() * 0.8));
+        ingredientSuggestView.setAdapter(adapter);
+        ingredientSuggestView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                InputMethodManager in = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
+            }
+        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MainActivity act = (MainActivity) requireActivity();
+
+        if (appIngredients == null) {
+            act.getNetwork().getIngredients(new IngredientListNwCallback() {
+                @Override
+                public void notifySuccess(ArrayList<IngredientInfo> response) throws JsonProcessingException {
+                    appIngredients = new String[response.size()];
+
+                    for (int i = 0; i < response.size(); i++) {
+                        String name = response.get(i).getName();
+                        appIngredients[i] = name;
+                        ingredientMap.put(name, response.get(i).getId());
+                    }
+
+                    searchHelper(act, menu);
+                }
+
+                @Override
+                public void notifyError(VolleyError error) {
+                    // Unused
+                }
+            });
+        } else {
+            searchHelper(act, menu);
+        }
+    }
+
+    /**
      * Use fragment toolbar as main supporting action bar for the main activity
      *
      * @param v the view to get the toolbar from
      */
     private void initToolbar(View v) {
         Toolbar toolbar = v.findViewById(R.id.toolbar2);
+
         ((MainActivity) requireActivity()).setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
 
         // May want to show something here later
         Objects.requireNonNull(((MainActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -115,10 +182,10 @@ public class HomeFragment extends Fragment {
     /**
      * Helper function to request new recipes based on the chosen filter settings
      *
-     * @param scals     The calorie slider
-     * @param sf        The fat slider
-     * @param scarbs    The carbs slider
-     * @param sp        The proteins slider
+     * @param scals  The calorie slider
+     * @param sf     The fat slider
+     * @param scarbs The carbs slider
+     * @param sp     The proteins slider
      */
     private void refreshRecipes(RangeSlider scals, RangeSlider sf, RangeSlider scarbs, RangeSlider sp) {
         Networking conn = ((MainActivity) getActivity()).getNetwork();
@@ -141,6 +208,8 @@ public class HomeFragment extends Fragment {
         currVals = sp.getValues();
         query += "&minproteins=" + Math.round(currVals.get(0));
         query += "&maxproteins=" + Math.round(currVals.get(1));
+
+        query += "&ingredients=" + ingredientMap.get(ingredientSuggestView.getText().toString());
 
         // Backend call
         conn.getRecipes(new RecipeListNwCallback() {

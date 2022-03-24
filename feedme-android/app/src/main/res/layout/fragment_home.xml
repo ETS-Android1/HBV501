@@ -19,6 +19,8 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
             app:toolbarId="@+id/toolbar2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,7 +156,7 @@
                     android:valueFrom="0"
                     android:valueTo="100"
                     app:haloColor="@color/black"
-                    app:layout_constraintBottom_toTopOf="@id/search"
+                    app:layout_constraintBottom_toTopOf="@id/search_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -165,18 +167,6 @@
                     app:tickColorActive="@color/white"
                     app:tickColorInactive="@color/teal_200"
                     app:trackColor="@color/white" />
-
-                <SearchView
-                    android:id="@+id/search"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintBottom_toTopOf="@id/search_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/slider_protein" />
 
                 <Button
                     android:id="@+id/search_button"
@@ -189,7 +179,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/search" />
+                    app:layout_constraintTop_toBottomOf="@id/slider_protein" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.Toolbar
