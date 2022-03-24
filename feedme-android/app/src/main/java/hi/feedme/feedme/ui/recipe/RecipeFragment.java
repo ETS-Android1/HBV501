@@ -28,7 +28,7 @@ import hi.feedme.feedme.ui.home.RecipeRecyclerViewAdapter;
 
 public class RecipeFragment extends Fragment {
     private Recipe shownRecipe;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView; // May want to edit this view e.g. delete current user review
 
     public RecipeFragment() {
         // Required empty public constructor

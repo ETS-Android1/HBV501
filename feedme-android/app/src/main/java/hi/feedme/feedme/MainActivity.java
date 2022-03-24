@@ -27,11 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private ArrayList<IngredientInfo> appIngredients;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = this;
-        network = new Networking(context);
+    public void refreshIngredients() { // Because of Heroku delays we provide access to this
         network.getIngredients(new IngredientListNwCallback() {
             @Override
             public void notifySuccess(ArrayList<IngredientInfo> response) throws JsonProcessingException {
@@ -43,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context, "Heroku cold start...", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = this;
+        network = new Networking(context);
+
+        refreshIngredients();
 
         hi.feedme.feedme.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     public Networking getNetwork() { return network; }
 
     public NavController getNavController() { return navController; }
+
 
     public ArrayList<IngredientInfo> getIngredients() { return appIngredients; }
 }

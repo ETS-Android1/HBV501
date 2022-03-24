@@ -2,10 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    android:id="@+id/home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/home"
-    android:fitsSystemWindows="true" >
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -45,9 +45,9 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:stepSize="50.0"
                     android:valueFrom="0"
                     android:valueTo="1000"
-                    android:stepSize="50.0"
                     app:haloColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@id/text_fats"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
                     app:tickColor="@color/black"
                     app:tickColorActive="@color/white"
                     app:tickColorInactive="@color/teal_200"
-                    app:trackColor="@color/white"/>
+                    app:trackColor="@color/white" />
 
                 <TextView
                     android:id="@+id/text_fats"
@@ -80,9 +80,9 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:stepSize="5.0"
                     android:valueFrom="0"
                     android:valueTo="100"
-                    android:stepSize="5.0"
                     app:haloColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@id/text_carbs"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +94,7 @@
                     app:tickColor="@color/black"
                     app:tickColorActive="@color/white"
                     app:tickColorInactive="@color/teal_200"
-                    app:trackColor="@color/white"/>
+                    app:trackColor="@color/white" />
 
                 <TextView
                     android:id="@+id/text_carbs"
@@ -115,9 +115,9 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:stepSize="5.0"
                     android:valueFrom="0"
                     android:valueTo="100"
-                    android:stepSize="5.0"
                     app:haloColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@id/text_protein"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +129,7 @@
                     app:tickColor="@color/black"
                     app:tickColorActive="@color/white"
                     app:tickColorInactive="@color/teal_200"
-                    app:trackColor="@color/white"/>
+                    app:trackColor="@color/white" />
 
                 <TextView
                     android:id="@+id/text_protein"
@@ -150,9 +150,9 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:stepSize="5.0"
                     android:valueFrom="0"
                     android:valueTo="100"
-                    android:stepSize="5.0"
                     app:haloColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@id/search"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +164,7 @@
                     app:tickColor="@color/black"
                     app:tickColorActive="@color/white"
                     app:tickColorInactive="@color/teal_200"
-                    app:trackColor="@color/white"/>
+                    app:trackColor="@color/white" />
 
                 <SearchView
                     android:id="@+id/search"
@@ -204,20 +204,14 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/fragment_vertical_margin"
         android:paddingLeft="@dimen/fragment_horizontal_margin"
+        android:paddingTop="@dimen/fragment_vertical_margin"
         android:paddingRight="@dimen/fragment_horizontal_margin"
         android:paddingBottom="@dimen/fragment_vertical_margin"
-
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager" />
-    </androidx.core.widget.NestedScrollView>
+        app:layoutManager="LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
