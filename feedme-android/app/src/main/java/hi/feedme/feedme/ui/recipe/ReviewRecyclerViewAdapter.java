@@ -1,30 +1,18 @@
 package hi.feedme.feedme.ui.recipe;
 
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.VolleyError;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import hi.feedme.feedme.MainActivity;
-import hi.feedme.feedme.R;
-import hi.feedme.feedme.listeners.RecipeNwCallback;
-import hi.feedme.feedme.logic.Networking;
-import hi.feedme.feedme.models.Recipe;
-import hi.feedme.feedme.models.Review;
-import hi.feedme.feedme.models.SimplifiedRecipe;
-import hi.feedme.feedme.databinding.FragmentReviewBinding;
-
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.List;
+
+import hi.feedme.feedme.databinding.FragmentReviewBinding;
+import hi.feedme.feedme.models.Review;
 
 /**
  * Adapter for the Review list displayed on the RecipeFragment
@@ -32,7 +20,6 @@ import java.util.List;
  * This mostly provides a translation layer between the Java object and the xml view
  */
 public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecyclerViewAdapter.ViewHolder> {
-
     private final List<Review> mValues;
 
     public ReviewRecyclerViewAdapter(List<Review> items) {
@@ -51,8 +38,22 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Review r = mValues.get(position);
 
+        String postedBy = "Posted by: " + r.getUsername();
+        String dateString;
+
+        try {
+            dateString = new SimpleDateFormat("dd MMMM yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(r.getDate()));
+        } catch (Exception e) {
+           dateString = r.getDate();
+        }
+
+
         holder.mItem = r;
-        holder.mReviewText.setText(r.getTitle());
+        holder.mReviewTitle.setText(r.getTitle());
+        holder.mReviewOwner.setText(postedBy);
+        holder.mReviewSubTitle.setText(r.getSubtitle());
+        holder.mReviewRating.setRating((float) r.getRating());
+        holder.mReviewDate.setText(dateString);
     }
 
     @Override
@@ -61,13 +62,22 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mReviewText;
+        public final TextView mReviewTitle;
+        public final TextView mReviewOwner;
+        public final TextView mReviewSubTitle;
+        public final RatingBar mReviewRating;
+        public final TextView mReviewDate;
+
         public Review mItem;
 
         public ViewHolder(FragmentReviewBinding binding) {
             super(binding.getRoot());
 
-            mReviewText = binding.reviewText;
+            mReviewTitle = binding.reviewTitle;
+            mReviewOwner = binding.reviewOwner;
+            mReviewSubTitle = binding.reviewSubtitle;
+            mReviewRating = binding.reviewRating;
+            mReviewDate = binding.reviewDate;
         }
 
         @NonNull

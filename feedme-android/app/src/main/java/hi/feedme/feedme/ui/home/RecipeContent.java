@@ -11,6 +11,6 @@ import hi.feedme.feedme.models.SimplifiedRecipe;
  * Simple container class for static HomeFragment recipes
  */
 public class RecipeContent {
-    public static List<SimplifiedRecipe> items = new ArrayList<SimplifiedRecipe>();
-    public static Map<Integer, SimplifiedRecipe> itemMap = new HashMap<Integer,SimplifiedRecipe>();
+    public static List<SimplifiedRecipe> items = new ArrayList<>();
+    public static Map<Integer, SimplifiedRecipe> itemMap = new HashMap<>();
 }

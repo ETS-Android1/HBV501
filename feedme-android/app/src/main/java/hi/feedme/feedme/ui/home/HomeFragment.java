@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -19,12 +18,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
@@ -43,16 +42,15 @@ import hi.feedme.feedme.models.SimplifiedRecipe;
 
 /**
  * The main fragment of the application.
- * <p>
+ *
  * It contains a filters toolbar as well as a list of SimplifiedRecipes
  */
 public class HomeFragment extends Fragment {
     // Column count currently unused, may used it for landscape layout if time allows
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private final Map<String, Integer> ingredientMap = new HashMap<>();
     private int mColumnCount = 1;
     private String[] appIngredients;
-    private Map<String, Integer> ingredientMap = new HashMap<String, Integer>();
-
     private RecyclerView recyclerView;
     private AutoCompleteTextView ingredientSuggestView;
 
@@ -79,19 +77,15 @@ public class HomeFragment extends Fragment {
      * @param m The menu that contains the autosuggestion item
      */
     private void searchHelper(MainActivity a, Menu m) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(a, android.R.layout.select_dialog_item, appIngredients);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(a, android.R.layout.select_dialog_item, appIngredients);
 
         MenuItem searchItem = m.findItem(R.id.search);
         ingredientSuggestView = (AutoCompleteTextView) searchItem.getActionView();
         ingredientSuggestView.setWidth((int) Math.round(a.getWindow().getDecorView().getWidth() * 0.8));
         ingredientSuggestView.setAdapter(adapter);
-        ingredientSuggestView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                InputMethodManager in = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
-            }
+        ingredientSuggestView.setOnItemClickListener((arg0, arg1, arg2, arg3) -> {
+            InputMethodManager in = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
+            in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
         });
     }
 
@@ -104,8 +98,9 @@ public class HomeFragment extends Fragment {
 
         if (appIngredients == null) {
             act.getNetwork().getIngredients(new IngredientListNwCallback() {
+
                 @Override
-                public void notifySuccess(ArrayList<IngredientInfo> response) throws JsonProcessingException {
+                public void notifySuccess(ArrayList<IngredientInfo> response) {
                     appIngredients = new String[response.size()];
 
                     for (int i = 0; i < response.size(); i++) {
@@ -148,16 +143,19 @@ public class HomeFragment extends Fragment {
      * @param v the view the recyclerView is in
      */
     private void initAdapter(View v) {
-        this.recyclerView = v.findViewById(R.id.list);
+        recyclerView = v.findViewById(R.id.list);
         Context context = recyclerView.getContext();
 
         if (mColumnCount <= 1) {
-            this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
         } else {
-            this.recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        this.recyclerView.setAdapter(new RecipeRecyclerViewAdapter(RecipeContent.items));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        recyclerView.setAdapter(new RecipeRecyclerViewAdapter(RecipeContent.items));
     }
 
     /**
@@ -188,7 +186,7 @@ public class HomeFragment extends Fragment {
      * @param sp     The proteins slider
      */
     private void refreshRecipes(RangeSlider scals, RangeSlider sf, RangeSlider scarbs, RangeSlider sp) {
-        Networking conn = ((MainActivity) getActivity()).getNetwork();
+        Networking conn = ((MainActivity) requireActivity()).getNetwork();
         List<Float> currVals;
 
         // Populate querystring based on filters
@@ -209,12 +207,12 @@ public class HomeFragment extends Fragment {
         query += "&minproteins=" + Math.round(currVals.get(0));
         query += "&maxproteins=" + Math.round(currVals.get(1));
 
-        query += "&ingredients=" + ingredientMap.get(ingredientSuggestView.getText().toString());
+        if (ingredientSuggestView != null) query += "&ingredients=" + ingredientMap.get(ingredientSuggestView.getText().toString());
 
         // Backend call
         conn.getRecipes(new RecipeListNwCallback() {
             @Override
-            public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
+            public void notifySuccess(ArrayList<SimplifiedRecipe> response) {
                 // Replace recyclerview items
                 setData(response);
             }
@@ -247,12 +245,7 @@ public class HomeFragment extends Fragment {
 
         Button btn = view.findViewById(R.id.search_button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshRecipes(scals, sf, scarbs, sp);
-            }
-        });
+        btn.setOnClickListener(view1 -> refreshRecipes(scals, sf, scarbs, sp));
 
         return view;
     }

@@ -1,5 +1,6 @@
 package hi.feedme.feedme.ui.recipe;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -7,20 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.Ingredient;
-import hi.feedme.feedme.models.Recipe;
 
 /**
  * Adapter for the Ingredient list displayed on the RecipeFragment
  */
 public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
-    private Context context;
-    private List<String> expandableTitleList;
-    private HashMap<String, List<Ingredient>> expandableDetailList;
+    private final Context context;
+    private final List<String> expandableTitleList;
+    private final HashMap<String, List<Ingredient>> expandableDetailList;
 
     public ExpandableIngredientListAdapter(Context context, List<String> expandableListTitle,
                                            HashMap<String, List<Ingredient>> expandableListDetail) {
@@ -31,7 +33,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
-        return this.expandableDetailList.get(this.expandableTitleList.get(listPosition)).get(expandedListPosition);
+        return Objects.requireNonNull(this.expandableDetailList.get(this.expandableTitleList.get(listPosition))).get(expandedListPosition);
     }
 
     @Override
@@ -39,6 +41,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
         return expandedListPosition;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
@@ -61,7 +64,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int listPosition) {
-        return this.expandableDetailList.get(this.expandableTitleList.get(listPosition)).size();
+        return Objects.requireNonNull(this.expandableDetailList.get(this.expandableTitleList.get(listPosition))).size();
     }
 
     @Override
@@ -79,6 +82,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
         return listPosition;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getGroupView(int listPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String listTitle = (String) getGroup(listPosition);

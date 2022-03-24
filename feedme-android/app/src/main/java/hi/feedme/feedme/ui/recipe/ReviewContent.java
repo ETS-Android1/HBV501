@@ -11,6 +11,6 @@ import hi.feedme.feedme.models.Review;
  * Simple container class for static Recipe Reviews
  */
 public class ReviewContent {
-    public static List<Review> items = new ArrayList<Review>();
-    public static Map<Integer, Review> itemMap = new HashMap<Integer, Review>();
+    public static List<Review> items = new ArrayList<>();
+    public static Map<Integer, Review> itemMap = new HashMap<>();
 }

@@ -27,12 +27,12 @@ import hi.feedme.feedme.models.IngredientInfo;
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private Networking network;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
+
+        Context context = this;
         network = new Networking(context);
 
         hi.feedme.feedme.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
-
-
 
     public Networking getNetwork() {
         return network;

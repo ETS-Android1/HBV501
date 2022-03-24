@@ -1,31 +1,29 @@
 package hi.feedme.feedme.ui.home;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.VolleyError;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.util.List;
 
 import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
-import hi.feedme.feedme.listeners.RecipeListNwCallback;
+import hi.feedme.feedme.databinding.FragmentSimplifiedRecipeBinding;
 import hi.feedme.feedme.listeners.RecipeNwCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.SimplifiedRecipe;
-import hi.feedme.feedme.databinding.FragmentSimplifiedRecipeBinding;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Adapter for the SimplifiedRecipe list displayed on the HomeFragment
@@ -53,17 +51,11 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         SimplifiedRecipe sr = mValues.get(position);
 
-        StringBuilder r = new StringBuilder();
-        double cr = sr.getRating();
-        for (int i = 0; i < 5; i++) {
-            r.append(i >= cr ? "☆" : "★"); // Placeholder, replace with rating view thingy
-        }
-
         holder.mItem = sr;
-        holder.mRatingView.setText(r.toString());
-        holder.mIdView.setText(sr.getName());
-        holder.mContentView.setText(sr.getDescription());
-        holder.mRealIdView.setText(sr.getId()+""); // Hidden element
+        holder.mTitleView.setText(sr.getName());
+        holder.mRatingView.setRating((float) sr.getRating());
+        holder.mDescriptionView.setText(sr.getDescription());
+        holder.mHiddenIdView.setText(sr.getId()+""); // Hidden element
     }
 
     @Override
@@ -72,18 +64,18 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public final TextView mRatingView;
-        public final TextView mRealIdView;
         public SimplifiedRecipe mItem;
+        public final TextView mTitleView;
+        public final RatingBar mRatingView;
+        public final TextView mDescriptionView;
+        public final TextView mHiddenIdView;
 
         public ViewHolder(FragmentSimplifiedRecipeBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.itemNumber;
-            mContentView = binding.content;
-            mRatingView = binding.rating;
-            mRealIdView = binding.ID;
+            mTitleView = binding.simpleTitle;
+            mRatingView = binding.simpleRating;
+            mDescriptionView = binding.simpleDescription;
+            mHiddenIdView = binding.simpleHiddenId;
 
             View v = binding.getRoot();
             v.setOnClickListener(this);
@@ -103,19 +95,19 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             Networking conn = activity.getNetwork();
 
             // Backend call
-            conn.getRecipeById(mRealIdView.getText().toString(), new RecipeNwCallback() {
+            conn.getRecipeById(mHiddenIdView.getText().toString(), new RecipeNwCallback() {
                 @Override
-                public void notifySuccess(Recipe response) throws JsonProcessingException {
+                public void notifySuccess(Recipe response) {
                     // Before we load the RecipeFragment we fetch the recipe and bundle it
                     Bundle b = new Bundle();
                     b.putSerializable("recipe", response);
                     activity.getNavController().navigate(R.id.recipe, b);
-                };
+                }
 
                 @Override
                 public void notifyError(VolleyError error) {
                     Toast.makeText((Context) activity, "Failed to fetch recipe!", Toast.LENGTH_SHORT).show();
-                };
+                }
             });
         }
 

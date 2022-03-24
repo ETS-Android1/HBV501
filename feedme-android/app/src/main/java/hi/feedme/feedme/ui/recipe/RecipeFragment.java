@@ -10,7 +10,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +22,6 @@ import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.Ingredient;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.Review;
-import hi.feedme.feedme.models.SimplifiedRecipe;
 import hi.feedme.feedme.ui.home.RecipeContent;
 import hi.feedme.feedme.ui.home.RecipeRecyclerViewAdapter;
 
@@ -97,10 +96,13 @@ public class RecipeFragment extends Fragment {
      * @param v the view the recyclerView is in
      */
     private void initReviews(View v) {
-        this.recyclerView = v.findViewById(R.id.review_list);
+        recyclerView = v.findViewById(R.id.review_list);
 
         Context context = recyclerView.getContext();
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         ReviewContent.items.clear();
         ArrayList<Review> rs = shownRecipe.getReviews();
@@ -111,7 +113,7 @@ public class RecipeFragment extends Fragment {
             ReviewContent.itemMap.put(i, r);
         }
 
-        this.recyclerView.setAdapter(new ReviewRecyclerViewAdapter(ReviewContent.items));
+        recyclerView.setAdapter(new ReviewRecyclerViewAdapter(ReviewContent.items));
     }
 
     /**
@@ -123,19 +125,15 @@ public class RecipeFragment extends Fragment {
         ArrayList<Ingredient> ingredients = shownRecipe.getIngredients();
         ExpandableListView expandableIngredientListView = (ExpandableListView) v.findViewById(R.id.ingredients_list);
 
-        HashMap<String, List<Ingredient>> expandableIngredientDetailList = new HashMap<String, List<Ingredient>>();
+        HashMap<String, List<Ingredient>> expandableIngredientDetailList = new HashMap<>();
         expandableIngredientDetailList.put("Ingredients:", ingredients);
-        List<String> expandableIngredientTitleList = new ArrayList<String>(expandableIngredientDetailList.keySet());
+        List<String> expandableIngredientTitleList = new ArrayList<>(expandableIngredientDetailList.keySet());
         ExpandableListAdapter expandableIngredientListAdapter = new ExpandableIngredientListAdapter(v.getContext(), expandableIngredientTitleList, expandableIngredientDetailList);
 
         expandableIngredientListView.setAdapter(expandableIngredientListAdapter);
-        expandableIngredientListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
-                setListViewHeight(parent, groupPosition);
-                return false;
-            }
+        expandableIngredientListView.setOnGroupClickListener((parent, v1, groupPosition, id) -> {
+            setListViewHeight(parent, groupPosition);
+            return false;
         });
     }
 
