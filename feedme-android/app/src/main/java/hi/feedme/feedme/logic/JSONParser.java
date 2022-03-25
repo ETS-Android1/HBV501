@@ -11,6 +11,9 @@ import hi.feedme.feedme.models.LoginInformation;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 
+/**
+ * General parsing tools for JSON we get from the back-end
+ */
 public class JSONParser {
     public static Recipe parseRecipe(String json) throws JsonProcessingException {
         return new ObjectMapper().readValue(json.toString(), Recipe.class);

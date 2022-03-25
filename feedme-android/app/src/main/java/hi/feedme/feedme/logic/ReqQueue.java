@@ -4,6 +4,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+/**
+ * Random crap for Volley
+ */
 public class ReqQueue {
     private static ReqQueue instance;
     private RequestQueue requestQueue;

@@ -26,6 +26,9 @@ import hi.feedme.feedme.models.LoginInformation;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 
+/**
+ * Networking logic to communicate with the heroku back-end
+ */
 public class Networking {
     // REST
     private Context context;
@@ -38,6 +41,7 @@ public class Networking {
 
     /**
      * Fetches a recipe from the backend, to be returned in the callback
+     *
      * @param id the target id of the recipe
      * @param nwcb instance of the callback listener when fetching has finished
      */
@@ -62,6 +66,7 @@ public class Networking {
 
     /**
      * Fetches all the recipes from the backend satisfying the query, to be returned in the callback
+     *
      * @param q query to be used for the Recipe filtering
      * @param nwcb instance of the callback listener when fetching has finished
      */
@@ -94,6 +99,7 @@ public class Networking {
 
     /**
      * Fetches all the ingredients from the backend currently in use, to be returned in the callback
+     *
      * @param nwcb instance of the callback listener when fetching has finished
      */
     public void getIngredients(IngredientListNwCallback nwcb) {
@@ -126,10 +132,11 @@ public class Networking {
 
     /**
      * Attempts to login the user with a username and password combination.
-     * Returns LoginInformation from the callback upon a successful login.
+     *
      * @param user username of the login request
      * @param pw password of the login request
      * @param nwcb instance of the callback listener, returning LoginInformation or an error.
+     * @return LoginInformation from the callback upon a successful login
      */
     public void postLogin(String user, String pw, LoginNwCallback nwcb) {
         String url = ROOT + "users/login";
@@ -152,6 +159,7 @@ public class Networking {
 
     /**
      * Attempts to register the user with a username, password and email combination.
+     *
      * @param user username of the register request
      * @param pw password of the register request
      * @param email email of the register request
@@ -175,6 +183,7 @@ public class Networking {
 
     /**
      * Favorites a given recipe, provided the user is logged in.
+     *
      * @param recipeId id of the recipe that's being favorited
      */
     public void postFavorite(String recipeId) {
