@@ -1,7 +1,6 @@
 package hi.feedme.feedme.logic;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -241,7 +240,6 @@ public class Networking {
         if(current == null) return; //User isn't logged or has an expired token
         String url = ROOT + "users/me";
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
-            Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
             try {
                 ArrayList<SimplifiedRecipe> recipeList = new ArrayList();
                 //Getting all of the JSON from the JSON recipes array
