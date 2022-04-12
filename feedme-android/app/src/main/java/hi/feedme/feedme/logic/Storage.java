@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hi.feedme.feedme.models.LoginInformation;
 
 /**
@@ -57,5 +60,19 @@ public class Storage {
         final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(LOGIN_INFORMATION, token);
         editor.commit();
+    }
+
+    public static Map<String, String> authHeader(Context context) {
+        String token = "";
+        try {
+            token = Storage.getLoginInformation(context).getToken();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        HashMap<String, String> headers = new HashMap<>();
+        //Adhering to the JWT standard
+        headers.put("Content-type","application/json");
+        headers.put("Authorization", "Bearer " + token);
+        return headers;
     }
 }

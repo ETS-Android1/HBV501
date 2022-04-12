@@ -1,6 +1,7 @@
 package hi.feedme.feedme.logic;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -202,22 +203,70 @@ public class Networking {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 //We need to override the headers in order to place our custom authorization
-                String token = "";
-                try {
-                    token = Storage.getLoginInformation(context).getToken();
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                HashMap<String, String> headers = new HashMap<>();
-                //Adhering to the JWT standard
-                headers.put("Content-type","application/json");
-                headers.put("Authorization", "Bearer " + token);
-                return headers;
+                return Storage.authHeader(context);
             }
         };
         ReqQueue.getInstance(context).addToRequestQueue(req);
     }
 
+    public void deleteFavorite(String recipeId) {
+        LoginInformation current = null;
+        try {
+            current = Storage.getLoginInformation(context);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        if(current == null) return; //User isn't logged or has an expired token
+        String url = ROOT + "users/me/recipes/" + recipeId;
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.DELETE, url, null, response -> {
+
+        }, error -> {})
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                //We need to override the headers in order to place our custom authorization
+                return Storage.authHeader(context);
+            }
+        };
+        ReqQueue.getInstance(context).addToRequestQueue(req);
+    }
+
+    public void getFavoriteRecipes(RecipeListNwCallback nwcb) {
+        LoginInformation current = null;
+        try {
+            current = Storage.getLoginInformation(context);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        if(current == null) return; //User isn't logged or has an expired token
+        String url = ROOT + "users/me";
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            try {
+                ArrayList<SimplifiedRecipe> recipeList = new ArrayList();
+                //Getting all of the JSON from the JSON recipes array
+                JSONArray recipes = response.getJSONArray("recipes");
+                for (int i = 0; i < recipes.length(); i++) {
+                    //Getting i-th recipe json, parsing it to a model and adding it to the return list.
+                    String js = recipes.getJSONObject(i).toString();
+                    SimplifiedRecipe r = JSONParser.parseSimplifiedRecipe(js);
+                    recipeList.add(r);
+                }
+                //Returning the SimplifiedRecipe list to the listener.
+                nwcb.notifySuccess(recipeList);
+            }
+            catch (JSONException | JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }, nwcb::notifyError)
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return Storage.authHeader(context);
+            }
+        };
+        ReqQueue.getInstance(context).addToRequestQueue(req);
+    }
 }
 
 
