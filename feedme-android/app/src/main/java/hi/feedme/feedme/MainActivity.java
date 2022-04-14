@@ -78,27 +78,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         MenuItem home = navMenu.getItem(0);
-        home.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                navController.navigate(R.id.navigation_home);
+        home.setOnMenuItemClickListener(menuItem -> {
+            navController.navigate(R.id.navigation_home);
 
-                return true;
-            }
+            return true;
         });
 
         MenuItem login = navMenu.getItem(2);
-        login.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                if (user == null) {
-                    navController.navigate(R.id.navigation_login);
-                } else {
-                    removeActiveUser();
-                }
-
-                return true;
+        login.setOnMenuItemClickListener(menuItem -> {
+            if (user == null) {
+                navController.navigate(R.id.navigation_login);
+            } else {
+                removeActiveUser();
             }
+
+            return true;
         });
     }
 
