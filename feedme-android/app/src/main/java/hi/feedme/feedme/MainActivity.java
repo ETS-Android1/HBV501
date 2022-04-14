@@ -4,12 +4,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -17,6 +20,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.VolleyError;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -29,7 +34,21 @@ import hi.feedme.feedme.models.LoginInformation;
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private Networking network;
+    private Menu navMenu;
     private LoginInformation user = null;
+
+    private void toggleDash(boolean b) {
+        MenuItem dash = navMenu.getItem(1);
+        dash.setVisible(b);
+        dash.setEnabled(b);
+    }
+
+    private void removeActiveUser() {
+        user = null;
+        Storage.removeLoginInformation(this);
+        toggleDash(false);
+        navMenu.getItem(2).setTitle("Login");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +69,37 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+        navMenu = binding.navView.getMenu();
+
         try {
             user = Storage.getLoginInformation(this);
-        } catch (JsonProcessingException e) {
-            // Ignore, leave null
+        } catch (Exception e) {
+            toggleDash(false);
         }
 
-        if (user != null) System.out.println(user.getUser().getEmail());
+        MenuItem home = navMenu.getItem(0);
+        home.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                navController.navigate(R.id.navigation_home);
+
+                return false;
+            }
+        });
+
+        MenuItem login = navMenu.getItem(2);
+        login.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (user == null) {
+                    navController.navigate(R.id.navigation_login);
+                } else {
+                    removeActiveUser();
+                }
+
+                return true;
+            }
+        });
     }
 
     public Networking getNetwork() {
@@ -69,5 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
     public LoginInformation getActiveUser() { return user; }
 
-    public void setActiveUser(LoginInformation l) { user = l; }
+    public void setActiveUser(LoginInformation l) {
+        user = l;
+        toggleDash(true);
+        navMenu.getItem(2).setTitle("Logout");
+    }
 }

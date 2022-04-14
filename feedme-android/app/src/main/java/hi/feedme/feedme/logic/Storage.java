@@ -39,6 +39,16 @@ public class Storage {
     }
 
     /**
+     * Removes the currently existing login information
+     *
+     * @param context the context of the request
+     */
+    public static void removeLoginInformation(Context context) {
+        final SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.remove(LOGIN_INFORMATION).apply();
+    }
+
+    /**
      * Saves a json token to the  stored login information
      *
      * @param context the context of the request
