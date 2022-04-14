@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 navController.navigate(R.id.navigation_home);
 
-                return false;
+                return true;
             }
         });
 
