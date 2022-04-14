@@ -22,11 +22,14 @@ import java.util.ArrayList;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
 import hi.feedme.feedme.logic.Networking;
+import hi.feedme.feedme.logic.Storage;
 import hi.feedme.feedme.models.IngredientInfo;
+import hi.feedme.feedme.models.LoginInformation;
 
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private Networking network;
+    private LoginInformation user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        try {
+            user = Storage.getLoginInformation(this);
+        } catch (JsonProcessingException e) {
+            // Ignore, leave null
+        }
+
+        if (user != null) System.out.println(user.getUser().getEmail());
     }
 
     public Networking getNetwork() {
@@ -55,4 +66,8 @@ public class MainActivity extends AppCompatActivity {
     public NavController getNavController() {
         return navController;
     }
+
+    public LoginInformation getActiveUser() { return user; }
+
+    public void setActiveUser(LoginInformation l) { user = l; }
 }

@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_login"
-        android:name="hi.feedme.feedme.ui.login.fragment.LoginFragment"
+        android:name="hi.feedme.feedme.ui.login.LoginFragment"
         android:label="@string/title_login"
         tools:layout="@layout/fragment_login" />
 
