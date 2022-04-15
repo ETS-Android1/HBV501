@@ -19,7 +19,7 @@
     <string name="carbs">Carbs:</string>
     <string name="protein">Protein:</string>
     <string name="search">Search</string>
-    <string name="search_menu">Search</string>
+    <string name="search_menu">« Search for recipes!</string>
     <string name="add_review">Add Review</string>
     <string name="prompt_username">Username</string>
     <string name="register_prompt"><u>Don\'t have an account? Register!</u></string>

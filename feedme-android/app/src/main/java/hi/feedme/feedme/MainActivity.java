@@ -24,12 +24,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
+import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.logic.Storage;
 import hi.feedme.feedme.models.IngredientInfo;
 import hi.feedme.feedme.models.LoginInformation;
+import hi.feedme.feedme.models.SimplifiedRecipe;
+import hi.feedme.feedme.ui.dashboard.FavoritesContent;
+import hi.feedme.feedme.ui.home.RecipeContent;
 
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         user = null;
         Storage.removeLoginInformation(this);
         toggleDash(false);
+        FavoritesContent.items.clear();
         navMenu.getItem(2).setTitle("Login");
     }
 
@@ -85,12 +92,39 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        MenuItem favorites = navMenu.getItem(1);
+        favorites.setOnMenuItemClickListener(menuItem -> {
+            network.getFavoriteRecipes(new RecipeListNwCallback() {
+                @Override
+                public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
+                    FavoritesContent.items.clear();
+
+                    for (SimplifiedRecipe r : response) {
+                        FavoritesContent.items.add(r);
+                        FavoritesContent.itemMap.put(r.getId(), r);
+                    }
+
+                    // Force sort by rating, descending
+                    Collections.sort(FavoritesContent.items, (r1, r2) -> Double.compare(r2.getRating(), r1.getRating()));
+                    navController.navigate(R.id.navigation_dashboard);
+                }
+
+                @Override
+                public void notifyError(VolleyError error) {
+                    Toast.makeText(context, "Failed to fetch favorites!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return true;
+        });
+
         MenuItem login = navMenu.getItem(2);
         login.setOnMenuItemClickListener(menuItem -> {
             if (user == null) {
                 navController.navigate(R.id.navigation_login);
             } else {
                 removeActiveUser();
+                navController.navigate(R.id.navigation_home);
             }
 
             return true;
