@@ -1,10 +1,12 @@
 package hi.feedme.feedme.ui.recipe;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -18,16 +20,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.Ingredient;
 import hi.feedme.feedme.models.Recipe;
 import hi.feedme.feedme.models.Review;
-import hi.feedme.feedme.ui.home.RecipeContent;
-import hi.feedme.feedme.ui.home.RecipeRecyclerViewAdapter;
 
 public class RecipeFragment extends Fragment {
     private Recipe shownRecipe;
-    private RecyclerView recyclerView; // May want to edit this view e.g. delete current user review
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -96,7 +96,8 @@ public class RecipeFragment extends Fragment {
      * @param v the view the recyclerView is in
      */
     private void initReviews(View v) {
-        recyclerView = v.findViewById(R.id.review_list);
+        // May want to edit this view e.g. delete current user review
+        RecyclerView recyclerView = v.findViewById(R.id.review_list);
 
         Context context = recyclerView.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -141,6 +142,8 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
+        MainActivity act = (MainActivity) requireActivity();
+
         initReviews(view);
         initIngredients(view);
 
@@ -151,6 +154,17 @@ public class RecipeFragment extends Fragment {
         ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
         ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
         ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
+
+        if (act.getActiveUser() != null) {
+            Button addReview = (Button) view.findViewById(R.id.review_button);
+
+            addReview.setOnClickListener(v -> {
+                ReviewDialog reviewDialog = ReviewDialog.newInstance(shownRecipe);
+                reviewDialog.show(act.getSupportFragmentManager(), "fragment_review_dialog");
+            });
+
+            addReview.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }
