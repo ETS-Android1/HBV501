@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             user = Storage.getLoginInformation(this);
+            navMenu.getItem(2).setTitle("Logout");
         } catch (Exception e) {
             toggleDash(false);
         }

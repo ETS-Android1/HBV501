@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FeedMe!</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Favorites</string>
     <string name="title_login">Login</string>
     <string name="title_recipe">Recipe</string>
     <!-- Strings related to login -->
