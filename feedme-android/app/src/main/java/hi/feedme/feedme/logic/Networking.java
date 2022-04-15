@@ -265,6 +265,35 @@ public class Networking {
         };
         ReqQueue.getInstance(context).addToRequestQueue(req);
     }
+
+    public void postReview(String title, String text, int rating, String recipeId) {
+        LoginInformation current = null;
+        try {
+            current = Storage.getLoginInformation(context);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        if(current == null) return; //User isn't logged or has an expired token
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("title", title);
+        params.put("subtitle", text);
+        params.put("rating", Integer.toString(rating));
+
+        String url = ROOT + "recipes/" + recipeId + "/reviews";
+        System.out.println(url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), response -> {
+
+        }, error -> {})
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                //We need to override the headers in order to place our custom authorization
+                return Storage.authHeader(context);
+            }
+        };
+        ReqQueue.getInstance(context).addToRequestQueue(req);
+    }
 }
 
 
