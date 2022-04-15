@@ -2,11 +2,14 @@ package hi.feedme.feedme.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.VolleyError;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
@@ -53,6 +57,9 @@ public class HomeFragment extends Fragment {
     private String[] appIngredients;
     private RecyclerView recyclerView;
     private AutoCompleteTextView ingredientSuggestView;
+    private Menu searchMenu;
+    private int menuScroll = -1;
+    private boolean menuShow = true;
 
 
     /**
@@ -87,6 +94,9 @@ public class HomeFragment extends Fragment {
             InputMethodManager in = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
             in.hideSoftInputFromWindow(arg1.getApplicationWindowToken(), 0);
         });
+
+        ingredientSuggestView.setHint("Try looking for an ingredient!");
+        ingredientSuggestView.setTextColor(Color.WHITE);
     }
 
     @Override
@@ -120,6 +130,31 @@ public class HomeFragment extends Fragment {
         } else {
             searchHelper(act, menu);
         }
+
+        searchMenu = menu;
+
+        AppBarLayout appBarLayout = act.findViewById(R.id.appbar);
+        AutoCompleteTextView tv = menu.findItem(R.id.search).getActionView().findViewById(R.id.search);
+        appBarLayout.addOnOffsetChangedListener((appBarLayout1, verticalOffset) -> {
+            if (menuScroll == -1) {
+                menuScroll = appBarLayout1.getTotalScrollRange();
+            }
+
+            if (menuScroll + verticalOffset == 0) {
+                if (ingredientSuggestView != null && !getResources().getString(R.string.search_menu).contentEquals(searchMenu.findItem(R.id.search).getTitle())) {
+                    searchMenu.findItem(R.id.search).setTitle(R.string.search_menu);
+                    searchMenu.findItem(R.id.search).setEnabled(false);
+                }
+                menuShow = true;
+            } else if (menuShow) {
+                if (ingredientSuggestView != null) {
+                    searchMenu.findItem(R.id.search).setTitle(R.string.search_menu_alt);
+                    searchMenu.findItem(R.id.search).setEnabled(true);
+                }
+
+                menuShow = false;
+            }
+        });
     }
 
     /**
