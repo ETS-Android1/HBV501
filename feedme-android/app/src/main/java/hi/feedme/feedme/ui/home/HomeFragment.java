@@ -141,13 +141,13 @@ public class HomeFragment extends Fragment {
             }
 
             if (menuScroll + verticalOffset == 0) {
-                if (ingredientSuggestView != null && !getResources().getString(R.string.search_menu).contentEquals(searchMenu.findItem(R.id.search).getTitle())) {
+                if (null != ingredientSuggestView && !getResources().getString(R.string.search_menu).contentEquals(searchMenu.findItem(R.id.search).getTitle())) {
                     searchMenu.findItem(R.id.search).setTitle(R.string.search_menu);
                     searchMenu.findItem(R.id.search).setEnabled(false);
                 }
                 menuShow = true;
             } else if (menuShow) {
-                if (ingredientSuggestView != null) {
+                if (null != ingredientSuggestView) {
                     searchMenu.findItem(R.id.search).setTitle(R.string.search_menu_alt);
                     searchMenu.findItem(R.id.search).setEnabled(true);
                 }

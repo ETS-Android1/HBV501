@@ -1,5 +1,6 @@
 package hi.feedme.feedme.ui.recipe;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 import hi.feedme.feedme.databinding.FragmentReviewBinding;
 import hi.feedme.feedme.models.Review;
@@ -34,15 +36,16 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Review r = mValues.get(position);
 
         String postedBy = "Posted by: " + r.getUsername();
         String dateString;
 
         try {
-            dateString = new SimpleDateFormat("dd MMMM yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(r.getDate()));
+            dateString = new SimpleDateFormat("dd MMMM yyyy").format(Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd").parse(r.getDate())));
         } catch (Exception e) {
            dateString = r.getDate();
         }
