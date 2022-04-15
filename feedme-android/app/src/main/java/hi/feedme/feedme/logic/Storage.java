@@ -56,8 +56,13 @@ public class Storage {
      * @throws JsonProcessingException If the json to LoginInformation parsing is invalid or unsuccessful.
      */
     public static LoginInformation getLoginInformation(Context context) throws JsonProcessingException {
-        String json = getJsonLogin(context);
-        return JSONParser.parseLogin(json);
+        try {
+            String json = getJsonLogin(context);
+            return JSONParser.parseLogin(json);
+        }
+        catch(Exception e) {
+            return new LoginInformation(null, "", 0);
+        }
     }
 
     /**
@@ -77,7 +82,7 @@ public class Storage {
         try {
             token = Storage.getLoginInformation(context).getToken();
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            token = "";
         }
         HashMap<String, String> headers = new HashMap<>();
         //Adhering to the JWT standard

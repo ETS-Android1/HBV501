@@ -60,7 +60,13 @@ public class Networking {
                 }, error -> {
                     System.out.println("Error!: " + error.toString());
                     nwcb.notifyError(error);
-                });
+                })
+                {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        return Storage.authHeader(context);
+                    }
+                };
         ReqQueue.getInstance(context).addToRequestQueue(jsonObjectRequest); //Sending the HTTP request
     }
 
@@ -273,7 +279,7 @@ public class Networking {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        if(current == null) return; //User isn't logged or has an expired token
+        if(current == null) return;
 
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("title", title);
@@ -288,7 +294,6 @@ public class Networking {
         {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                //We need to override the headers in order to place our custom authorization
                 return Storage.authHeader(context);
             }
         };
