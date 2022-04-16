@@ -59,9 +59,6 @@
                     app:layout_constraintTop_toBottomOf="@id/text_calories"
                     app:thumbColor="@color/white"
                     app:thumbStrokeColor="@color/teal_200"
-                    app:tickColor="@color/black"
-                    app:tickColorActive="@color/white"
-                    app:tickColorInactive="@color/teal_200"
                     app:trackColor="@color/white" />
 
                 <TextView
@@ -95,9 +92,6 @@
                     app:layout_constraintTop_toBottomOf="@id/text_fats"
                     app:thumbColor="@color/white"
                     app:thumbStrokeColor="@color/teal_200"
-                    app:tickColor="@color/black"
-                    app:tickColorActive="@color/white"
-                    app:tickColorInactive="@color/teal_200"
                     app:trackColor="@color/white" />
 
                 <TextView
@@ -131,9 +125,6 @@
                     app:layout_constraintTop_toBottomOf="@id/text_carbs"
                     app:thumbColor="@color/white"
                     app:thumbStrokeColor="@color/teal_200"
-                    app:tickColor="@color/black"
-                    app:tickColorActive="@color/white"
-                    app:tickColorInactive="@color/teal_200"
                     app:trackColor="@color/white" />
 
                 <TextView
@@ -167,9 +158,6 @@
                     app:layout_constraintTop_toBottomOf="@id/text_protein"
                     app:thumbColor="@color/white"
                     app:thumbStrokeColor="@color/teal_200"
-                    app:tickColor="@color/black"
-                    app:tickColorActive="@color/white"
-                    app:tickColorInactive="@color/teal_200"
                     app:trackColor="@color/white" />
 
                 <Button
