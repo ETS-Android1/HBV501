@@ -14,8 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 
 import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
@@ -70,7 +72,24 @@ public class ReviewDialog extends DialogFragment {
             MainActivity act = (MainActivity) requireActivity();
             act.getNetwork().postReview(title, subTitle, rating, "" + reviewRecipe.getId());
 
+            Review nr = new Review();
+            nr.setUser_id(act.getActiveUser().getUser().getId());
+            nr.setUsername(act.getActiveUser().getUser().getUsername());
+            nr.setTitle(title);
+            nr.setSubtitle(subTitle);
+            nr.setRating(rating);
+
+            Date curr = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+            nr.setDate(df.format(curr));
+            reviewRecipe.getReviews().add(nr);
+
+            Bundle refresh = new Bundle();
+            refresh.putSerializable("recipe", reviewRecipe);
+
             dismiss();
+            act.reload(refresh);
         });
     }
 }

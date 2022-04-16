@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
 import hi.feedme.feedme.listeners.RecipeListNwCallback;
@@ -32,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
     private Networking network;
     private Menu navMenu;
     private LoginInformation user = null;
+
+    public void reload(Bundle b) {
+        int id = Objects.requireNonNull(navController.getCurrentDestination()).getId();
+        navController.popBackStack(id, true);
+        navController.navigate(id, b);
+    }
 
     private void toggleDash(boolean b) {
         MenuItem dash = navMenu.getItem(1);

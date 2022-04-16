@@ -116,7 +116,6 @@ public class RecipeFragment extends Fragment {
         reviewButton.setOnClickListener(view -> {
             ReviewDialog reviewDialog = ReviewDialog.newInstance(shownRecipe);
             reviewDialog.show(act.getSupportFragmentManager(), "fragment_review_dialog");
-            reviewButton.setVisibility(View.GONE);
         });
 
         boolean showBtn = null != act.getActiveUser() && null != act.getActiveUser().getUser();
