@@ -11,8 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -67,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         hi.feedme.feedme.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_login, R.id.recipe)
                 .build();
@@ -80,8 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             user = Storage.getLoginInformation(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        if (null != user && null != user.getUser()) {
             navMenu.getItem(2).setTitle("Logout");
-        } catch (Exception e) {
+        } else {
             toggleDash(false);
         }
 
@@ -120,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
         MenuItem login = navMenu.getItem(2);
         login.setOnMenuItemClickListener(menuItem -> {
-            if (user == null) {
+            if (user == null || user.getUser() == null) {
                 navController.navigate(R.id.navigation_login);
             } else {
                 removeActiveUser();
-                navController.navigate(R.id.navigation_home);
+                navController.navigate(R.id.navigation_home,null, new NavOptions.Builder().setPopUpTo((navController.getGraph().getStartDestinationId()), true).build());
             }
 
             return true;
@@ -145,5 +151,6 @@ public class MainActivity extends AppCompatActivity {
         user = l;
         toggleDash(true);
         navMenu.getItem(2).setTitle("Logout");
+        navController.navigate(R.id.navigation_home,null, new NavOptions.Builder().setPopUpTo((navController.getGraph().getStartDestinationId()), true).build());
     }
 }

@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -116,12 +119,12 @@ public class RecipeFragment extends Fragment {
             reviewButton.setVisibility(View.GONE);
         });
 
-        boolean showBtn = null != act.getActiveUser();
+        boolean showBtn = null != act.getActiveUser() && null != act.getActiveUser().getUser();
 
         for (int i = 0; i < rs.size(); i++) {
             Review r = rs.get(i);
 
-            if (showBtn && r.getUser_id() == act.getActiveUser().getUser().getId())
+            if (showBtn && act.getActiveUser() != null && act.getActiveUser().getUser() != null && r.getUser_id() == act.getActiveUser().getUser().getId())
                 showBtn = false;
 
             ReviewContent.items.add(r);
@@ -159,6 +162,7 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
+        MainActivity act = (MainActivity) requireActivity();
         initReviews(view);
         initIngredients(view);
 
@@ -169,6 +173,23 @@ public class RecipeFragment extends Fragment {
         ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
         ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
         ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
+
+        ImageButton favButton = view.findViewById(R.id.favorite_button);
+        favButton.setOnClickListener(view1 -> {
+            if (!shownRecipe.getUser_stored()) {
+                act.getNetwork().postFavorite("" + shownRecipe.getId());
+                shownRecipe.setUser_stored(true);
+                favButton.setBackground(AppCompatResources.getDrawable(act, R.drawable.ic_baseline_favorite_24));
+            } else {
+                act.getNetwork().deleteFavorite("" + shownRecipe.getId());
+                shownRecipe.setUser_stored(false);
+                favButton.setBackground(AppCompatResources.getDrawable(act, R.drawable.ic_baseline_favorite_border_24));
+            }
+        });
+
+        if(null == act.getActiveUser()) favButton.setVisibility(View.GONE);
+        else
+            if (shownRecipe.getUser_stored()) favButton.setBackground(AppCompatResources.getDrawable(act, R.drawable.ic_baseline_favorite_24));
 
         return view;
     }

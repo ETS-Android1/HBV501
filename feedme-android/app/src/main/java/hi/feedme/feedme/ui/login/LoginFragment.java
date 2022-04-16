@@ -1,9 +1,5 @@
 package hi.feedme.feedme.ui.login;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +9,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.VolleyError;
 
@@ -63,42 +63,47 @@ public class LoginFragment extends Fragment {
         });
 
         loginButton.setOnClickListener(v -> {
-            if (usernameEditText.length() != 0 && passwordEditText.length() != 0)
-            if (emailEditText.length() != 0 && loginButton.getText().equals(getResources().getString(R.string.action_register_short))) {
-                // Current setup is register
-                loadingProgressBar.setVisibility(View.VISIBLE);
+            if (usernameEditText.length() != 0 && passwordEditText.length() != 0) {
+                if (emailEditText.length() != 0 && loginButton.getText().equals(getResources().getString(R.string.action_register_short))) {
+                    // Current setup is register
+                    loadingProgressBar.setVisibility(View.VISIBLE);
 
-                act.getNetwork().postRegister(usernameEditText.getText().toString(), passwordEditText.getText().toString(), emailEditText.getText().toString(), false, new RegisterNwCallback() {
-                    @Override
-                    public void notifySuccess(String response) {
-                        loadingProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(act , "Account created!", Toast.LENGTH_SHORT).show();
-                    }
+                    act.getNetwork().postRegister(usernameEditText.getText().toString(), passwordEditText.getText().toString(), emailEditText.getText().toString(), false, new RegisterNwCallback() {
+                        @Override
+                        public void notifySuccess(String response) {
+                            loadingProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(act, "Account created!", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void notifyError(VolleyError error) {
-                        loadingProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(act , "Failed to create account!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                // Current setup is login
-                loadingProgressBar.setVisibility(View.VISIBLE);
+                        @Override
+                        public void notifyError(VolleyError error) {
+                            loadingProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(act, "Failed to create account!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    // Current setup is login
+                    loadingProgressBar.setVisibility(View.VISIBLE);
 
-                act.getNetwork().postLogin(usernameEditText.getText().toString(), passwordEditText.getText().toString(), new LoginNwCallback() {
-                    @Override
-                    public void notifySuccess(LoginInformation response) {
-                        act.setActiveUser(response);
-                        loadingProgressBar.setVisibility(View.GONE);
-                        act.getNavController().navigate(R.id.navigation_home);
-                    }
+                    act.getNetwork().postLogin(usernameEditText.getText().toString(), passwordEditText.getText().toString(), new LoginNwCallback() {
+                        @Override
+                        public void notifySuccess(LoginInformation response) {
+                            act.setActiveUser(response);
+                            loadingProgressBar.setVisibility(View.GONE);
+                            act.getNavController().navigate(R.id.navigation_home);
+                        }
 
-                    @Override
-                    public void notifyError(VolleyError error) {
-                        loadingProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(act , "Login failed!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void notifyError(VolleyError error) {
+                            loadingProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(act, "Login failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                usernameEditText.setText("");
+                emailEditText.setText("");
+                passwordEditText.setText("");
             }
         });
     }
