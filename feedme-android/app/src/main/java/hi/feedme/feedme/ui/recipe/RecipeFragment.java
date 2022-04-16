@@ -187,7 +187,7 @@ public class RecipeFragment extends Fragment {
             }
         });
 
-        if(null == act.getActiveUser()) favButton.setVisibility(View.GONE);
+        if(null == act.getActiveUser() || null == act.getActiveUser().getUser()) favButton.setVisibility(View.GONE);
         else
             if (shownRecipe.getUser_stored()) favButton.setBackground(AppCompatResources.getDrawable(act, R.drawable.ic_baseline_favorite_24));
 

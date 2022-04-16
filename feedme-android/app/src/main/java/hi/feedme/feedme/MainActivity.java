@@ -4,16 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,23 +15,17 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.VolleyError;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import hi.feedme.feedme.databinding.ActivityMainBinding;
 import hi.feedme.feedme.listeners.RecipeListNwCallback;
 import hi.feedme.feedme.logic.Networking;
 import hi.feedme.feedme.logic.Storage;
-import hi.feedme.feedme.models.IngredientInfo;
 import hi.feedme.feedme.models.LoginInformation;
 import hi.feedme.feedme.models.SimplifiedRecipe;
 import hi.feedme.feedme.ui.dashboard.FavoritesContent;
-import hi.feedme.feedme.ui.home.RecipeContent;
 
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
@@ -102,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         favorites.setOnMenuItemClickListener(menuItem -> {
             network.getFavoriteRecipes(new RecipeListNwCallback() {
                 @Override
-                public void notifySuccess(ArrayList<SimplifiedRecipe> response) throws JsonProcessingException {
+                public void notifySuccess(ArrayList<SimplifiedRecipe> response) {
                     FavoritesContent.items.clear();
 
                     for (SimplifiedRecipe r : response) {
