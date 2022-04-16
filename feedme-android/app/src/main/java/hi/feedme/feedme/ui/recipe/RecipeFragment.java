@@ -27,6 +27,7 @@ import hi.feedme.feedme.models.Review;
 
 public class RecipeFragment extends Fragment {
     private Recipe shownRecipe;
+    private Button reviewButton;
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -50,7 +51,7 @@ public class RecipeFragment extends Fragment {
      * @param group     The position of the group
      */
     private void setListViewHeight(ExpandableListView listView, int group) {
-        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
+        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
@@ -97,7 +98,7 @@ public class RecipeFragment extends Fragment {
     private void initReviews(View v) {
         // May want to edit this view e.g. delete current user review
         RecyclerView recyclerView = v.findViewById(R.id.review_list);
-
+        MainActivity act = (MainActivity) requireActivity();
         Context context = recyclerView.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -107,11 +108,28 @@ public class RecipeFragment extends Fragment {
         ReviewContent.items.clear();
         ArrayList<Review> rs = shownRecipe.getReviews();
 
+        reviewButton = v.findViewById(R.id.review_button);
+
+        reviewButton.setOnClickListener(view -> {
+            ReviewDialog reviewDialog = ReviewDialog.newInstance(shownRecipe);
+            reviewDialog.show(act.getSupportFragmentManager(), "fragment_review_dialog");
+            reviewButton.setVisibility(View.GONE);
+        });
+
+        boolean showBtn = null != act.getActiveUser();
+
         for (int i = 0; i < rs.size(); i++) {
             Review r = rs.get(i);
+
+            if (showBtn && r.getUser_id() == act.getActiveUser().getUser().getId())
+                showBtn = false;
+
             ReviewContent.items.add(r);
             ReviewContent.itemMap.put(i, r);
         }
+
+        if (showBtn)
+            reviewButton.setVisibility(View.VISIBLE);
 
         recyclerView.setAdapter(new ReviewRecyclerViewAdapter(ReviewContent.items));
     }
@@ -123,7 +141,7 @@ public class RecipeFragment extends Fragment {
      */
     private void initIngredients(View v) {
         ArrayList<Ingredient> ingredients = shownRecipe.getIngredients();
-        ExpandableListView expandableIngredientListView = (ExpandableListView) v.findViewById(R.id.ingredients_list);
+        ExpandableListView expandableIngredientListView = v.findViewById(R.id.ingredients_list);
 
         HashMap<String, List<Ingredient>> expandableIngredientDetailList = new HashMap<>();
         expandableIngredientDetailList.put("Ingredients:", ingredients);
@@ -141,8 +159,6 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        MainActivity act = (MainActivity) requireActivity();
-
         initReviews(view);
         initIngredients(view);
 
@@ -153,17 +169,6 @@ public class RecipeFragment extends Fragment {
         ((TextView) view.findViewById(R.id.fat_quant)).setText(String.format("%s", shownRecipe.getFats()));
         ((TextView) view.findViewById(R.id.carb_quant)).setText(String.format("%s", shownRecipe.getCarbs()));
         ((TextView) view.findViewById(R.id.protein_quant)).setText(String.format("%s", shownRecipe.getProteins()));
-
-        if (act.getActiveUser() != null) {
-            Button addReview = (Button) view.findViewById(R.id.review_button);
-
-            addReview.setOnClickListener(v -> {
-                ReviewDialog reviewDialog = ReviewDialog.newInstance(shownRecipe);
-                reviewDialog.show(act.getSupportFragmentManager(), "fragment_review_dialog");
-            });
-
-            addReview.setVisibility(View.VISIBLE);
-        }
 
         return view;
     }

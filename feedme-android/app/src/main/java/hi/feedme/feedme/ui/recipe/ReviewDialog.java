@@ -1,17 +1,26 @@
 package hi.feedme.feedme.ui.recipe;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
+import hi.feedme.feedme.MainActivity;
 import hi.feedme.feedme.R;
 import hi.feedme.feedme.models.Recipe;
+import hi.feedme.feedme.models.Review;
 
 public class ReviewDialog extends DialogFragment {
     Recipe reviewRecipe;
@@ -39,6 +48,7 @@ public class ReviewDialog extends DialogFragment {
         return inflater.inflate(R.layout.fragment_review_dialog, container);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -52,7 +62,14 @@ public class ReviewDialog extends DialogFragment {
         // Placeholder, would send post request here
         Button send = view.findViewById(R.id.review_button);
         send.setOnClickListener(v -> {
-            System.out.println(reviewRecipe.getName());
+            String title = ((EditText) view.findViewById(R.id.title)).getText().toString();
+            String subTitle = ((EditText) view.findViewById(R.id.subtitle)).getText().toString();
+            // Steps are integers so we can truncate
+            int rating = (int) ((RatingBar) view.findViewById(R.id.rating)).getRating();
+
+            MainActivity act = (MainActivity) requireActivity();
+            act.getNetwork().postReview(title, subTitle, rating, "" + reviewRecipe.getId());
+
             dismiss();
         });
     }

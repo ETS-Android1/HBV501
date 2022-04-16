@@ -20,7 +20,7 @@
     <string name="protein">Protein:</string>
     <string name="search">Search</string>
     <string name="search_menu">« Search for recipes!</string>
-    <string name="add_review">Add Review</string>
+    <string name="add_review">Add Your Review</string>
     <string name="prompt_username">Username</string>
     <string name="register_prompt"><u>Don\'t have an account? Register!</u></string>
     <string name="login_prompt"><u>Already have an account? Login!</u></string>
@@ -30,4 +30,5 @@
     <string name="review_title">Review Title</string>
     <string name="review_text">Review text</string>
     <string name="search_menu_alt">Click here to filter!</string>
+    <string name="add_favorite">Add favorite</string>
 </resources>
