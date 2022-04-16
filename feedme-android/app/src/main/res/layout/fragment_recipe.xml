@@ -11,18 +11,20 @@
         android:id="@+id/recipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/fragment_horizontal_margin"
-        android:paddingRight="@dimen/fragment_horizontal_margin"
+        android:paddingStart="@dimen/fragment_horizontal_margin"
+        android:paddingEnd="@dimen/fragment_horizontal_margin"
         android:paddingBottom="100dp">
 
         <TextView
             android:id="@+id/recipe_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:gravity="start"
             android:paddingTop="32dp"
             android:paddingBottom="32dp"
+            android:textSize="22sp"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent=".8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/recipe_description"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +35,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_baseline_favorite_border_24"
             android:contentDescription="@string/add_favorite"
-            android:gravity="end"
             android:paddingTop="24dp"
             android:paddingBottom="24dp"
             android:paddingStart="24dp"
