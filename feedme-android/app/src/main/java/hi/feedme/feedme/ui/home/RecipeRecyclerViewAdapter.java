@@ -106,7 +106,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
 
                 @Override
                 public void notifyError(VolleyError error) {
-                    Toast.makeText((Context) activity, "Failed to fetch recipe!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Failed to fetch recipe!", Toast.LENGTH_SHORT).show();
                 }
             });
         }

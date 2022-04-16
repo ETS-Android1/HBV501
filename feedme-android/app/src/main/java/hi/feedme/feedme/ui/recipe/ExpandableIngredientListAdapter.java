@@ -52,11 +52,11 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.ingredient_list_item, null);
         }
 
-        TextView expandedListTextViewName = (TextView) convertView.findViewById(R.id.expanded_ingredient_name);
+        TextView expandedListTextViewName = convertView.findViewById(R.id.expanded_ingredient_name);
         expandedListTextViewName.setText(curr.getIngredient().getName());
 
         String displayedQuant = curr.getQuantity() + " " + curr.getUnit();
-        TextView expandedListTextViewQuantity = (TextView) convertView.findViewById(R.id.expanded_ingredient_quantity);
+        TextView expandedListTextViewQuantity = convertView.findViewById(R.id.expanded_ingredient_quantity);
         expandedListTextViewQuantity.setText(displayedQuant);
 
         return convertView;
@@ -91,7 +91,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.ingredient_list_group, null);
         }
-        TextView listTitleTextView = (TextView) convertView.findViewById(R.id.ingredient_name);
+        TextView listTitleTextView = convertView.findViewById(R.id.ingredient_name);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
         return convertView;

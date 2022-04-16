@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +29,6 @@ import hi.feedme.feedme.models.Review;
 
 public class RecipeFragment extends Fragment {
     private Recipe shownRecipe;
-    private Button reviewButton;
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -111,7 +109,7 @@ public class RecipeFragment extends Fragment {
         ReviewContent.items.clear();
         ArrayList<Review> rs = shownRecipe.getReviews();
 
-        reviewButton = v.findViewById(R.id.review_button);
+        Button reviewButton = v.findViewById(R.id.review_button);
 
         reviewButton.setOnClickListener(view -> {
             ReviewDialog reviewDialog = ReviewDialog.newInstance(shownRecipe);

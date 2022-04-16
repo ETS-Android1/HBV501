@@ -132,7 +132,6 @@ public class HomeFragment extends Fragment {
         searchMenu = menu;
 
         AppBarLayout appBarLayout = act.findViewById(R.id.appbar);
-        AutoCompleteTextView tv = menu.findItem(R.id.search).getActionView().findViewById(R.id.search);
         appBarLayout.addOnOffsetChangedListener((appBarLayout1, verticalOffset) -> {
             if (menuScroll == -1) {
                 menuScroll = appBarLayout1.getTotalScrollRange();
@@ -252,7 +251,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void notifyError(VolleyError error) {
-                Toast.makeText((Context) getActivity(), "Failed to fetch recipes!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Failed to fetch recipes!", Toast.LENGTH_SHORT).show();
             }
         }, query);
     }
@@ -269,7 +268,7 @@ public class HomeFragment extends Fragment {
         RangeSlider scals = view.findViewById(R.id.slider_calories);
         RangeSlider sf = view.findViewById(R.id.slider_fats);
         RangeSlider scarbs = view.findViewById(R.id.slider_carbs);
-        RangeSlider sp = ((RangeSlider) view.findViewById(R.id.slider_protein));
+        RangeSlider sp = view.findViewById(R.id.slider_protein);
 
         scals.setValues(0.0f, 1000.0f);
         sf.setValues(0.0f, 100.0f);
